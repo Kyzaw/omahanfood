@@ -25,9 +25,24 @@ interface Address {
   fullAddress: string;
 }
 
+interface MidtransResult {
+  payment_type: string;
+  transaction_status?: string;
+  order_id?: string;
+  status_message?: string;
+}
+
+interface MidtransSnap {
+  pay: (token: string, options: {
+    onSuccess: (result: MidtransResult) => void;
+    onError: (error: Error) => void;
+    onClose: () => void;
+  }) => void;
+}
+
 declare global {
   interface Window {
-    snap: any;
+    snap: MidtransSnap;
   }
 }
 
@@ -297,7 +312,7 @@ export default function CheckoutPage() {
 
       // Open Midtrans payment popup
       window.snap.pay(token, {
-        onSuccess: async function (result: any) {
+        onSuccess: async function(result: MidtransResult) {
           try {
             const paymentMethod = result.payment_type || "unknown";
 
@@ -334,11 +349,11 @@ export default function CheckoutPage() {
             toast.error("❌ Pembayaran berhasil tetapi gagal memperbarui status. Silakan hubungi customer service.");
           }
         },
-        onError: function (error: any) {
+        onError: function(error: Error) {
           console.error("Payment error:", error);
           toast.error("❌ Pembayaran gagal. Silakan coba lagi.");
         },
-        onClose: function () {
+        onClose: function() {
           toast("⚠️ Pembayaran dibatalkan.");
         },
       });

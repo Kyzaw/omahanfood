@@ -1,5 +1,6 @@
 import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
+import { JsonValue } from "@prisma/client/runtime/library";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -13,11 +14,40 @@ import {
   Truck,
   UserPlus,
   AlertCircle,
-  CheckCircle,
-  Sidebar
+  CheckCircle
 } from "lucide-react";
 import { revalidatePath } from "next/cache";
 import AdminSidebar from "@/components/AdminNavbar";
+
+interface OrderItem {
+  quantity: number;
+  // Add other item properties as needed
+}
+
+interface User {
+  name: string;
+  email: string;
+}
+
+interface Order {
+  id: string;
+  status: string;
+  items: JsonValue;
+  totalAmount: number;
+  address?: string;
+  courierId: string | null;
+  courier?: User | null;
+  user: User;
+  createdAt: Date;
+  userId: string;
+  deliveryTime: string;
+}
+
+interface Courier {
+  id: string;
+  name: string;
+  email: string;
+}
 
 // Server action untuk assign kurir ke pesanan
 async function assignCourierToOrder(formData: FormData) {
@@ -159,8 +189,22 @@ function getStatusLabel(status: string) {
   }
 }
 
+// Helper function to safely count quantities
+function getItemCount(items: JsonValue): number {
+  if (!items || !Array.isArray(items)) {
+    return 0;
+  }
+  
+  return items.reduce<number>((sum, item) => {
+    if (item && typeof item === 'object' && 'quantity' in item && typeof item.quantity === 'number') {
+      return sum + item.quantity;
+    }
+    return sum;
+  }, 0);
+}
+
 // Component for courier assignment
-function CourierAssignmentForm({ order, couriers }: { order: any, couriers: any[] }) {
+function CourierAssignmentForm({ order, couriers }: { order: Order, couriers: Courier[] }) {
   return (
     <div className="flex items-center gap-2">
       {!order.courierId ? (
@@ -383,8 +427,7 @@ export default async function AdminOrdersPage() {
                 
                 <div className="space-y-4">
                   {unassignedOrders.map((order) => {
-                    const items = Array.isArray(order.items) ? order.items : [];
-                    const itemCount = items.reduce((sum: number, item: any) => sum + (item.quantity || 0), 0);
+                    const itemCount = getItemCount(order.items);
 
                     return (
                       <Card key={order.id} className="border-l-4 border-l-red-500 shadow-sm hover:shadow-md transition-shadow">
@@ -482,8 +525,7 @@ export default async function AdminOrdersPage() {
               ) : (
                 <div className="space-y-4">
                   {assignedOrders.map((order) => {
-                    const items = Array.isArray(order.items) ? order.items : [];
-                    const itemCount = items.reduce((sum: number, item: any) => sum + (item.quantity || 0), 0);
+                    const itemCount = getItemCount(order.items);
 
                     return (
                       <Card key={order.id} className="border-l-4 border-l-green-500 shadow-sm hover:shadow-md transition-shadow">

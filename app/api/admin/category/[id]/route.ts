@@ -16,7 +16,7 @@ export async function PATCH(
     });
 
     return NextResponse.json(category);
-  } catch (error) {
+  } catch (_error) {
     return NextResponse.json(
       { error: "Failed to update category" },
       { status: 500 }
@@ -37,7 +37,7 @@ export async function DELETE(
     });
 
     return NextResponse.json({ success: true });
-  } catch (error) {
+  } catch (_error) {
     return NextResponse.json(
       { error: "Failed to delete category" },
       { status: 500 }

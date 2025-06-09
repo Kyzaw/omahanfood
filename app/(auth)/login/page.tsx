@@ -1,11 +1,12 @@
 "use client";
 
+import Image from "next/image"; // Ganti img ke Image
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { FcGoogle } from "react-icons/fc";
 import { useState } from "react";
 import { signIn } from "next-auth/react";
-import { redirect, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 
 export default function LoginPage() {
@@ -13,8 +14,12 @@ export default function LoginPage() {
   const [formError, setFormError] = useState<string | null>(null);
   const [fieldErrors, setFieldErrors] = useState<{ email?: string; password?: string }>({});
   const [loading, setLoading] = useState(false);
-  const { data:session } = useSession()
-  const user = session?.user
+  const { data: session } = useSession();
+  // Jika user sudah login, langsung redirect
+  if (session?.user) {
+    router.push("/redirect");
+    return null;
+  }
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -61,10 +66,12 @@ export default function LoginPage() {
     <div className="flex flex-col sm:flex-row w-full max-w-5xl mx-auto sm:my-50 shadow-lg rounded-lg overflow-hidden border">
       {/* Kiri*/}
       <div className="w-full sm:w-1/2 bg-orange-600 flex flex-col justify-center items-center text-center px-6 py-10">
-        <img
+        <Image
           src="/logo.jpg"
           alt="Branding Image"
-          className="w-24 h-24 rounded-full mb-6 object-cover"
+          width={96}
+          height={96}
+          className="rounded-full mb-6 object-cover"
         />
         <h1 className="text-3xl sm:text-4xl font-bold text-black mb-2">Omahan Food</h1>
         <p className="text-black text-sm sm:text-base">
@@ -141,7 +148,7 @@ export default function LoginPage() {
           </div>
 
           <p className="mt-6 text-sm text-center">
-            Don't have an account?{" "}
+            Don&apos;t have an account?{" "}
             <a href="/register" className="font-semibold text-black">
               Register
             </a>

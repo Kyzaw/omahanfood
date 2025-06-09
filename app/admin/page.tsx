@@ -244,6 +244,12 @@ async function getTopMenusWithOrderCounts() {
       }
     })
 
+    interface OrderItem {
+      menuId?: string;
+      id?: string;
+      quantity?: number;
+    }
+
     // Count how many times each menu appears in orders
     const menuOrderCounts = new Map<string, number>()
 
@@ -256,7 +262,7 @@ async function getTopMenusWithOrderCounts() {
 
         // If items is an array, count each menu
         if (Array.isArray(items)) {
-          items.forEach((item: any) => {
+          items.forEach((item: OrderItem) => {
             if (item.menuId || item.id) {
               const menuId = item.menuId || item.id
               menuOrderCounts.set(menuId, (menuOrderCounts.get(menuId) || 0) + (item.quantity || 1))
@@ -265,7 +271,7 @@ async function getTopMenusWithOrderCounts() {
         }
         // If items is an object with menu items
         else if (items && typeof items === 'object') {
-          Object.entries(items).forEach(([key, value]: [string, any]) => {
+          Object.entries(items).forEach(([_, value]: [string, OrderItem]) => {
             if (value && (value.menuId || value.id)) {
               const menuId = value.menuId || value.id
               menuOrderCounts.set(menuId, (menuOrderCounts.get(menuId) || 0) + (value.quantity || 1))

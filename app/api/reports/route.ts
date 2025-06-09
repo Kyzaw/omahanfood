@@ -3,6 +3,26 @@ import { PrismaClient } from '@/app/generated/prisma';
 
 const prisma = new PrismaClient();
 
+interface DateFilter {
+  createdAt?: {
+    gte?: Date;
+    lte?: Date;
+  };
+}
+
+interface OrderItem {
+  name: string;
+  quantity: number;
+  price: number;
+}
+
+interface ProductStat {
+  name: string;
+  category: string;
+  sold: number;
+  revenue: number;
+}
+
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
@@ -33,7 +53,7 @@ export async function GET(request: NextRequest) {
   }
 }
 
-async function getOverviewData(dateFilter: any) {
+async function getOverviewData(dateFilter: DateFilter) {
   // Total Penjualan
   const totalSales = await prisma.order.aggregate({
     where: {
@@ -73,7 +93,7 @@ async function getOverviewData(dateFilter: any) {
 
   let totalProductsSold = 0;
   orders.forEach((order) => {
-    const items = order.items as any[];
+    const items = order.items as OrderItem[];
     if (Array.isArray(items)) {
       totalProductsSold += items.reduce((sum, item) => sum + (item.quantity || 0), 0);
     }
@@ -111,7 +131,7 @@ async function getOverviewData(dateFilter: any) {
   });
 }
 
-async function getProductsData(dateFilter: any) {
+async function getProductsData(dateFilter: DateFilter) {
   const orders = await prisma.order.findMany({
     where: {
       status: 'SELESAI',
@@ -137,7 +157,7 @@ async function getProductsData(dateFilter: any) {
   const productStats = new Map();
 
   orders.forEach((order) => {
-    const items = order.items as any[];
+    const items = order.items as OrderItem[];
     if (Array.isArray(items)) {
       items.forEach((item) => {
         const key = item.name;
@@ -149,7 +169,7 @@ async function getProductsData(dateFilter: any) {
             category: category,
             sold: 0,
             revenue: 0,
-          });
+          } as ProductStat);
         }
         const stat = productStats.get(key);
         stat.sold += item.quantity || 0;
@@ -183,7 +203,7 @@ async function getProductsData(dateFilter: any) {
   });
 }
 
-async function getTransactionsData(dateFilter: any) {
+async function getTransactionsData(dateFilter: DateFilter) {
   const transactions = await prisma.order.findMany({
     where: dateFilter,
     include: {
@@ -200,7 +220,7 @@ async function getTransactionsData(dateFilter: any) {
   });
 
   const formattedTransactions = transactions.map((transaction) => {
-    const items = transaction.items as any[];
+    const items = transaction.items as OrderItem[];
     const itemCount = Array.isArray(items)
       ? items.reduce((sum, item) => sum + (item.quantity || 0), 0)
       : 0;

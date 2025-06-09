@@ -1,0 +1,9 @@
+# Prisma generated files
+app/generated/**/*
+/app/generated/prisma/**/*
+
+# Other common files to ignore
+node_modules/
+.next/
+build/
+dist/ 

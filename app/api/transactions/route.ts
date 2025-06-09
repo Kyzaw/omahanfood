@@ -1,8 +1,7 @@
 import { NextResponse } from "next/server"
+import midtransClient from 'midtrans-client'
 
-const midtransClient = require('midtrans-client')
-
-let snap = new midtransClient.Snap({
+const snap = new midtransClient.Snap({
     isProduction:false,
     serverKey:process.env.SECRET_MIDTRANS,
     clientKey:process.env.NEXT_PUBLIC_MIDTRANS_CLIENT
