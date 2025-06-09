@@ -262,21 +262,21 @@ async function getTopMenusWithOrderCounts() {
 
         // If items is an array, count each menu
         if (Array.isArray(items)) {
-          items.forEach((item: OrderItem) => {
-            if (item.menuId || item.id) {
-              const menuId = item.menuId || item.id
-              menuOrderCounts.set(menuId, (menuOrderCounts.get(menuId) || 0) + (item.quantity || 1))
+          items.forEach((item) => {
+            const menuId = item.menuId || item.id;
+            if (menuId) {
+              menuOrderCounts.set(menuId, (menuOrderCounts.get(menuId) || 0) + (item.quantity || 1));
             }
-          })
+          });
         }
         // If items is an object with menu items
         else if (items && typeof items === 'object') {
-          Object.entries(items).forEach(([_, value]: [string, OrderItem]) => {
-            if (value && (value.menuId || value.id)) {
-              const menuId = value.menuId || value.id
-              menuOrderCounts.set(menuId, (menuOrderCounts.get(menuId) || 0) + (value.quantity || 1))
+          Object.entries(items).forEach(([_, value]) => {
+            const menuId = value.menuId || value.id;
+            if (menuId) {
+              menuOrderCounts.set(menuId, (menuOrderCounts.get(menuId) || 0) + (value.quantity || 1));
             }
-          })
+          });
         }
       } catch (error) {
         // Skip invalid JSON entries
