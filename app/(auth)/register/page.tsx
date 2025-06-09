@@ -3,7 +3,6 @@
 import { useFormState } from "react-dom";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { FcGoogle } from "react-icons/fc";
 import { signUpCredentials } from "@/lib/actions";
 
 type FieldErrors = {
@@ -90,15 +89,6 @@ export default function RegisterPage() {
               Sign Up
             </Button>
           </form>
-
-          <div className="text-center my-4 text-sm text-gray-500">Or</div>
-
-          <div className="flex flex-col gap-2">
-            <Button variant="outline" className="rounded-full flex items-center justify-center gap-2">
-              <FcGoogle className="text-xl" />
-              Sign Up with Google
-            </Button>
-          </div>
 
           <p className="mt-6 text-sm text-center">
             Already have an account?{" "}

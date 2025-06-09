@@ -3,7 +3,6 @@
 import Image from "next/image"; // Ganti img ke Image
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { FcGoogle } from "react-icons/fc";
 import { useState } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
@@ -137,15 +136,6 @@ export default function LoginPage() {
               {loading ? "Signing In..." : "Sign In"}
             </Button>
           </form>
-
-          <div className="text-center my-4 text-sm text-gray-500">Or</div>
-
-          <div className="flex flex-col gap-2">
-            <Button variant="outline" className="rounded-full flex items-center justify-center gap-2">
-              <FcGoogle className="text-xl" />
-              Sign Up with Google
-            </Button>
-          </div>
 
           <p className="mt-6 text-sm text-center">
             Don&apos;t have an account?{" "}
