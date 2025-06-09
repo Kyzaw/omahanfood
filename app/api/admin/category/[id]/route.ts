@@ -1,14 +1,18 @@
 import { prisma } from "@/lib/prisma";
-import { NextRequest } from "next/server";
+import { type NextRequest } from "next/server";
+
+type Props = {
+  params: { id: string };
+};
 
 export async function PATCH(
-  request: NextRequest,
-  { params }: { params: { id: string } }
+  req: Request,
+  props: Props
 ) {
   try {
-    const { name } = await request.json();
+    const { name } = await req.json();
     const category = await prisma.category.update({
-      where: { id: params.id },
+      where: { id: props.params.id },
       data: { name },
     });
     return new Response(JSON.stringify(category), {
@@ -24,12 +28,12 @@ export async function PATCH(
 }
 
 export async function DELETE(
-  request: NextRequest,
-  { params }: { params: { id: string } }
+  req: Request,
+  props: Props
 ) {
   try {
     await prisma.category.delete({
-      where: { id: params.id },
+      where: { id: props.params.id },
     });
     return new Response(JSON.stringify({ success: true }), {
       status: 200,
