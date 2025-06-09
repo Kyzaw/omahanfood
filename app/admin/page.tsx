@@ -226,79 +226,71 @@ interface OrderItem {
   price: number;
 }
 
-// Helper function to get top menus with order counts
 async function getTopMenusWithOrderCounts() {
   try {
-    // Get all menus with their related data
+    // Ambil semua menu beserta data terkait
     const menus = await prisma.menu.findMany({
       include: {
         category: {
-          select: {
-            name: true
-          }
+          select: { name: true }
         },
         reviews: {
-          select: {
-            rating: true
-          }
+          select: { rating: true }
         }
       }
-    })
+    });
 
-    // Get order counts for each menu by parsing JSON items field
+    // Ambil semua order dengan field 'items'
     const orders = await prisma.order.findMany({
-      select: {
-        items: true
-      }
-    })
+      select: { items: true }
+    });
 
-    // Count how many times each menu appears in orders
-    const menuOrderCounts = new Map<string, number>()
+    // Map untuk menyimpan jumlah order per menuId
+    const menuOrderCounts = new Map<string, number>();
 
     orders.forEach(order => {
       try {
-        // Parse the JSON items field
-        const items = typeof order.items === 'string' 
-          ? JSON.parse(order.items) 
+        // Parse items jika berupa string JSON
+        const items: Record<string, OrderItem> | OrderItem[] = typeof order.items === 'string'
+          ? JSON.parse(order.items)
           : order.items;
 
-        // If items is an array, count each menu
         if (Array.isArray(items)) {
+          // Jika items berupa array
           items.forEach((item: OrderItem) => {
             const menuId = item.menuId || item.id;
             if (menuId) {
               menuOrderCounts.set(menuId, (menuOrderCounts.get(menuId) || 0) + (item.quantity || 1));
             }
           });
-        }
-        // If items is an object with menu items
-        else if (items && typeof items === 'object') {
-          Object.entries(items).forEach(([_, value]: [string, OrderItem]) => {
-            const menuId = value.menuId || value.id;
+        } else if (items && typeof items === 'object') {
+          // Jika items berupa objek dengan nilai OrderItem
+          Object.entries(items).forEach(([_, value]) => {
+            const orderItem = value as OrderItem;
+            const menuId = orderItem.menuId || orderItem.id;
             if (menuId) {
-              menuOrderCounts.set(menuId, (menuOrderCounts.get(menuId) || 0) + (value.quantity || 1));
+              menuOrderCounts.set(menuId, (menuOrderCounts.get(menuId) || 0) + (orderItem.quantity || 1));
             }
           });
         }
       } catch (error) {
-        // Skip invalid JSON entries
         console.warn('Failed to parse order items:', error);
       }
-    })
+    });
 
-    // Add order counts to menus and return
+    // Tambahkan orderCount ke masing-masing menu
     const menusWithOrderCounts = menus.map(menu => ({
       ...menu,
       orderCount: menuOrderCounts.get(menu.id) || 0
-    }))
+    }));
 
-    // Sort by order count and return top 10
+    // Urutkan berdasarkan orderCount terbesar dan ambil 10 teratas
     return menusWithOrderCounts
       .sort((a, b) => b.orderCount - a.orderCount)
-      .slice(0, 10)
+      .slice(0, 10);
 
   } catch (error) {
-    console.error('Error fetching top menus:', error)
-    return []
+    console.error('Error fetching top menus:', error);
+    return [];
   }
 }
