@@ -1,21 +1,28 @@
 import { prisma } from "@/lib/prisma";
-import { NextRequest, NextResponse } from "next/server";
+import { type NextRequest } from "next/server";
 
-export async function PATCH(req: Request, { params }: { params: { id: string } }) {
-  const { name } = await req.json();
+export async function PATCH(
+  request: NextRequest,
+  context: { params: { id: string } }
+): Promise<Response> {
+  const { name } = await request.json();
   const category = await prisma.category.update({
-    where: { id: params.id },
+    where: { id: context.params.id },
     data: { name },
   });
-  return NextResponse.json(category);
+  return new Response(JSON.stringify(category), {
+    headers: { "Content-Type": "application/json" },
+  });
 }
 
 export async function DELETE(
   request: NextRequest,
   context: { params: { id: string } }
-) {
+): Promise<Response> {
   await prisma.category.delete({
     where: { id: context.params.id },
   });
-  return NextResponse.json({ success: true });
+  return new Response(JSON.stringify({ success: true }), {
+    headers: { "Content-Type": "application/json" },
+  });
 }
