@@ -35,7 +35,7 @@ const MenuForm = ({ categories }: { categories: { id: string, name: string }[] }
       <div className="w-full max-w-3xl mx-auto">
         {/* Header */}
         <div className="bg-white rounded-2xl shadow-xl border border-slate-200 overflow-hidden">
-          <div className="bg-gradient-to-r from-blue-600 to-blue-700 px-8 py-6">
+          <div className="bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900 px-8 py-6">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-4">
                 <div className="p-2 bg-white/20 rounded-lg">
@@ -206,7 +206,7 @@ const MenuForm = ({ categories }: { categories: { id: string, name: string }[] }
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full py-4 px-8 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 disabled:from-slate-400 disabled:to-slate-500 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl disabled:shadow-none transition-all duration-200 flex items-center justify-center space-x-2"
+                  className="w-full py-4 px-8 bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900 hover:from-slate-700 hover:to-slate-800 disabled:from-slate-400 disabled:to-slate-500 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl disabled:shadow-none transition-all duration-200 flex items-center justify-center space-x-2"
                 >
                   {isSubmitting ? (
                     <>

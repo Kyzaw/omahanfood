@@ -83,7 +83,7 @@ const CategoryForm = () => {
 
         {/* Form Container */}
         <div className="bg-white rounded-2xl shadow-xl border border-slate-200 overflow-hidden">
-          <div className="bg-gradient-to-r from-blue-600 to-indigo-600 p-6">
+          <div className="bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900 p-6">
             <div className="flex items-center space-x-3">
               <div className="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center">
                 <Plus className="w-5 h-5 text-white" />
@@ -203,7 +203,7 @@ const CategoryForm = () => {
             <div className="pt-6 border-t border-slate-200">
               <button
                 type="submit"
-                className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white py-4 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-0.5 flex items-center justify-center space-x-2"
+                className="w-full bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900 hover:from-slate-700 hover:to-slate-700 text-white py-4 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-0.5 flex items-center justify-center space-x-2"
               >
                 <Upload className="w-5 h-5" />
                 <span>Buat Kategori</span>

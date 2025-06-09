@@ -242,109 +242,114 @@ export default function CheckoutPage() {
   };
 
   const handleCheckout = async () => {
-  if (!validateCheckoutData()) return;
+    if (!validateCheckoutData()) return;
 
-  setIsLoading(true);
+    setIsLoading(true);
 
-  try {
+    try {
+      const updatedItems = items.map(({ id, name, price, quantity }) => ({
+        id,
+        name,
+        price,
+        quantity: quantity * paketMultiplier,
+      }));
 
-    const updatedItems = items.map(({ id, name, price, quantity }) => ({
-      id,
-      name,
-      price,
-      quantity: quantity * paketMultiplier,
-    }));
+      // Hitung total baru
+      const totalAmount = updatedItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
 
-    // Hitung total baru
-    const totalAmount = updatedItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
+      // Create order
+      const orderPayload = {
+        userId: session?.user?.id,
+        deliveryTime: deliveryTime.toUpperCase(),
+        items: updatedItems,
+        totalAmount,
+        jenisPaket, // Tambahkan jenis paket ke payload
+        address: `${address.name}, ${address.phone}, ${address.fullAddress}`,
+        paymentMethod: "PENDING", // Will be updated after payment
+        notes: note.trim() || null,
+      };
 
+      const orderRes = await fetch("/api/order", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(orderPayload),
+      });
 
-    // Create order
-    const orderPayload = {
-      userId: session?.user?.id,
-      deliveryTime: deliveryTime.toUpperCase(),
-      items: updatedItems,
-      totalAmount,
-      jenisPaket, // Tambahkan jenis paket ke payload
-      address: `${address.name}, ${address.phone}, ${address.fullAddress}`,
-      paymentMethod: "PENDING", // Will be updated after payment
-      notes: note.trim() || null,
-    };
+      if (!orderRes.ok) {
+        const error = await orderRes.json();
+        throw new Error(error.error || "Failed to create order");
+      }
 
-    const orderRes = await fetch("/api/order", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(orderPayload),
-    });
+      const { orderId } = await orderRes.json();
 
-    if (!orderRes.ok) {
-      const error = await orderRes.json();
-      throw new Error(error.error || "Failed to create order");
-    }
+      // Create payment token
+      const transactionRes = await fetch("/api/transactions", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: orderId, totalAmount }),
+      });
 
-    const { orderId } = await orderRes.json();
+      if (!transactionRes.ok) {
+        throw new Error("Failed to create payment token");
+      }
 
-    // Create payment token
-    const transactionRes = await fetch("/api/transactions", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ id: orderId, totalAmount }),
-    });
+      const { token } = await transactionRes.json();
 
-    if (!transactionRes.ok) {
-      throw new Error("Failed to create payment token");
-    }
+      // Open Midtrans payment popup
+      window.snap.pay(token, {
+        onSuccess: async function (result: any) {
+          try {
+            const paymentMethod = result.payment_type || "unknown";
 
-    const { token } = await transactionRes.json();
+            const updateRes = await fetch("/api/order/payment-method", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ orderId, paymentMethod }),
+            });
 
-    // Open Midtrans payment popup
-    window.snap.pay(token, {
-      onSuccess: async function (result: any) {
-        try {
-          const paymentMethod = result.payment_type || "unknown";
+            if (!updateRes.ok) {
+              throw new Error("Failed to update payment method");
+            }
 
-          const updateRes = await fetch("/api/order/payment-method", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ orderId, paymentMethod }),
-          });
+            toast.success("✅ Pembayaran berhasil! Terima kasih telah memesan.");
 
-          if (!updateRes.ok) {
-            throw new Error("Failed to update payment method");
+            // Clear checkout data
+            localStorage.removeItem("checkoutItems");
+            localStorage.removeItem("shippingAddress");
+            setItems([]);
+            setAddress({
+              name: "",
+              phone: "",
+              fullAddress: ""
+            });
+            setDeliveryTime("");
+            setNote("");
+
+            // Redirect to success page or orders page
+            setTimeout(() => {
+              router.push("/");
+            }, 2000);
+          } catch (error) {
+            console.error("Payment update error:", error);
+            toast.error("❌ Pembayaran berhasil tetapi gagal memperbarui status. Silakan hubungi customer service.");
           }
+        },
+        onError: function (error: any) {
+          console.error("Payment error:", error);
+          toast.error("❌ Pembayaran gagal. Silakan coba lagi.");
+        },
+        onClose: function () {
+          toast("⚠️ Pembayaran dibatalkan.");
+        },
+      });
 
-          toast.success("✅ Pembayaran berhasil! Terima kasih telah memesan.");
-
-          // Clear checkout data
-          localStorage.removeItem("checkoutItems");
-          localStorage.removeItem("shippingAddress");
-
-          // Redirect to success page or orders page
-          setTimeout(() => {
-            router.push("/");
-          }, 2000);
-        } catch (error) {
-          console.error("Payment update error:", error);
-          toast.error("❌ Pembayaran berhasil tetapi gagal memperbarui status. Silakan hubungi customer service.");
-        }
-      },
-      onError: function (error: any) {
-        console.error("Payment error:", error);
-        toast.error("❌ Pembayaran gagal. Silakan coba lagi.");
-      },
-      onClose: function () {
-        toast("⚠️ Pembayaran dibatalkan.");
-      },
-    });
-
-  } catch (error) {
-    console.error("Checkout error:", error);
-    toast.error(`❌ ${error instanceof Error ? error.message : "Terjadi kesalahan saat checkout"}`);
-  } finally {
-    setIsLoading(false);
-  }
-};
-
+    } catch (error) {
+      console.error("Checkout error:", error);
+      toast.error(`❌ ${error instanceof Error ? error.message : "Terjadi kesalahan saat checkout"}`);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-red-50 md:pt-25">
@@ -607,8 +612,6 @@ export default function CheckoutPage() {
           </>
         )}
       </div>
-
-
     </div>
   );
 }

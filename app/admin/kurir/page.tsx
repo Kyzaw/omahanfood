@@ -269,7 +269,7 @@ export default async function AdminOrdersPage() {
         <AdminSidebar />
         
         {/* Main Content with proper margin */}
-        <div className="ml-64 min-h-screen">
+        <div className="ml-96 min-h-screen">
           <div className="p-6">
             {/* Header */}
             <div className="mb-8">
