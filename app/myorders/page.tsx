@@ -6,8 +6,43 @@ import { Separator } from "@/components/ui/separator";
 import { redirect } from "next/navigation";
 import { Clock, MapPin, CreditCard, Package, User } from "lucide-react";
 
+interface OrderItem {
+  name: string;
+  quantity: number;
+  price: number;
+}
+
+interface AddressData {
+  nama: string;
+  noHp: string;
+  alamat: string;
+}
+
+type OrderStatus = 'PENDING' | 'DIBAYAR' | 'DIMASAK' | 'SIAP_KIRIM' | 'DIKIRIM' | 'SELESAI';
+type DeliveryTime = 'PAGI' | 'SIANG' | 'SORE';
+
+interface JsonOrderItem {
+  name?: string | null;
+  quantity?: number | string | null;
+  price?: number | string | null;
+}
+
+// Type guard to check if an item is a valid order item from JSON
+function isValidOrderItem(item: unknown): item is JsonOrderItem {
+  if (typeof item !== 'object' || item === null) {
+    return false;
+  }
+  
+  const jsonItem = item as Record<string, unknown>;
+  return (
+    'name' in jsonItem ||
+    'quantity' in jsonItem ||
+    'price' in jsonItem
+  );
+}
+
 // Helper function to get status color
-function getStatusColor(status: string) {
+function getStatusColor(status: OrderStatus) {
   switch (status) {
     case "PENDING":
       return "bg-yellow-100 text-yellow-800";
@@ -27,7 +62,7 @@ function getStatusColor(status: string) {
 }
 
 // Helper function to get status label
-function getStatusLabel(status: string) {
+function getStatusLabel(status: OrderStatus) {
   switch (status) {
     case "PENDING":
       return "Menunggu Pembayaran";
@@ -46,8 +81,7 @@ function getStatusLabel(status: string) {
   }
 }
 
-
-function getDeliveryTimeLabel(deliveryTime: string) {
+function getDeliveryTimeLabel(deliveryTime: DeliveryTime) {
   switch (deliveryTime) {
     case "PAGI":
       return "Pagi (08:00 - 12:00)";
@@ -61,7 +95,7 @@ function getDeliveryTimeLabel(deliveryTime: string) {
 }
 
 // Helper function to parse address string
-function parseAddressString(addressString: string) {
+function parseAddressString(addressString: string): AddressData | null {
   // Try different patterns to extract name, phone, and address
   
   // Pattern 1: "Nama | 08123456789 | Jl. Address"
@@ -189,9 +223,21 @@ export default async function MyOrdersPage() {
 
       <div className="space-y-4">
         {orders.map((order) => {
-          // Parse items from JSON
-          const items = Array.isArray(order.items) ? order.items : [];
-          const itemCount = items.reduce((sum: number, item: any) => sum + (item.quantity || 0), 0);
+          // Parse items from JSON and validate the structure
+          const rawItems = Array.isArray(order.items) ? order.items : [];
+          const parsedItems = rawItems.map(item => {
+            if (isValidOrderItem(item)) {
+              return {
+                name: String(item.name || ''),
+                quantity: Number(item.quantity || 1),
+                price: Number(item.price || 0)
+              } satisfies OrderItem;
+            }
+            return { name: '', quantity: 1, price: 0 } satisfies OrderItem;
+          });
+          
+          const items = parsedItems;
+          const itemCount = items.reduce((sum, item) => sum + item.quantity, 0);
 
           return (
             <Card key={order.id} className="shadow-sm hover:shadow-md transition-shadow">
@@ -201,10 +247,10 @@ export default async function MyOrdersPage() {
                     Order #{order.id.slice(-8).toUpperCase()}
                   </CardTitle>
                   <Badge 
-                    className={`${getStatusColor(order.status)} border-0`}
+                    className={`${getStatusColor(order.status as OrderStatus)} border-0`}
                     variant="secondary"
                   >
-                    {getStatusLabel(order.status)}
+                    {getStatusLabel(order.status as OrderStatus)}
                   </Badge>
                 </div>
                 <div className="flex items-center text-sm text-gray-500">
@@ -238,7 +284,6 @@ export default async function MyOrdersPage() {
                         <p className="text-sm font-medium">Alamat Pengiriman</p>
                         {(() => {
                           try {
-                            // First try to parse as JSON
                             const addressData = JSON.parse(order.address);
                             if (typeof addressData === 'object' && addressData !== null) {
                               return (
@@ -255,7 +300,7 @@ export default async function MyOrdersPage() {
                                 </div>
                               );
                             }
-                          } catch (error) {
+                          } catch {
                             // If not JSON, try to parse as delimited string
                             const parsedAddress = parseAddressString(order.address);
                             
@@ -287,7 +332,7 @@ export default async function MyOrdersPage() {
                       <div className="flex-1">
                         <p className="text-sm font-medium">Waktu Pengiriman</p>
                         <p className="text-sm text-gray-600">
-                          {getDeliveryTimeLabel(order.deliveryTime)}
+                          {getDeliveryTimeLabel(order.deliveryTime as DeliveryTime)}
                         </p>
                       </div>
                     </div>
@@ -336,14 +381,14 @@ export default async function MyOrdersPage() {
                     <div>
                       <h4 className="text-sm font-medium mb-2">Detail Pesanan</h4>
                       <div className="space-y-2">
-                        {items.map((item: any, index: number) => (
+                        {items.map((item, index) => (
                           <div key={index} className="flex justify-between items-center text-sm">
                             <div className="flex-1">
                               <span className="font-medium">{item.name || 'Item'}</span>
-                              <span className="text-gray-500 ml-2">x{item.quantity || 1}</span>
+                              <span className="text-gray-500 ml-2">x{item.quantity}</span>
                             </div>
                             <span className="font-medium">
-                              Rp {((item.price || 0) * (item.quantity || 1)).toLocaleString()}
+                              Rp {(item.price * item.quantity).toLocaleString()}
                             </span>
                           </div>
                         ))}

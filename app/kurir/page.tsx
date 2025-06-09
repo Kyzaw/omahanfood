@@ -52,11 +52,6 @@ interface Order {
   user: OrderUser;
 }
 
-interface JsonOrderItem {
-  name?: string;
-  quantity?: number;
-}
-
 async function updateOrderStatus(orderId: string, newStatus: OrderStatus) {
   "use server";
   
@@ -363,9 +358,9 @@ export default async function CourierDashboard() {
           <h2 className="text-xl font-semibold">
             Semua Pesanan Anda ({displayOrders.length})
           </h2>
-          {ongoingOrders.map((order) => {
+          {ongoingOrders.map((order: Order) => {
             const items = Array.isArray(order.items) ? order.items : [];
-            const itemCount = items.reduce((sum: number, item: any) => sum + (item.quantity || 0), 0);
+            const itemCount = items.reduce((sum: number, item: OrderItem) => sum + (item.quantity || 0), 0);
             const addressData = parseAddressString(order.address);
 
             return (
@@ -501,7 +496,7 @@ export default async function CourierDashboard() {
                       <div>
                         <h4 className="text-sm font-medium mb-2">Item Pesanan</h4>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                          {items.map((item: any, index: number) => (
+                          {items.map((item: OrderItem, index: number) => (
                             <div key={index} className="flex justify-between items-center text-sm bg-gray-50 p-2 rounded">
                               <div className="flex-1">
                                 <span className="font-medium">{item.name || 'Item'}</span>
@@ -539,185 +534,185 @@ export default async function CourierDashboard() {
               </Card>
             );
           })}
-            {completedOrders.length > 0 && (
+          {completedOrders.length > 0 && (
             <>
               <Separator className="my-6" />
               <h2 className="text-xl font-semibold">Pesanan Selesai ({completedOrders.length})</h2>
-              {completedOrders.map((order) => {
+              {completedOrders.map((order: Order) => {
                 const items = Array.isArray(order.items) ? order.items : [];
-            const itemCount = items.reduce((sum: number, item: any) => sum + (item.quantity || 0), 0);
-            const addressData = parseAddressString(order.address);
+                const itemCount = items.reduce((sum: number, item: OrderItem) => sum + (item.quantity || 0), 0);
+                const addressData = parseAddressString(order.address);
 
-            return (
-              <Card key={order.id} className="shadow-sm hover:shadow-md transition-shadow">
-                <CardHeader className="pb-3">
-                  <div className="flex items-center justify-between">
-                    <CardTitle className="text-lg font-semibold">
-                      Order #{order.id.slice(-8).toUpperCase()}
-                    </CardTitle>
-                    <div className="flex items-center space-x-2">
-                      <Badge 
-                        className={`${getStatusColor(order.status)} border-0`}
-                        variant="secondary"
-                      >
-                        {getStatusLabel(order.status)}
-                      </Badge>
-                      {order.status === "SIAP_KIRIM" && (
-                        <AlertCircle className="h-5 w-5 text-orange-500" />
-                      )}
-                    </div>
-                  </div>
-                  <div className="flex items-center text-sm text-gray-500">
-                    <Clock className="h-4 w-4 mr-1" />
-                    {new Date(order.createdAt).toLocaleString("id-ID", {
-                      weekday: "short",
-                      day: "numeric",
-                      month: "short",
-                      hour: "2-digit",
-                      minute: "2-digit",
-                    })}
-                  </div>
-                </CardHeader>
-
-                <CardContent className="space-y-4">
-                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    {/* Customer Info */}
-                    <div className="space-y-3">
-                      <h4 className="font-semibold text-gray-900">Informasi Pelanggan</h4>
-                      
-                      <div className="flex items-start space-x-2">
-                        <User className="h-4 w-4 mt-0.5 text-gray-400" />
-                        <div className="flex-1">
-                          <p className="text-sm font-medium">Nama</p>
-                          <p className="text-sm text-gray-600">{order.user.name}</p>
+                return (
+                  <Card key={order.id} className="shadow-sm hover:shadow-md transition-shadow">
+                    <CardHeader className="pb-3">
+                      <div className="flex items-center justify-between">
+                        <CardTitle className="text-lg font-semibold">
+                          Order #{order.id.slice(-8).toUpperCase()}
+                        </CardTitle>
+                        <div className="flex items-center space-x-2">
+                          <Badge 
+                            className={`${getStatusColor(order.status)} border-0`}
+                            variant="secondary"
+                          >
+                            {getStatusLabel(order.status)}
+                          </Badge>
+                          {order.status === "SIAP_KIRIM" && (
+                            <AlertCircle className="h-5 w-5 text-orange-500" />
+                          )}
                         </div>
                       </div>
+                      <div className="flex items-center text-sm text-gray-500">
+                        <Clock className="h-4 w-4 mr-1" />
+                        {new Date(order.createdAt).toLocaleString("id-ID", {
+                          weekday: "short",
+                          day: "numeric",
+                          month: "short",
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })}
+                      </div>
+                    </CardHeader>
 
-                      {addressData ? (
-                        <>
-                          {addressData.nama && (
-                            <div className="flex items-start space-x-2">
-                              <User className="h-4 w-4 mt-0.5 text-gray-400" />
-                              <div className="flex-1">
-                                <p className="text-sm font-medium">Penerima</p>
-                                <p className="text-sm text-gray-600">{addressData.nama}</p>
-                              </div>
-                            </div>
-                          )}
+                    <CardContent className="space-y-4">
+                      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        {/* Customer Info */}
+                        <div className="space-y-3">
+                          <h4 className="font-semibold text-gray-900">Informasi Pelanggan</h4>
                           
-                          {addressData.noHp && (
-                            <div className="flex items-start space-x-2">
-                              <Phone className="h-4 w-4 mt-0.5 text-gray-400" />
-                              <div className="flex-1">
-                                <p className="text-sm font-medium">No HP</p>
-                                <p className="text-sm text-gray-600">
-                                  <a href={`tel:${addressData.noHp}`} className="text-blue-600 hover:underline">
-                                    {addressData.noHp}
-                                  </a>
-                                </p>
-                              </div>
+                          <div className="flex items-start space-x-2">
+                            <User className="h-4 w-4 mt-0.5 text-gray-400" />
+                            <div className="flex-1">
+                              <p className="text-sm font-medium">Nama</p>
+                              <p className="text-sm text-gray-600">{order.user.name}</p>
                             </div>
-                          )}
-                          
-                          {addressData.alamat && (
+                          </div>
+
+                          {addressData ? (
+                            <>
+                              {addressData.nama && (
+                                <div className="flex items-start space-x-2">
+                                  <User className="h-4 w-4 mt-0.5 text-gray-400" />
+                                  <div className="flex-1">
+                                    <p className="text-sm font-medium">Penerima</p>
+                                    <p className="text-sm text-gray-600">{addressData.nama}</p>
+                                  </div>
+                                </div>
+                              )}
+                              
+                              {addressData.noHp && (
+                                <div className="flex items-start space-x-2">
+                                  <Phone className="h-4 w-4 mt-0.5 text-gray-400" />
+                                  <div className="flex-1">
+                                    <p className="text-sm font-medium">No HP</p>
+                                    <p className="text-sm text-gray-600">
+                                      <a href={`tel:${addressData.noHp}`} className="text-blue-600 hover:underline">
+                                        {addressData.noHp}
+                                      </a>
+                                    </p>
+                                  </div>
+                                </div>
+                              )}
+                              
+                              {addressData.alamat && (
+                                <div className="flex items-start space-x-2">
+                                  <MapPin className="h-4 w-4 mt-0.5 text-gray-400" />
+                                  <div className="flex-1">
+                                    <p className="text-sm font-medium">Alamat</p>
+                                    <p className="text-sm text-gray-600">{addressData.alamat}</p>
+                                  </div>
+                                </div>
+                              )}
+                            </>
+                          ) : (
                             <div className="flex items-start space-x-2">
                               <MapPin className="h-4 w-4 mt-0.5 text-gray-400" />
                               <div className="flex-1">
                                 <p className="text-sm font-medium">Alamat</p>
-                                <p className="text-sm text-gray-600">{addressData.alamat}</p>
+                                <p className="text-sm text-gray-600">{order.address}</p>
                               </div>
                             </div>
                           )}
-                        </>
-                      ) : (
-                        <div className="flex items-start space-x-2">
-                          <MapPin className="h-4 w-4 mt-0.5 text-gray-400" />
-                          <div className="flex-1">
-                            <p className="text-sm font-medium">Alamat</p>
-                            <p className="text-sm text-gray-600">{order.address}</p>
+                        </div>
+
+                        {/* Order Details */}
+                        <div className="space-y-3">
+                          <h4 className="font-semibold text-gray-900">Detail Pesanan</h4>
+                          
+                          <div className="flex items-start space-x-2">
+                            <Package className="h-4 w-4 mt-0.5 text-gray-400" />
+                            <div className="flex-1">
+                              <p className="text-sm font-medium">Total Item</p>
+                              <p className="text-sm text-gray-600">{itemCount} item</p>
+                            </div>
+                          </div>
+
+                          <div className="flex items-start space-x-2">
+                            <Clock className="h-4 w-4 mt-0.5 text-gray-400" />
+                            <div className="flex-1">
+                              <p className="text-sm font-medium">Waktu Pengiriman</p>
+                              <p className="text-sm text-gray-600">
+                                {getDeliveryTimeLabel(order.deliveryTime)}
+                              </p>
+                            </div>
+                          </div>
+
+                          <div className="flex items-start space-x-2">
+                            <CreditCard className="h-4 w-4 mt-0.5 text-gray-400" />
+                            <div className="flex-1">
+                              <p className="text-sm font-medium">Total Pembayaran</p>
+                              <p className="text-sm font-semibold text-green-600">
+                                Rp {order.totalAmount.toLocaleString()}
+                              </p>
+                            </div>
                           </div>
                         </div>
-                      )}
-                    </div>
-
-                    {/* Order Details */}
-                    <div className="space-y-3">
-                      <h4 className="font-semibold text-gray-900">Detail Pesanan</h4>
-                      
-                      <div className="flex items-start space-x-2">
-                        <Package className="h-4 w-4 mt-0.5 text-gray-400" />
-                        <div className="flex-1">
-                          <p className="text-sm font-medium">Total Item</p>
-                          <p className="text-sm text-gray-600">{itemCount} item</p>
-                        </div>
                       </div>
 
-                      <div className="flex items-start space-x-2">
-                        <Clock className="h-4 w-4 mt-0.5 text-gray-400" />
-                        <div className="flex-1">
-                          <p className="text-sm font-medium">Waktu Pengiriman</p>
-                          <p className="text-sm text-gray-600">
-                            {getDeliveryTimeLabel(order.deliveryTime)}
-                          </p>
-                        </div>
-                      </div>
-
-                      <div className="flex items-start space-x-2">
-                        <CreditCard className="h-4 w-4 mt-0.5 text-gray-400" />
-                        <div className="flex-1">
-                          <p className="text-sm font-medium">Total Pembayaran</p>
-                          <p className="text-sm font-semibold text-green-600">
-                            Rp {order.totalAmount.toLocaleString()}
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Order Items */}
-                  {items.length > 0 && (
-                    <>
-                      <Separator />
-                      <div>
-                        <h4 className="text-sm font-medium mb-2">Item Pesanan</h4>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                          {items.map((item: any, index: number) => (
-                            <div key={index} className="flex justify-between items-center text-sm bg-gray-50 p-2 rounded">
-                              <div className="flex-1">
-                                <span className="font-medium">{item.name || 'Item'}</span>
-                                <span className="text-gray-500 ml-2">x{item.quantity || 1}</span>
-                              </div>
+                      {/* Order Items */}
+                      {items.length > 0 && (
+                        <>
+                          <Separator />
+                          <div>
+                            <h4 className="text-sm font-medium mb-2">Item Pesanan</h4>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                              {items.map((item: OrderItem, index: number) => (
+                                <div key={index} className="flex justify-between items-center text-sm bg-gray-50 p-2 rounded">
+                                  <div className="flex-1">
+                                    <span className="font-medium">{item.name || 'Item'}</span>
+                                    <span className="text-gray-500 ml-2">x{item.quantity || 1}</span>
+                                  </div>
+                                </div>
+                              ))}
                             </div>
-                          ))}
-                        </div>
-                      </div>
-                    </>
-                  )}
+                          </div>
+                        </>
+                      )}
 
-                  {/* Notes */}
-                  {order.notes && (
-                    <>
+                      {/* Notes */}
+                      {order.notes && (
+                        <>
+                          <Separator />
+                          <div>
+                            <h4 className="text-sm font-medium mb-1">Catatan</h4>
+                            <p className="text-sm text-gray-600 bg-yellow-50 p-2 rounded border-l-4 border-yellow-400">
+                              {order.notes}
+                            </p>
+                          </div>
+                        </>
+                      )}
+
+                      {/* Action Buttons */}
                       <Separator />
-                      <div>
-                        <h4 className="text-sm font-medium mb-1">Catatan</h4>
-                        <p className="text-sm text-gray-600 bg-yellow-50 p-2 rounded border-l-4 border-yellow-400">
-                          {order.notes}
-                        </p>
+                      <div className="flex justify-between items-center">
+                        <div className="text-sm text-gray-500">
+                          Update status pesanan sesuai dengan progress pengiriman
+                        </div>
+                        <StatusUpdateButtons order={order} />
                       </div>
-                    </>
-                  )}
-
-                  {/* Action Buttons */}
-                  <Separator />
-                  <div className="flex justify-between items-center">
-                    <div className="text-sm text-gray-500">
-                      Update status pesanan sesuai dengan progress pengiriman
-                    </div>
-                    <StatusUpdateButtons order={order} />
-                  </div>
-                </CardContent>
-              </Card>
-            );
+                    </CardContent>
+                  </Card>
+                );
               })}
             </>
           )}
