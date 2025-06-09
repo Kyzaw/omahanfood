@@ -1,16 +1,20 @@
 import { prisma } from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 
+// PATCH: Update category by ID
 export async function PATCH(
   request: NextRequest,
-  context: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const { name } = await request.json();
+
     const category = await prisma.category.update({
-      where: { id: context.params.id },
+      where: { id },
       data: { name },
     });
+
     return NextResponse.json(category);
   } catch (error) {
     return NextResponse.json(
@@ -20,14 +24,18 @@ export async function PATCH(
   }
 }
 
+// DELETE: Delete category by ID
 export async function DELETE(
   request: NextRequest,
-  context: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
+
     await prisma.category.delete({
-      where: { id: context.params.id },
+      where: { id },
     });
+
     return NextResponse.json({ success: true });
   } catch (error) {
     return NextResponse.json(
