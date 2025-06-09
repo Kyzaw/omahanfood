@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { useFormState } from "react-dom";
 import { Input } from "@/components/ui/input";
@@ -6,16 +6,29 @@ import { Button } from "@/components/ui/button";
 import { FcGoogle } from "react-icons/fc";
 import { signUpCredentials } from "@/lib/actions";
 
+type FieldErrors = {
+  name?: string[];
+  email?: string[];
+  password?: string[];
+};
+
+type RegisterState = {
+  error?: FieldErrors;
+  message?: string;
+};
+
 export default function RegisterPage() {
-    const [state, formAction] = useFormState(signUpCredentials, null)
+  // Ganti null dengan {} as RegisterState supaya tipe cocok
+  const [state, formAction] = useFormState(signUpCredentials, {} as RegisterState);
+
   return (
     <div className="flex flex-col sm:flex-row w-full max-w-5xl mx-auto sm:my-50 shadow-lg rounded-lg overflow-hidden border">
       {/* Kiri */}
       <div className="w-full sm:w-1/2 bg-orange-600 flex flex-col justify-center items-center text-center px-6 py-10">
         <img
-          src="/logo.jpg" // Ganti dengan URL atau path gambar
+          src="/logo.jpg"
           alt="Branding Image"
-          className="w-24 h-24 rounded-full mb-6 object-cover" // Menyesuaikan ukuran dan bentuk gambar
+          className="w-24 h-24 rounded-full mb-6 object-cover"
         />
         <h1 className="text-3xl sm:text-4xl font-bold text-black mb-2">Omahan Food</h1>
         <p className="text-black text-sm sm:text-base">Join us for an unforgettable culinary experience.</p>
@@ -29,7 +42,9 @@ export default function RegisterPage() {
 
           <form action={formAction} className="space-y-4">
             <div className="flex flex-col">
-              <label htmlFor="name" className="text-sm font-semibold text-gray-700 mb-2">Name</label>
+              <label htmlFor="name" className="text-sm font-semibold text-gray-700 mb-2">
+                Name
+              </label>
               <Input
                 id="name"
                 name="name"
@@ -37,12 +52,14 @@ export default function RegisterPage() {
                 placeholder="Name"
                 className="rounded-full px-4 py-2"
               />
-               <div aria-live="polite" aria-atomic="true">
-                <span className="text-sm text-red-500">{state?.error?.name}</span>
+              <div aria-live="polite" aria-atomic="true">
+                <span className="text-sm text-red-500">{state?.error?.name?.[0]}</span>
               </div>
             </div>
             <div className="flex flex-col">
-              <label htmlFor="email" className="text-sm font-semibold text-gray-700 mb-2">Email</label>
+              <label htmlFor="email" className="text-sm font-semibold text-gray-700 mb-2">
+                Email
+              </label>
               <Input
                 id="email"
                 name="email"
@@ -51,11 +68,13 @@ export default function RegisterPage() {
                 className="rounded-full px-4 py-2"
               />
               <div aria-live="polite" aria-atomic="true">
-                <span className="text-sm text-red-500">{state?.error?.email}</span>
+                <span className="text-sm text-red-500">{state?.error?.email?.[0]}</span>
               </div>
             </div>
             <div className="flex flex-col">
-              <label htmlFor="password" className="text-sm font-semibold text-gray-700 mb-2">Password</label>
+              <label htmlFor="password" className="text-sm font-semibold text-gray-700 mb-2">
+                Password
+              </label>
               <Input
                 id="password"
                 name="password"
@@ -63,8 +82,8 @@ export default function RegisterPage() {
                 placeholder="Password"
                 className="rounded-full px-4 py-2"
               />
-               <div aria-live="polite" aria-atomic="true">
-                <span className="text-sm text-red-500">{state?.error?.password}</span>
+              <div aria-live="polite" aria-atomic="true">
+                <span className="text-sm text-red-500">{state?.error?.password?.[0]}</span>
               </div>
             </div>
             <Button className="w-full rounded-full bg-orange-600 hover:bg-orange-700 text-white">
@@ -75,10 +94,7 @@ export default function RegisterPage() {
           <div className="text-center my-4 text-sm text-gray-500">Or</div>
 
           <div className="flex flex-col gap-2">
-            <Button
-              variant="outline"
-              className="rounded-full flex items-center justify-center gap-2"
-            >
+            <Button variant="outline" className="rounded-full flex items-center justify-center gap-2">
               <FcGoogle className="text-xl" />
               Sign Up with Google
             </Button>

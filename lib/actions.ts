@@ -8,6 +8,17 @@ import { AuthError } from "next-auth"
 import {put} from "@vercel/blob"
 import { revalidatePath } from "next/cache"
 
+type FieldErrors = {
+  name?: string[];
+  email?: string[];
+  password?: string[];
+};
+
+type RegisterState = {
+  error?: FieldErrors;
+  message?: string;
+};
+
 export const getUserRole = async (email: string): Promise<"ADMIN" | "USER" | "KURIR" | "DAPUR" | null> => {
   try {
     const user = await prisma.user.findUnique({
@@ -22,35 +33,38 @@ export const getUserRole = async (email: string): Promise<"ADMIN" | "USER" | "KU
   }
 };
 
-export const signUpCredentials = async(prevState: unknown, formData: FormData) => {
+export const signUpCredentials = async (
+  prevState: unknown,
+  formData: FormData
+): Promise<RegisterState | void> => {
+  const validateFields = RegisterSchema.safeParse(Object.fromEntries(formData.entries()));
 
-    const validateFields = RegisterSchema.safeParse(Object.fromEntries(formData.entries()))
+  if (!validateFields.success) {
+    return {
+      error: validateFields.error.flatten().fieldErrors,
+    };
+  }
 
-    if(!validateFields.success) {
-        return {
-            error: validateFields.error.flatten().fieldErrors
-        }
+  const { name, email, password } = validateFields.data;
+  const hashedPassword = hashSync(password, 10);
+
+  try {
+    await prisma.user.create({
+      data: {
+        name,
+        email,
+        password: hashedPassword,
+      },
+    });
+  } catch (error: any) {
+    if (error.code === "P2002") {
+      return { error: { email: ["Email is already registered"] } };
     }
+    return { message: "Failed to register user" };
+  }
 
-    const {name, email, password} = validateFields.data
-    const hashedPassword = hashSync(password, 10)
-
-    try {
-        await prisma.user.create({
-            data:{
-                name,
-                email,
-                password: hashedPassword
-            }
-        })
-    } catch (error: any) {
-        if (error.code === "P2002") {
-            return { error: { email: "Email is already registered" } }
-         }
-        return { message: "Failed to register user" }
-    }
-    redirect("/login")
-}
+  redirect("/login");
+};
 
 export const SignInCredentials = async(prevstate: unknown, formData:FormData) => {
     const validateFields = SigninSchema.safeParse(Object.fromEntries(formData.entries()))
