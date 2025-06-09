@@ -19,7 +19,45 @@ import {
 } from "lucide-react";
 import { revalidatePath } from "next/cache";
 
-async function updateOrderStatus(orderId: string, newStatus: string) {
+type OrderStatus = 'SIAP_KIRIM' | 'DIKIRIM' | 'SELESAI';
+type DeliveryTime = 'PAGI' | 'SIANG' | 'SORE';
+
+interface OrderItem {
+  name: string;
+  quantity: number;
+}
+
+interface AddressData {
+  nama: string;
+  noHp: string;
+  alamat: string;
+}
+
+interface OrderUser {
+  name: string;
+  email: string;
+}
+
+interface Order {
+  id: string;
+  status: OrderStatus;
+  courierId: string | null;
+  userId: string;
+  items: OrderItem[];
+  address: string;
+  deliveryTime: DeliveryTime;
+  totalAmount: number;
+  notes?: string;
+  createdAt: Date;
+  user: OrderUser;
+}
+
+interface JsonOrderItem {
+  name?: string;
+  quantity?: number;
+}
+
+async function updateOrderStatus(orderId: string, newStatus: OrderStatus) {
   "use server";
   
   const session = await auth();
@@ -43,7 +81,7 @@ async function updateOrderStatus(orderId: string, newStatus: string) {
   await prisma.order.update({
     where: { id: orderId },
     data: { 
-      status: newStatus as any,
+      status: newStatus,
     },
   });
 
@@ -93,14 +131,14 @@ function getDeliveryTimeLabel(deliveryTime: string) {
 }
 
 // Helper function to parse address string
-function parseAddressString(addressString: string) {
+function parseAddressString(addressString: string): AddressData | null {
   try {
     // First try to parse as JSON
     const addressData = JSON.parse(addressString);
     if (typeof addressData === 'object' && addressData !== null) {
-      return addressData;
+      return addressData as AddressData;
     }
-  } catch (error) {
+  } catch {
     // If not JSON, try to parse as delimited string
     const phoneRegex = /(\+62|62|0)[\s-]?8[1-9][0-9]{6,10}/g;
     const phoneMatch = addressString.match(phoneRegex);
@@ -146,7 +184,7 @@ function parseAddressString(addressString: string) {
 }
 
 // Component for status update buttons
-function StatusUpdateButtons({ order }: { order: any }) {
+function StatusUpdateButtons({ order }: { order: Order }) {
   const currentStatus = order.status;
   
   return (
@@ -185,41 +223,6 @@ export default async function CourierDashboard() {
     return redirect("/")
   }
 
-
-  // DEBUG: Check all orders in database first
-  const allOrders = await prisma.order.findMany({
-    select: {
-      id: true,
-      status: true,
-      courierId: true,
-      userId: true,
-    },
-    orderBy: {
-      createdAt: "desc",
-    },
-  });
-
-
-  const orders = await prisma.order.findMany({
-    where: {
-      courierId: userId,
-      status: {
-        in: ["SIAP_KIRIM", "DIKIRIM"],
-      },
-    },
-    include: {
-      user: {
-        select: {
-          name: true,
-          email: true,
-        },
-      },
-    },
-    orderBy: {
-      createdAt: "desc",
-    },
-  });
-
   const ordersWithoutFilter = await prisma.order.findMany({
     where: {
       courierId: userId,
@@ -235,6 +238,28 @@ export default async function CourierDashboard() {
     orderBy: {
       createdAt: "desc",
     },
+  });
+
+  // Transform the items from JSON to proper type with safer type checking
+  const transformedOrders = ordersWithoutFilter.map(order => {
+    let parsedItems: OrderItem[] = [];
+    
+    if (Array.isArray(order.items)) {
+      parsedItems = order.items.map(item => {
+        if (item && typeof item === 'object' && 'name' in item && 'quantity' in item) {
+          return {
+            name: String(item.name || ''),
+            quantity: Number(item.quantity || 1)
+          };
+        }
+        return { name: '', quantity: 1 };
+      });
+    }
+
+    return {
+      ...order,
+      items: parsedItems
+    } as Order;
   });
 
   // Get statistics
@@ -253,10 +278,13 @@ export default async function CourierDashboard() {
     return acc;
   }, {} as Record<string, number>);
 
-  const displayOrders = ordersWithoutFilter.length > 0 ? ordersWithoutFilter : orders;
-  const ongoingOrders = displayOrders.filter(order => order.status !== "SELESAI");
-  const completedOrders = displayOrders.filter(order => order.status === "SELESAI");
-
+  const displayOrders = transformedOrders;
+  const ongoingOrders = displayOrders.filter(order => 
+    order.status === 'SIAP_KIRIM' || order.status === 'DIKIRIM'
+  );
+  const completedOrders = displayOrders.filter(order => 
+    order.status === 'SELESAI'
+  );
 
   return (
     <div className="container mx-auto p-4 max-w-6xl">
