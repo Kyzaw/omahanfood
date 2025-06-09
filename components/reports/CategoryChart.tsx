@@ -1,6 +1,6 @@
 // components/reports/CategoryChart.tsx
 import React from 'react';
-import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from 'recharts';
+import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
 
 interface CategoryData {
   name: string;
@@ -12,10 +12,19 @@ interface CategoryChartProps {
   data: CategoryData[];
 }
 
+interface TooltipProps {
+  active?: boolean;
+  payload?: {
+    name: string;
+    value: number;
+    payload: CategoryData;
+  }[];
+}
+
 const COLORS = ['#22c55e', '#3b82f6', '#f59e0b', '#ef4444', '#8b5cf6', '#06b6d4', '#84cc16', '#f97316'];
 
 // Custom tooltip component
-const CustomTooltip = ({ active, payload }: any) => {
+const CustomTooltip: React.FC<TooltipProps> = ({ active, payload }) => {
   if (active && payload && payload.length) {
     const data = payload[0];
     return (

@@ -10,7 +10,6 @@ import {
   CartesianGrid,
   Tooltip,
   LabelList,
-  Legend,
 } from 'recharts';
 
 type DailySalesData = {
@@ -21,6 +20,10 @@ type DailySalesData = {
 interface SalesChartProps {
   data: DailySalesData[];
 }
+
+const formatCurrency = (value: number): string => {
+  return `Rp${value.toLocaleString()}`;
+};
 
 export function SalesChart({ data }: SalesChartProps) {
   return (
@@ -35,12 +38,12 @@ export function SalesChart({ data }: SalesChartProps) {
             tick={{ fontSize: 12 }}
           />
           <YAxis tick={{ fontSize: 12 }} />
-          <Tooltip formatter={(value: any) => `Rp${value.toLocaleString()}`} />
+          <Tooltip formatter={(value: number) => formatCurrency(value)} />
           <Bar dataKey="value" fill="#3b82f6" radius={[4, 4, 0, 0]}>
             <LabelList
               dataKey="value"
               position="top"
-              formatter={(value:any) => `Rp${value.toLocaleString()}`}
+              formatter={(value: number) => formatCurrency(value)}
               style={{ fontSize: 12, fill: '#2563eb', fontWeight: 'bold' }}
             />
           </Bar>

@@ -28,7 +28,6 @@ export const getUserRole = async (email: string): Promise<"ADMIN" | "USER" | "KU
 
     return user?.role ?? null;
   } catch (error) {
-    console.error("Failed to get user role:", error);
     return null;
   }
 };
@@ -56,11 +55,14 @@ export const signUpCredentials = async (
         password: hashedPassword,
       },
     });
-  } catch (error: any) {
-    if (error.code === "P2002") {
-      return { error: { email: ["Email is already registered"] } };
+  } catch (error) {
+    if (error instanceof Error) {
+      if ('code' in error && error.code === "P2002") {
+        return { error: { email: ["Email is already registered"] } };
+      }
+      return { message: "Failed to register user" };
     }
-    return { message: "Failed to register user" };
+    return { message: "An unexpected error occurred" };
   }
 
   redirect("/login");

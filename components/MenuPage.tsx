@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { LayoutGrid, Plus, Minus, ShoppingCart } from "lucide-react";
+import Image from "next/image";
 
 interface Category {
   id: string;
@@ -84,9 +85,11 @@ function CategoryList({
                 : "hover:shadow-xl"
             }`}>
               {cat.image ? (
-                <img
+                <Image
                   src={cat.image}
                   alt={cat.name}
+                  width={96}
+                  height={96}
                   className="object-cover w-full h-full"
                 />
               ) : (
@@ -137,7 +140,7 @@ function MenuList({ menuItems }: { menuItems: MenuItem[] }) {
 
   const handleAdd = (item: MenuItem) => {
     const stored = localStorage.getItem("checkoutItems");
-    let checkoutItems: (MenuItem & { quantity: number })[] = stored ? JSON.parse(stored) : [];
+    const checkoutItems: (MenuItem & { quantity: number })[] = stored ? JSON.parse(stored) : [];
 
     const existingIndex = checkoutItems.findIndex((x) => x.id === item.id);
     if (existingIndex !== -1) {
@@ -154,7 +157,7 @@ function MenuList({ menuItems }: { menuItems: MenuItem[] }) {
 
   const handleIncrease = (item: MenuItem) => {
     const stored = localStorage.getItem("checkoutItems");
-    let checkoutItems: (MenuItem & { quantity: number })[] = stored ? JSON.parse(stored) : [];
+    const checkoutItems: (MenuItem & { quantity: number })[] = stored ? JSON.parse(stored) : [];
 
     const index = checkoutItems.findIndex((x) => x.id === item.id);
     if (index !== -1) {
@@ -167,7 +170,7 @@ function MenuList({ menuItems }: { menuItems: MenuItem[] }) {
 
   const handleDecrease = (item: MenuItem) => {
     const stored = localStorage.getItem("checkoutItems");
-    let checkoutItems: (MenuItem & { quantity: number })[] = stored ? JSON.parse(stored) : [];
+    const checkoutItems: (MenuItem & { quantity: number })[] = stored ? JSON.parse(stored) : [];
 
     const index = checkoutItems.findIndex((x) => x.id === item.id);
     if (index !== -1) {
