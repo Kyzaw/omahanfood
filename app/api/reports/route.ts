@@ -23,6 +23,34 @@ interface ProductStat {
   revenue: number;
 }
 
+function parseItems(raw: unknown): OrderItem[] {
+  let itemsParsed: unknown;
+
+  if (typeof raw === 'string') {
+    try {
+      itemsParsed = JSON.parse(raw);
+    } catch {
+      return [];
+    }
+  } else {
+    itemsParsed = raw;
+  }
+
+  if (!Array.isArray(itemsParsed)) return [];
+
+  // Validasi tiap elemen agar sesuai tipe OrderItem
+  const validItems = itemsParsed.filter(
+    (item) =>
+      item &&
+      typeof item === 'object' &&
+      'name' in item &&
+      'quantity' in item &&
+      'price' in item
+  ) as OrderItem[];
+
+  return validItems;
+}
+
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
@@ -54,7 +82,6 @@ export async function GET(request: NextRequest) {
 }
 
 async function getOverviewData(dateFilter: DateFilter) {
-  // Total Penjualan
   const totalSales = await prisma.order.aggregate({
     where: {
       status: 'SELESAI',
@@ -66,7 +93,6 @@ async function getOverviewData(dateFilter: DateFilter) {
     _count: true,
   });
 
-  // Total Transaksi
   const totalTransactions = await prisma.order.count({
     where: {
       status: 'SELESAI',
@@ -74,13 +100,11 @@ async function getOverviewData(dateFilter: DateFilter) {
     },
   });
 
-  // Rata-rata Transaksi
   const avgTransaction =
     totalSales._sum.totalAmount && totalTransactions > 0
       ? Math.round(totalSales._sum.totalAmount / totalTransactions)
       : 0;
 
-  // Produk Terjual
   const orders = await prisma.order.findMany({
     where: {
       status: 'SELESAI',
@@ -93,10 +117,8 @@ async function getOverviewData(dateFilter: DateFilter) {
 
   let totalProductsSold = 0;
   orders.forEach((order) => {
-    const items = order.items as OrderItem[];
-    if (Array.isArray(items)) {
-      totalProductsSold += items.reduce((sum, item) => sum + (item.quantity || 0), 0);
-    }
+    const items = parseItems(order.items);
+    totalProductsSold += items.reduce((sum, item) => sum + (item.quantity || 0), 0);
   });
 
   const dailySalesRaw = await prisma.order.findMany({
@@ -113,7 +135,7 @@ async function getOverviewData(dateFilter: DateFilter) {
   const dailySalesMap = new Map<string, number>();
 
   dailySalesRaw.forEach((order) => {
-    const date = order.createdAt.toISOString().split('T')[0]; // yyyy-mm-dd
+    const date = order.createdAt.toISOString().split('T')[0];
     const current = dailySalesMap.get(date) || 0;
     dailySalesMap.set(date, current + (order.totalAmount || 0));
   });
@@ -154,40 +176,35 @@ async function getProductsData(dateFilter: DateFilter) {
     menuCategoryMap.set(menu.name, menu.category.name);
   });
 
-  const productStats = new Map();
+  const productStats = new Map<string, ProductStat>();
 
   orders.forEach((order) => {
-    const items = order.items as OrderItem[];
-    if (Array.isArray(items)) {
-      items.forEach((item) => {
-        const key = item.name;
-        const category = menuCategoryMap.get(item.name) || 'Lainnya';
+    const items = parseItems(order.items);
+    items.forEach((item) => {
+      const key = item.name;
+      const category = menuCategoryMap.get(item.name) || 'Lainnya';
 
-        if (!productStats.has(key)) {
-          productStats.set(key, {
-            name: key,
-            category: category,
-            sold: 0,
-            revenue: 0,
-          } as ProductStat);
-        }
-        const stat = productStats.get(key);
-        stat.sold += item.quantity || 0;
-        stat.revenue += (item.price * item.quantity) || 0;
-      });
-    }
+      if (!productStats.has(key)) {
+        productStats.set(key, {
+          name: key,
+          category,
+          sold: 0,
+          revenue: 0,
+        });
+      }
+      const stat = productStats.get(key)!;
+      stat.sold += item.quantity || 0;
+      stat.revenue += (item.price * item.quantity) || 0;
+    });
   });
 
   const products = Array.from(productStats.values())
     .sort((a, b) => b.sold - a.sold)
     .slice(0, 10);
 
-  const categoryStats = new Map();
+  const categoryStats = new Map<string, number>();
   products.forEach((product) => {
-    if (!categoryStats.has(product.category)) {
-      categoryStats.set(product.category, 0);
-    }
-    categoryStats.set(product.category, categoryStats.get(product.category) + product.sold);
+    categoryStats.set(product.category, (categoryStats.get(product.category) || 0) + product.sold);
   });
 
   const totalSold = Array.from(categoryStats.values()).reduce((sum, val) => sum + val, 0);
@@ -220,10 +237,8 @@ async function getTransactionsData(dateFilter: DateFilter) {
   });
 
   const formattedTransactions = transactions.map((transaction) => {
-    const items = transaction.items as OrderItem[];
-    const itemCount = Array.isArray(items)
-      ? items.reduce((sum, item) => sum + (item.quantity || 0), 0)
-      : 0;
+    const items = parseItems(transaction.items);
+    const itemCount = items.reduce((sum, item) => sum + (item.quantity || 0), 0);
 
     return {
       id: transaction.id,
