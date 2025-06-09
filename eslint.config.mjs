@@ -1,3 +1,4 @@
+// eslint.config.mjs
 import { dirname } from "path";
 import { fileURLToPath } from "url";
 import { FlatCompat } from "@eslint/eslintrc";
@@ -9,8 +10,31 @@ const compat = new FlatCompat({
   baseDirectory: __dirname,
 });
 
-const eslintConfig = [
-  ...compat.extends("next/core-web-vitals", "next/typescript"),
-];
+export default [
+  // ⛔️ Gantikan .eslintignore
+  {
+    ignores: [
+      "**/node_modules/**",
+      ".next/**",
+      "build/**",
+      "dist/**",
+      "app/generated/**",
+      "app/generated/prisma/**",
+    ],
+  },
 
-export default eslintConfig;
+  // ✅ Extend konfigurasi Next.js + TypeScript
+  ...compat.extends("next/core-web-vitals", "next/typescript"),
+
+  // 🔧 Aturan tambahan (opsional)
+  {
+    files: ["**/*.ts", "**/*.tsx"],
+    rules: {
+      // Contoh: mencegah penggunaan console.log di production
+      "no-console": process.env.NODE_ENV === "production" ? "warn" : "off",
+
+      // Aturan tambahan bisa ditaruh di sini
+      "@typescript-eslint/no-unused-vars": ["warn"],
+    },
+  },
+];
