@@ -1,28 +1,44 @@
 import { prisma } from "@/lib/prisma";
 import { NextRequest } from "next/server";
 
-interface RequestContext {
-  params: { id: string };
-}
-
 export async function PATCH(
   request: NextRequest,
-  context: RequestContext
+  { params }: { params: { id: string } }
 ) {
-  const { name } = await request.json();
-  const category = await prisma.category.update({
-    where: { id: context.params.id },
-    data: { name },
-  });
-  return Response.json(category);
+  try {
+    const { name } = await request.json();
+    const category = await prisma.category.update({
+      where: { id: params.id },
+      data: { name },
+    });
+    return new Response(JSON.stringify(category), {
+      status: 200,
+      headers: { "Content-Type": "application/json" },
+    });
+  } catch (error) {
+    return new Response(JSON.stringify({ error: "Failed to update category" }), {
+      status: 500,
+      headers: { "Content-Type": "application/json" },
+    });
+  }
 }
 
 export async function DELETE(
   request: NextRequest,
-  context: RequestContext
+  { params }: { params: { id: string } }
 ) {
-  await prisma.category.delete({
-    where: { id: context.params.id },
-  });
-  return Response.json({ success: true });
+  try {
+    await prisma.category.delete({
+      where: { id: params.id },
+    });
+    return new Response(JSON.stringify({ success: true }), {
+      status: 200,
+      headers: { "Content-Type": "application/json" },
+    });
+  } catch (error) {
+    return new Response(JSON.stringify({ error: "Failed to delete category" }), {
+      status: 500,
+      headers: { "Content-Type": "application/json" },
+    });
+  }
 }
