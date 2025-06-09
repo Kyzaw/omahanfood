@@ -218,6 +218,14 @@ async function calculateTotalRevenue() {
   }
 }
 
+interface OrderItem {
+  menuId?: string;
+  id?: string;
+  name: string;
+  quantity?: number;
+  price: number;
+}
+
 // Helper function to get top menus with order counts
 async function getTopMenusWithOrderCounts() {
   try {
@@ -244,12 +252,6 @@ async function getTopMenusWithOrderCounts() {
       }
     })
 
-    interface OrderItem {
-      menuId?: string;
-      id?: string;
-      quantity?: number;
-    }
-
     // Count how many times each menu appears in orders
     const menuOrderCounts = new Map<string, number>()
 
@@ -258,11 +260,11 @@ async function getTopMenusWithOrderCounts() {
         // Parse the JSON items field
         const items = typeof order.items === 'string' 
           ? JSON.parse(order.items) 
-          : order.items
+          : order.items;
 
         // If items is an array, count each menu
         if (Array.isArray(items)) {
-          items.forEach((item) => {
+          items.forEach((item: OrderItem) => {
             const menuId = item.menuId || item.id;
             if (menuId) {
               menuOrderCounts.set(menuId, (menuOrderCounts.get(menuId) || 0) + (item.quantity || 1));
@@ -271,7 +273,7 @@ async function getTopMenusWithOrderCounts() {
         }
         // If items is an object with menu items
         else if (items && typeof items === 'object') {
-          Object.entries(items).forEach(([_, value]) => {
+          Object.entries(items).forEach(([_, value]: [string, OrderItem]) => {
             const menuId = value.menuId || value.id;
             if (menuId) {
               menuOrderCounts.set(menuId, (menuOrderCounts.get(menuId) || 0) + (value.quantity || 1));
@@ -280,7 +282,7 @@ async function getTopMenusWithOrderCounts() {
         }
       } catch (error) {
         // Skip invalid JSON entries
-        console.warn('Failed to parse order items:', error)
+        console.warn('Failed to parse order items:', error);
       }
     })
 
