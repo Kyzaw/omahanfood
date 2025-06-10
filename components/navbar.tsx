@@ -36,7 +36,7 @@ export default function Navbar() {
   return (
     <>
       {/* Desktop Navbar */}
-      <nav className="hidden sm:flex fixed top-0 left-1/2 -translate-x-1/2 z-50 bg-white/95 backdrop-blur-xl shadow-2xl rounded-3xl px-8 py-4 justify-between items-center max-w-7xl w-[95%] mt-6 border border-gray-100">
+      <nav className="hidden sm:flex fixed top-0 left-1/2 -translate-x-1/2 z-[100] bg-white/95 backdrop-blur-xl shadow-2xl rounded-3xl px-8 py-4 justify-between items-center max-w-7xl w-[95%] mt-6 border border-gray-100">
         {/* Logo & Navigation */}
         <div className="flex items-center space-x-2 gap-12">
           <div className="flex items-center space-x-3">
@@ -172,7 +172,7 @@ export default function Navbar() {
       </nav>
 
       {/* Mobile Bottom Navbar */}
-      <nav className="sm:hidden fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-white/95 backdrop-blur-xl shadow-2xl rounded-3xl px-2 py-3 flex justify-between items-center w-[92vw] max-w-md border border-gray-100">
+      <nav className="sm:hidden fixed bottom-4 left-1/2 transform -translate-x-1/2 z-[100] bg-white/95 backdrop-blur-xl shadow-2xl rounded-3xl px-2 py-3 flex justify-between items-center w-[92vw] max-w-md border border-gray-100">
         {mobileMenuItems.map((item) => {
           const isActive = activeMobileTab === item.id
           return (
