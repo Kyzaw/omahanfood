@@ -13,7 +13,6 @@ interface Menu {
   category: {
     name: string
   }
-  reviews: { rating: number }[]
   _count?: {
     orderItems: number
   }
@@ -46,9 +45,6 @@ export function TopMenus({ menus }: { menus: Menu[] }) {
 
   return (
     <Card className="shadow-lg border-0 bg-gradient-to-br from-white to-gray-50">
-      <CardHeader className="pb-3">
-        <p className="text-sm text-gray-600">Menu yang paling banyak dipesan</p>
-      </CardHeader>
       <CardContent className="space-y-4">
         {popularMenus.length === 0 ? (
           <div className="text-center py-8 text-gray-500">
@@ -58,8 +54,7 @@ export function TopMenus({ menus }: { menus: Menu[] }) {
         ) : (
           popularMenus.map((menu, index) => {
             const orderCount = menu._count?.orderItems || menu.orderCount || 0
-            const rating = averageRating(menu.reviews)
-            const hasReviews = menu.reviews.length > 0
+
             
             return (
               <div
@@ -115,13 +110,6 @@ export function TopMenus({ menus }: { menus: Menu[] }) {
 
                 {/* Stats */}
                 <div className="flex flex-col items-end gap-1 text-sm">
-                  {hasReviews && (
-                    <div className="flex items-center gap-1 text-yellow-600">
-                      <Star className="h-4 w-4 fill-current" />
-                      <span className="font-medium">{rating}</span>
-                      <span className="text-gray-400">({menu.reviews.length})</span>
-                    </div>
-                  )}
                   <div className="flex items-center gap-1 text-orange-600">
                     <ShoppingCart className="h-4 w-4" />
                     <span className="font-medium">{orderCount}</span>

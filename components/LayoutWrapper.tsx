@@ -10,7 +10,8 @@ export default function LayoutWrapper({
 }) {
   const pathname = usePathname();
 
-  const hideNavbarOn = ['/login', '/register', '/admin', '/kurir', '/admin/category', '/admin/menu', '/admin/menu/add', '/admin/category/add', "/admin/kurir", "/admin/reports", "/redirect"];
+  const hideNavbarOn = ['/login', '/register', '/admin', '/kurir', '/admin/category', '/admin/menu', '/admin/menu/add', 
+    '/admin/category/add', "/admin/kurir", "/admin/reports", "/redirect", "/admin/orders", "/admin/topmenus", "/admin/users"];
 
   const shouldHideNavbar = hideNavbarOn.includes(pathname);
 

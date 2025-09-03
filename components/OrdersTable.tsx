@@ -190,17 +190,7 @@ export function OrdersTable({ orders }: { orders: Order[] }) {
         </>
       )}
       
-      {/* Show More Button */}
-      {orders.length > 0 && (
-        <div className="text-center pt-4">
-          <button className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-slate-600 hover:text-slate-800 hover:bg-slate-50 rounded-lg transition-colors">
-            <span>View All Orders</span>
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-            </svg>
-          </button>
-        </div>
-      )}
+
     </div>
   );
 }

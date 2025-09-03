@@ -1,8 +1,8 @@
-import AdminSidebar from '@/components/AdminNavbar'
+﻿import AdminSidebar from '@/components/AdminNavbar'
 import { StatsCard } from "@/components/StatsCard"
 import { OrdersTable } from "@/components/OrdersTable"
 import { TopMenus } from "@/components/TopMenus"
-import prisma from "@/lib/prisma"
+import { prisma } from "@/lib/prisma"
 import Link from 'next/link'
 
 export default async function AdminPage() {
@@ -15,7 +15,7 @@ export default async function AdminPage() {
     calculateTotalRevenue(),
     prisma.order.findMany({
       orderBy: { createdAt: "desc" },
-      take: 5,
+      take: 7,
       include: { user: true },
     }),
     // Updated query to get menus with order counts and all required data
@@ -115,9 +115,9 @@ export default async function AdminPage() {
                       Recent Orders
                     </h2>
                   </div>
-                  <button className="text-sm text-blue-600 hover:text-blue-700 font-semibold px-3 py-1 rounded-lg hover:bg-blue-50 transition-colors">
+                  <Link href="/admin/orders" className="text-sm text-blue-600 hover:text-blue-700 font-semibold px-3 py-1 rounded-lg hover:bg-blue-50 transition-colors">
                     View All
-                  </button>
+                  </Link>
                 </div>
               </div>
               <div className="p-6">
@@ -142,9 +142,9 @@ export default async function AdminPage() {
                       Top Performing Menus
                     </h2>
                   </div>
-                  <button className="text-sm text-green-600 hover:text-green-700 font-semibold px-3 py-1 rounded-lg hover:bg-green-50 transition-colors">
+                  <Link href="/admin/topmenus" className="text-sm text-green-600 hover:text-green-700 font-semibold px-3 py-1 rounded-lg hover:bg-green-50 transition-colors">
                     View All
-                  </button>
+                  </Link>
                 </div>
               </div>
               <div className="p-0">
@@ -181,12 +181,12 @@ export default async function AdminPage() {
                   </div>
                 </Link>
                 
-                <button className="group flex items-center justify-center p-6 bg-gradient-to-br from-purple-50 to-purple-100 hover:from-purple-100 hover:to-purple-200 rounded-xl border border-purple-200 transition-all duration-300 hover:scale-105 hover:shadow-lg">
+                <Link href="/admin/users" className="group flex items-center justify-center p-6 bg-gradient-to-br from-purple-50 to-purple-100 hover:from-purple-100 hover:to-purple-200 rounded-xl border border-purple-200 transition-all duration-300 hover:scale-105 hover:shadow-lg">
                   <div className="text-center">
-                    <div className="text-3xl mb-3 group-hover:scale-110 transition-transform">👥</div>
+                    <div className="text-3xl mb-3 group-hover:scale-110 transition-transform">👤</div>
                     <span className="text-sm font-semibold text-purple-700">Manage Users</span>
                   </div>
-                </button>
+                </Link>
               </div>
             </div>
           </div>

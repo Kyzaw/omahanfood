@@ -9,6 +9,7 @@ import {
   Album,
   BookUp,
   Car,
+  Users,
   ChevronLeft,
   FileChartColumn
 } from 'lucide-react'
@@ -17,10 +18,11 @@ import { useSession, signOut } from 'next-auth/react'
 
 const sidebarLinks = [
   { name: 'Dashboard', href: '/admin', icon: LayoutDashboard },
-  { name: 'Kurir', href: '/admin/kurir', icon: Car },
+  { name: 'Users', href: '/admin/users', icon: Users },
+  { name: 'Courier', href: '/admin/kurir', icon: Car },
   { name: 'Category', href: '/admin/category', icon: BookUp },
   { name: 'Menu', href: '/admin/menu', icon: Album },
-  { name: 'Laporan', href: '/admin/reports',icon: FileChartColumn },
+  { name: 'Report', href: '/admin/reports',icon: FileChartColumn },
   { name: 'Home', href: '/', icon: Home },
 ]
 
