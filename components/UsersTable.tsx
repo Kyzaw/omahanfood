@@ -8,13 +8,9 @@ import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { 
   Search, 
-  Edit, 
-  Trash2, 
   Eye, 
   MoreHorizontal,
-  User as UserIcon,
   Mail,
-  Calendar,
   ShoppingBag,
   Star
 } from "lucide-react"
@@ -42,7 +38,6 @@ export function UsersTable({ users }: UsersTableProps) {
   const [roleFilter, setRoleFilter] = useState<Role | "ALL">("ALL")
   const [sortBy, setSortBy] = useState<"name" | "email" | "orders">("name")
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc")
-  const [refreshKey, setRefreshKey] = useState(0)
 
   const getRoleColor = (role: Role) => {
     switch (role) {
@@ -62,13 +57,9 @@ export function UsersTable({ users }: UsersTableProps) {
   const getRoleIcon = (role: Role) => {
     switch (role) {
       case "ADMIN":
-        return ""
       case "USER":
-        return ""
       case "DAPUR":
-        return ""
       case "KURIR":
-        return ""
       default:
         return ""
     }
@@ -83,8 +74,9 @@ export function UsersTable({ users }: UsersTableProps) {
       return matchesSearch && matchesRole
     })
     .sort((a, b) => {
-      let aValue: any, bValue: any
-      
+      let aValue: string | number
+      let bValue: string | number
+
       switch (sortBy) {
         case "name":
           aValue = a.name.toLowerCase()
@@ -110,18 +102,11 @@ export function UsersTable({ users }: UsersTableProps) {
     })
 
   const handleRefresh = () => {
-    setRefreshKey(prev => prev + 1)
     window.location.reload()
-  }
-
-  const handleEditUser = (userId: string) => {
-    // This will be handled by the UserForm component
-    console.log("Edit user:", userId)
   }
 
   const handleViewUser = (userId: string) => {
     // TODO: Implement view user details functionality
-    console.log("View user:", userId)
   }
 
   return (
