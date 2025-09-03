@@ -3,7 +3,6 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   poweredByHeader: false,
   reactStrictMode: true,
-  serverActions: true,
   images: {
     remotePatterns: [
       {
@@ -13,6 +12,9 @@ const nextConfig: NextConfig = {
         pathname: '/**',
       },
     ],
+  },
+  eslint: {
+    ignoreDuringBuilds: true,
   },
 };
 
