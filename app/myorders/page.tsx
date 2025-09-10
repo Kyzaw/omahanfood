@@ -215,7 +215,7 @@ export default async function MyOrdersPage() {
   }
 
   return (
-    <div className="container mx-auto p-4 max-w-4xl md:pt-35">
+    <div className="container mx-auto p-4 max-w-4xl mb-23 md:pt-35">
       <div className="mb-6">
         <h1 className="text-3xl font-bold text-gray-900 mb-2">Pesanan Saya</h1>
         <p className="text-gray-600">Pantau status pesanan Anda</p>
