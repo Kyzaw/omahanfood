@@ -25,8 +25,8 @@ export const StatsCard: React.FC<StatsCardProps> = ({
           <Icon className={`w-6 h-6 ${iconColor}`} />
         </div>
         <div className="text-right">
-          <div className="text-2xl font-bold text-gray-900">{value}</div>
-          <div className="text-sm text-gray-500">{change}</div>
+          <div className="text-sm font-bold text-gray-900 md:text-2xl">{value}</div>
+          <div className="text-sm text-gray-500 md:text-base">{change}</div>
         </div>
       </div>
       <div className="text-sm font-medium text-gray-600">{title}</div>
