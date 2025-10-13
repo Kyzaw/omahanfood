@@ -88,3 +88,30 @@ Frontend (Next.js)
     ```bash
     http://localhost:3000
 
+
+---
+
+### 👤 Profil Pengembang
+
+**Nama:** Rizky Tri Mardiansyah  
+**Peran:** Full-Stack Developer  
+**Program Studi:** Sistem Informasi  
+**Institusi:** Universitas Ibn Khaldun Bogor  
+**Email:** [rizkytrimardiansyah08@uika-bogor.ac.id]  
+**GitHub:** [https://github.com/kyzaw](https://github.com/kyzaw)  
+**LinkedIn:** [https://www.linkedin.com/in/rizky-tri-mardiansyah-6598b1340/](https://www.linkedin.com/in/rizky-tri-mardiansyah-6598b1340/)  
+
+---
+
+
+### 🖼️ Cuplikan Tampilan Website
+
+#### 🏠 Halaman Beranda
+![Omahan Food Homepage](/public/homepage.png)
+
+
+#### 💳 Halaman Checkout dengan Midtrans
+![Omahan Food Checkout](/public/checkout.png)
+
+
+---
