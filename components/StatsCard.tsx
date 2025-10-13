@@ -60,12 +60,6 @@ export function StatsCard({
           </div>
         </div>
       </div>
-      
-      <div className="mt-6 pt-4 border-t border-slate-100">
-        <p className="text-xs text-slate-500 font-medium">
-          vs last month
-        </p>
-      </div>
     </div>
   );
 }

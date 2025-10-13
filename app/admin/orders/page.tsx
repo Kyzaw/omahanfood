@@ -152,11 +152,12 @@ export default async function AdminOrdersPage() {
       <div className="min-h-screen bg-slate-50">
         <AdminSidebar />
         
-        <main className="ml-64 min-h-screen transition-all duration-300 ease-in-out">
-          {/* Header Section */}
-          <div className="bg-white border-b border-slate-200 px-6 py-6 shadow-sm">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-4">
+        {/* Main content with responsive margin */}
+        <main className="md:ml-64 min-h-screen transition-all duration-300 ease-in-out">
+          {/* Header Section - Mobile Optimized */}
+          <div className="bg-white border-b border-slate-200 px-4 md:px-6 py-4 md:py-6 shadow-sm pt-20 md:pt-6">
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+              <div className="flex items-center gap-3 md:gap-4">
                 <Link 
                   href="/admin" 
                   className="p-2 hover:bg-slate-100 rounded-lg transition-colors"
@@ -164,17 +165,17 @@ export default async function AdminOrdersPage() {
                   <ArrowLeft className="h-5 w-5 text-slate-600" />
                 </Link>
                 <div>
-                  <h1 className="text-3xl font-bold bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent">
+                  <h1 className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent">
                     All Orders
                   </h1>
-                  <p className="text-sm text-slate-600 mt-2">
+                  <p className="text-xs md:text-sm text-slate-600 mt-1 md:mt-2">
                     Manage and monitor all customer orders
                   </p>
                 </div>
               </div>
-              <div className="flex items-center space-x-4">
-                <div className="text-right bg-slate-50 px-4 py-2 rounded-lg border border-slate-200">
-                  <p className="text-sm font-semibold text-slate-800">
+              <div className="flex items-center justify-end md:justify-start">
+                <div className="text-left md:text-right bg-slate-50 px-3 md:px-4 py-2 rounded-lg border border-slate-200 w-full md:w-auto">
+                  <p className="text-xs md:text-sm font-semibold text-slate-800">
                     Total Orders: {orders.length}
                   </p>
                   <p className="text-xs text-slate-500">
@@ -186,101 +187,103 @@ export default async function AdminOrdersPage() {
           </div>
 
           {/* Main Content */}
-          <div className="p-8 space-y-8">
-            {/* Stats Cards */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
+          <div className="p-4 md:p-8 space-y-6 md:space-y-8">
+            {/* Stats Cards - Mobile Optimized Grid */}
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 md:gap-6">
               <Card className="border-l-4 border-l-yellow-500">
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-sm font-medium text-slate-600">Pending</CardTitle>
+                <CardHeader className="pb-2 px-3 md:px-6 pt-3 md:pt-6">
+                  <CardTitle className="text-xs md:text-sm font-medium text-slate-600">Pending</CardTitle>
                 </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold text-yellow-600">
+                <CardContent className="px-3 md:px-6 pb-3 md:pb-6">
+                  <div className="text-xl md:text-2xl font-bold text-yellow-600">
                     {statsMap.PENDING || 0}
                   </div>
                 </CardContent>
               </Card>
               
               <Card className="border-l-4 border-l-blue-500">
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-sm font-medium text-slate-600">Processing</CardTitle>
+                <CardHeader className="pb-2 px-3 md:px-6 pt-3 md:pt-6">
+                  <CardTitle className="text-xs md:text-sm font-medium text-slate-600">Processing</CardTitle>
                 </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold text-blue-600">
+                <CardContent className="px-3 md:px-6 pb-3 md:pb-6">
+                  <div className="text-xl md:text-2xl font-bold text-blue-600">
                     {statsMap.DIPROSES || 0}
                   </div>
                 </CardContent>
               </Card>
               
               <Card className="border-l-4 border-l-purple-500">
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-sm font-medium text-slate-600">Shipped</CardTitle>
+                <CardHeader className="pb-2 px-3 md:px-6 pt-3 md:pt-6">
+                  <CardTitle className="text-xs md:text-sm font-medium text-slate-600">Shipped</CardTitle>
                 </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold text-purple-600">
+                <CardContent className="px-3 md:px-6 pb-3 md:pb-6">
+                  <div className="text-xl md:text-2xl font-bold text-purple-600">
                     {statsMap.DIKIRIM || 0}
                   </div>
                 </CardContent>
               </Card>
               
               <Card className="border-l-4 border-l-green-500">
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-sm font-medium text-slate-600">Completed</CardTitle>
+                <CardHeader className="pb-2 px-3 md:px-6 pt-3 md:pt-6">
+                  <CardTitle className="text-xs md:text-sm font-medium text-slate-600">Completed</CardTitle>
                 </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold text-green-600">
+                <CardContent className="px-3 md:px-6 pb-3 md:pb-6">
+                  <div className="text-xl md:text-2xl font-bold text-green-600">
                     {statsMap.SELESAI || 0}
                   </div>
                 </CardContent>
               </Card>
               
-              <Card className="border-l-4 border-l-red-500">
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-sm font-medium text-slate-600">Cancelled</CardTitle>
+              <Card className="border-l-4 border-l-red-500 col-span-2 md:col-span-1">
+                <CardHeader className="pb-2 px-3 md:px-6 pt-3 md:pt-6">
+                  <CardTitle className="text-xs md:text-sm font-medium text-slate-600">Cancelled</CardTitle>
                 </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold text-red-600">
+                <CardContent className="px-3 md:px-6 pb-3 md:pb-6">
+                  <div className="text-xl md:text-2xl font-bold text-red-600">
                     {statsMap.DIBATALKAN || 0}
                   </div>
                 </CardContent>
               </Card>
             </div>
 
-            {/* Orders Table */}
+            {/* Orders Table - Mobile Optimized */}
             <Card className="shadow-sm">
-              <CardHeader className="bg-gradient-to-r from-slate-50 to-white border-b border-slate-100">
-                <div className="flex items-center justify-between">
+              <CardHeader className="bg-gradient-to-r from-slate-50 to-white border-b border-slate-100 px-4 md:px-6 py-4 md:py-6">
+                <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center">
-                      <Package className="h-5 w-5 text-white" />
+                    <div className="w-8 h-8 md:w-10 md:h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center">
+                      <Package className="h-4 w-4 md:h-5 md:w-5 text-white" />
                     </div>
                     <div>
-                      <CardTitle className="text-xl font-bold text-slate-800">
+                      <CardTitle className="text-lg md:text-xl font-bold text-slate-800">
                         All Orders
                       </CardTitle>
-                      <p className="text-sm text-slate-600">
+                      <p className="text-xs md:text-sm text-slate-600">
                         Complete list of all customer orders
                       </p>
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
-                    <Button variant="outline" size="sm" className="gap-2">
-                      <Filter className="h-4 w-4" />
-                      Filter
+                    <Button variant="outline" size="sm" className="gap-2 text-xs md:text-sm">
+                      <Filter className="h-3 w-3 md:h-4 md:w-4" />
+                      <span className="hidden sm:inline">Filter</span>
                     </Button>
-                    <Button variant="outline" size="sm" className="gap-2">
-                      <Search className="h-4 w-4" />
-                      Search
+                    <Button variant="outline" size="sm" className="gap-2 text-xs md:text-sm">
+                      <Search className="h-3 w-3 md:h-4 md:w-4" />
+                      <span className="hidden sm:inline">Search</span>
                     </Button>
                   </div>
                 </div>
               </CardHeader>
               <CardContent className="p-0">
-                <OrdersTable
-                  orders={orders.map(order => ({
-                    ...order,
-                    createdAt: order.createdAt.toISOString(),
-                  }))}
-                />
+                <div className="overflow-x-auto">
+                  <OrdersTable
+                    orders={orders.map(order => ({
+                      ...order,
+                      createdAt: order.createdAt.toISOString(),
+                    }))}
+                  />
+                </div>
               </CardContent>
             </Card>
           </div>
@@ -290,17 +293,17 @@ export default async function AdminOrdersPage() {
   } catch (error) {
     console.error('Error loading orders page:', error);
     return (
-      <div className="min-h-screen bg-slate-50 flex items-center justify-center">
-        <Card className="p-8">
+      <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4">
+        <Card className="p-6 md:p-8 w-full max-w-md">
           <CardContent className="text-center">
-            <h2 className="text-xl font-semibold text-slate-800 mb-2">
+            <h2 className="text-lg md:text-xl font-semibold text-slate-800 mb-2">
               Error Loading Orders
             </h2>
-            <p className="text-slate-600 mb-4">
+            <p className="text-sm md:text-base text-slate-600 mb-4">
               There was an error loading the orders page.
             </p>
             <Link href="/admin">
-              <Button>Back to Dashboard</Button>
+              <Button className="w-full md:w-auto">Back to Dashboard</Button>
             </Link>
           </CardContent>
         </Card>

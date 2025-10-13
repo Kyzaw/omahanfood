@@ -8,7 +8,6 @@ export default async function HomePage() {
     },
   });
 
-  // Filter hanya kategori yang memiliki menu
   const filteredCategories = categories.filter((cat) => cat.menus.length > 0);
 
   const allMenus = filteredCategories.flatMap((cat) => cat.menus.map(menu => ({

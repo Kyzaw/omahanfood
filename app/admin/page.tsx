@@ -67,37 +67,27 @@ export default async function AdminPage() {
               title="Total Revenue" 
               value={Math.round(totalRevenue / 1)}
               icon="💰"
-              trend="+15%"
-              trendDirection="up"
             />
             <StatsCard 
               title="Total Users" 
               value={userCount}
               icon="👥"
-              trend="+12%"
-              trendDirection="up"
             />
             <StatsCard 
               title="Total Orders" 
               value={orderCount}
               icon="📦"
-              trend="+8%"
-              trendDirection="up"
             />
             <StatsCard 
               title="Menu Items" 
               value={menuCount}
               icon="🍽️"
-              trend="+3%"
-              trendDirection="up"
             />
             <div className="col-span-2 sm:col-span-1">
               <StatsCard 
                 title="Categories" 
                 value={categoryCount}
                 icon="📂"
-                trend="0%"
-                trendDirection="neutral"
               />
             </div>
           </div>
