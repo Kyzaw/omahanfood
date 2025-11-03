@@ -8,15 +8,17 @@ import { Star } from "lucide-react";
 import { ReviewList } from "@/components/ReviewList";
 
 interface MenuDetailPageProps {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 }
 
 export default async function MenuDetailPage({ params }: MenuDetailPageProps) {
+  const { id } = await params;
+  
   const menu = await prisma.menu.findUnique({
     where: {
-      id: params.id,
+      id,
     },
     include: {
       category: true,
@@ -30,7 +32,7 @@ export default async function MenuDetailPage({ params }: MenuDetailPageProps) {
   // Fetch reviews to calculate average rating
   const reviews = await prisma.review.findMany({
     where: {
-      menuId: params.id,
+      menuId: id,
     },
   });
 
@@ -104,7 +106,7 @@ export default async function MenuDetailPage({ params }: MenuDetailPageProps) {
       <Card>
         <CardContent className="pt-6">
           <h2 className="text-2xl font-bold mb-6">Rating & Review</h2>
-          <ReviewList menuId={params.id} />
+          <ReviewList menuId={id} />
         </CardContent>
       </Card>
     </div>
