@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { ChevronDown, ShoppingCart, Home, FileText, User, Shield, Truck } from 'lucide-react'
+import { ChevronDown, ShoppingCart, Home, FileText, User, Shield, Truck, History } from 'lucide-react'
 import { useSession } from 'next-auth/react'
 import Image from 'next/image'
 import { signOut } from 'next-auth/react'
@@ -64,6 +64,12 @@ export default function Navbar() {
             <li>
               <Link href="/myorders" className="text-gray-700 hover:text-orange-600 transition-all duration-300 hover:scale-105 px-3 py-2 rounded-xl hover:bg-orange-50 flex items-center">
                 My Orders
+              </Link>
+            </li>
+            <li>
+              <Link href="/orderhistory" className="text-gray-700 hover:text-orange-600 transition-all duration-300 hover:scale-105 px-3 py-2 rounded-xl hover:bg-orange-50 flex items-center gap-2">
+                <History className="w-4 h-4" />
+                History
               </Link>
             </li>
             {user?.role === 'ADMIN' && (

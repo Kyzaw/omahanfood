@@ -54,17 +54,22 @@ model Order {
   paidAt        DateTime?
   notes         String?
   createdAt     DateTime     @default(now())
+  reviews       Review[]
 }
 
 model Review {
   id        String   @id @default(cuid())
-  rating    Int
+  rating    Int // 1-5 stars
   comment   String?
   user      User     @relation(fields: [userId], references: [id])
   userId    String
   menu      Menu     @relation(fields: [menuId], references: [id])
   menuId    String
+  order     Order    @relation(fields: [orderId], references: [id])
+  orderId   String
   createdAt DateTime @default(now())
+
+  @@unique([orderId, menuId]) // Prevent duplicate reviews for same menu in same order
 }
 
 enum Role {

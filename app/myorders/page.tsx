@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { redirect } from "next/navigation";
-import { Clock, MapPin, CreditCard, Package, User } from "lucide-react";
+import { Clock, MapPin, CreditCard, Package, User, CheckCircle2, Truck, ChefHat, ShoppingBag, AlertCircle } from "lucide-react";
 
 interface OrderItem {
   name: string;
@@ -45,19 +45,59 @@ function isValidOrderItem(item: unknown): item is JsonOrderItem {
 function getStatusColor(status: OrderStatus) {
   switch (status) {
     case "PENDING":
-      return "bg-yellow-100 text-yellow-800";
+      return "bg-yellow-50 text-yellow-700 border-yellow-200";
     case "DIBAYAR":
-      return "bg-blue-100 text-blue-800";
+      return "bg-blue-50 text-blue-700 border-blue-200";
     case "DIMASAK":
-      return "bg-orange-100 text-orange-800";
+      return "bg-orange-50 text-orange-700 border-orange-200";
     case "SIAP_KIRIM":
-      return "bg-purple-100 text-purple-800";
+      return "bg-purple-50 text-purple-700 border-purple-200";
     case "DIKIRIM":
-      return "bg-indigo-100 text-indigo-800";
+      return "bg-indigo-50 text-indigo-700 border-indigo-200";
     case "SELESAI":
-      return "bg-green-100 text-green-800";
+      return "bg-green-50 text-green-700 border-green-200";
     default:
-      return "bg-gray-100 text-gray-800";
+      return "bg-gray-50 text-gray-700 border-gray-200";
+  }
+}
+
+// Helper function to get status icon
+function getStatusIcon(status: OrderStatus) {
+  switch (status) {
+    case "PENDING":
+      return AlertCircle;
+    case "DIBAYAR":
+      return CheckCircle2;
+    case "DIMASAK":
+      return ChefHat;
+    case "SIAP_KIRIM":
+      return Package;
+    case "DIKIRIM":
+      return Truck;
+    case "SELESAI":
+      return CheckCircle2;
+    default:
+      return Package;
+  }
+}
+
+// Helper function to get order progress
+function getOrderProgress(status: OrderStatus): number {
+  switch (status) {
+    case "PENDING":
+      return 0;
+    case "DIBAYAR":
+      return 20;
+    case "DIMASAK":
+      return 40;
+    case "SIAP_KIRIM":
+      return 60;
+    case "DIKIRIM":
+      return 80;
+    case "SELESAI":
+      return 100;
+    default:
+      return 0;
   }
 }
 
@@ -204,24 +244,43 @@ export default async function MyOrdersPage() {
 
   if (orders.length === 0) {
     return (
-      <div className="container mx-auto p-4 max-w-4xl md:pt-35">
+      <div className="container mx-auto p-4 max-w-4xl md:pt-35 min-h-[70vh] flex items-center justify-center">
         <div className="text-center py-12">
-          <Package className="mx-auto h-16 w-16 text-gray-400 mb-4" />
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">Pesanan Saya</h2>
-          <p className="text-gray-500 mb-6">Belum ada pesanan yang sedang diproses.</p>
+          <div className="relative mb-6">
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div className="w-32 h-32 bg-gradient-to-br from-orange-100 to-orange-50 rounded-full blur-2xl opacity-50"></div>
+            </div>
+            <ShoppingBag className="relative mx-auto h-20 w-20 text-orange-400 mb-4" strokeWidth={1.5} />
+          </div>
+          <h2 className="text-3xl font-bold text-gray-900 mb-3">Belum Ada Pesanan</h2>
+          <p className="text-gray-500 mb-6 max-w-md mx-auto">Anda belum memiliki pesanan yang sedang diproses. Mulai pesan makanan favorit Anda sekarang!</p>
+          <a href="/" className="inline-flex items-center px-6 py-3 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors font-medium shadow-sm">
+            <ShoppingBag className="h-5 w-5 mr-2" />
+            Mulai Belanja
+          </a>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="container mx-auto p-4 max-w-4xl mb-23 md:pt-35">
-      <div className="mb-6">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">Pesanan Saya</h1>
-        <p className="text-gray-600">Pantau status pesanan Anda</p>
+    <div className="container mx-auto p-4 max-w-5xl mb-23 md:pt-35">
+      <div className="mb-8">
+        <div className="flex items-center gap-3 mb-3">
+          <div className="p-2 bg-orange-100 rounded-lg">
+            <Package className="h-6 w-6 text-orange-600" />
+          </div>
+          <h1 className="text-4xl font-bold text-gray-900">Pesanan Saya</h1>
+        </div>
+        <p className="text-gray-600 text-lg">Pantau dan kelola pesanan Anda dengan mudah</p>
+        <div className="mt-4 flex items-center gap-2 text-sm">
+          <Badge variant="secondary" className="bg-blue-50 text-blue-700 border-blue-200">
+            {orders.length} Pesanan Aktif
+          </Badge>
+        </div>
       </div>
 
-      <div className="space-y-4">
+      <div className="space-y-6">
         {orders.map((order) => {
           // Parse items from JSON and validate the structure
           const rawItems = Array.isArray(order.items) ? order.items : [];
@@ -238,131 +297,142 @@ export default async function MyOrdersPage() {
           
           const items = parsedItems;
           const itemCount = items.reduce((sum, item) => sum + item.quantity, 0);
+          const StatusIcon = getStatusIcon(order.status as OrderStatus);
+          const progress = getOrderProgress(order.status as OrderStatus);
 
           return (
-            <Card key={order.id} className="shadow-sm hover:shadow-md transition-shadow">
-              <CardHeader className="pb-3">
-                <div className="flex items-center justify-between">
-                  <CardTitle className="text-lg font-semibold">
-                    Order #{order.id.slice(-8).toUpperCase()}
-                  </CardTitle>
+            <Card key={order.id} className="shadow-md hover:shadow-xl transition-all duration-300 border-2 border-gray-100 overflow-hidden">
+              {/* Progress bar */}
+              <div className="h-1.5 bg-gray-100">
+                <div 
+                  className="h-full bg-gradient-to-r from-orange-400 to-orange-500 transition-all duration-500"
+                  style={{ width: `${progress}%` }}
+                />
+              </div>
+              
+              <CardHeader className="pb-4 bg-gradient-to-br from-gray-50 to-white">
+                <div className="flex items-start justify-between gap-4">
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2 mb-2">
+                      <CardTitle className="text-xl font-bold text-gray-900">
+                        Order #{order.id.slice(-8).toUpperCase()}
+                      </CardTitle>
+                    </div>
+                    <div className="flex items-center text-sm text-gray-500">
+                      <Clock className="h-4 w-4 mr-1.5" />
+                      {new Date(order.createdAt).toLocaleString("id-ID", {
+                        weekday: "long",
+                        year: "numeric",
+                        month: "long",
+                        day: "numeric",
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })}
+                    </div>
+                  </div>
                   <Badge 
-                    className={`${getStatusColor(order.status as OrderStatus)} border-0`}
+                    className={`${getStatusColor(order.status as OrderStatus)} border px-4 py-2 font-semibold flex items-center gap-2`}
                     variant="secondary"
                   >
+                    <StatusIcon className="h-4 w-4" />
                     {getStatusLabel(order.status as OrderStatus)}
                   </Badge>
                 </div>
-                <div className="flex items-center text-sm text-gray-500">
-                  <Clock className="h-4 w-4 mr-1" />
-                  {new Date(order.createdAt).toLocaleString("id-ID", {
-                    weekday: "long",
-                    year: "numeric",
-                    month: "long",
-                    day: "numeric",
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  })}
-                </div>
               </CardHeader>
 
-              <CardContent className="space-y-4">
+              <CardContent className="space-y-6 pt-6">
                 {/* Order Summary */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="space-y-3">
-                    <div className="flex items-start space-x-2">
-                      <Package className="h-4 w-4 mt-0.5 text-gray-400" />
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="space-y-4">
+                    <div className="flex items-start space-x-3 p-3 rounded-lg bg-gray-50 border border-gray-100">
+                      <div className="p-2 bg-white rounded-lg shadow-sm">
+                        <Package className="h-5 w-5 text-orange-500" />
+                      </div>
                       <div className="flex-1">
-                        <p className="text-sm font-medium">Total Item</p>
-                        <p className="text-sm text-gray-600">{itemCount} item</p>
+                        <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">Total Item</p>
+                        <p className="text-base font-semibold text-gray-900 mt-0.5">{itemCount} item</p>
                       </div>
                     </div>
 
-                    <div className="flex items-start space-x-2">
-                      <MapPin className="h-4 w-4 mt-0.5 text-gray-400" />
+                    <div className="flex items-start space-x-3 p-3 rounded-lg bg-gray-50 border border-gray-100">
+                      <div className="p-2 bg-white rounded-lg shadow-sm">
+                        <MapPin className="h-5 w-5 text-red-500" />
+                      </div>
                       <div className="flex-1">
-                        <p className="text-sm font-medium">Alamat Pengiriman</p>
+                        <p className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-1.5">Alamat Pengiriman</p>
                         {(() => {
                           try {
                             const addressData = JSON.parse(order.address);
                             if (typeof addressData === 'object' && addressData !== null) {
                               return (
-                                <div className="text-sm text-gray-600 space-y-1">
-                                  {addressData.nama && (
-                                    <p><span className="font-medium">Nama:</span> {addressData.nama}</p>
-                                  )}
-                                  {addressData.noHp && (
-                                    <p><span className="font-medium">No HP:</span> {addressData.noHp}</p>
-                                  )}
-                                  {addressData.alamat && (
-                                    <p><span className="font-medium">Alamat:</span> {addressData.alamat}</p>
-                                  )}
-                                </div>
+                                <p className="text-sm text-gray-900 font-medium leading-relaxed">
+                                  {addressData.alamat || order.address}
+                                </p>
                               );
                             }
                           } catch {
                             // If not JSON, try to parse as delimited string
                             const parsedAddress = parseAddressString(order.address);
                             
-                            if (parsedAddress) {
+                            if (parsedAddress && parsedAddress.alamat) {
                               return (
-                                <div className="text-sm text-gray-600 space-y-1">
-                                  {parsedAddress.nama && (
-                                    <p><span className="font-medium">Nama:</span> {parsedAddress.nama}</p>
-                                  )}
-                                  {parsedAddress.noHp && (
-                                    <p><span className="font-medium">No HP:</span> {parsedAddress.noHp}</p>
-                                  )}
-                                  {parsedAddress.alamat && (
-                                    <p><span className="font-medium">Alamat:</span> {parsedAddress.alamat}</p>
-                                  )}
-                                </div>
+                                <p className="text-sm text-gray-900 font-medium leading-relaxed">
+                                  {parsedAddress.alamat}
+                                </p>
                               );
                             }
                           }
                           
                           // Fallback to showing as single string
-                          return <p className="text-sm text-gray-600">{order.address}</p>;
+                          return <p className="text-sm text-gray-900 font-medium leading-relaxed">{order.address}</p>;
                         })()}
                       </div>
                     </div>
 
-                    <div className="flex items-start space-x-2">
-                      <Clock className="h-4 w-4 mt-0.5 text-gray-400" />
+                    <div className="flex items-start space-x-3 p-3 rounded-lg bg-gray-50 border border-gray-100">
+                      <div className="p-2 bg-white rounded-lg shadow-sm">
+                        <Clock className="h-5 w-5 text-blue-500" />
+                      </div>
                       <div className="flex-1">
-                        <p className="text-sm font-medium">Waktu Pengiriman</p>
-                        <p className="text-sm text-gray-600">
+                        <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">Waktu Pengiriman</p>
+                        <p className="text-base font-semibold text-gray-900 mt-0.5">
                           {getDeliveryTimeLabel(order.deliveryTime as DeliveryTime)}
                         </p>
                       </div>
                     </div>
                   </div>
 
-                  <div className="space-y-3">
-                    <div className="flex items-start space-x-2">
-                      <CreditCard className="h-4 w-4 mt-0.5 text-gray-400" />
+                  <div className="space-y-4">
+                    <div className="flex items-start space-x-3 p-3 rounded-lg bg-gray-50 border border-gray-100">
+                      <div className="p-2 bg-white rounded-lg shadow-sm">
+                        <CreditCard className="h-5 w-5 text-green-500" />
+                      </div>
                       <div className="flex-1">
-                        <p className="text-sm font-medium">Metode Pembayaran</p>
-                        <p className="text-sm text-gray-600">{order.paymentMethod}</p>
+                        <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">Metode Pembayaran</p>
+                        <p className="text-base font-semibold text-gray-900 mt-0.5">{order.paymentMethod}</p>
                       </div>
                     </div>
 
                     {order.courier && (
-                      <div className="flex items-start space-x-2">
-                        <User className="h-4 w-4 mt-0.5 text-gray-400" />
+                      <div className="flex items-start space-x-3 p-3 rounded-lg bg-gray-50 border border-gray-100">
+                        <div className="p-2 bg-white rounded-lg shadow-sm">
+                          <User className="h-5 w-5 text-purple-500" />
+                        </div>
                         <div className="flex-1">
-                          <p className="text-sm font-medium">Kurir</p>
-                          <p className="text-sm text-gray-600">{order.courier.name}</p>
+                          <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">Kurir</p>
+                          <p className="text-base font-semibold text-gray-900 mt-0.5">{order.courier.name}</p>
                         </div>
                       </div>
                     )}
 
                     {order.paidAt && (
-                      <div className="flex items-start space-x-2">
-                        <Clock className="h-4 w-4 mt-0.5 text-gray-400" />
+                      <div className="flex items-start space-x-3 p-3 rounded-lg bg-gray-50 border border-gray-100">
+                        <div className="p-2 bg-white rounded-lg shadow-sm">
+                          <CheckCircle2 className="h-5 w-5 text-green-500" />
+                        </div>
                         <div className="flex-1">
-                          <p className="text-sm font-medium">Dibayar Pada</p>
-                          <p className="text-sm text-gray-600">
+                          <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">Dibayar Pada</p>
+                          <p className="text-base font-semibold text-gray-900 mt-0.5">
                             {new Date(order.paidAt).toLocaleString("id-ID", {
                               dateStyle: "short",
                               timeStyle: "short",
@@ -377,17 +447,20 @@ export default async function MyOrdersPage() {
                 {/* Order Items */}
                 {items.length > 0 && (
                   <>
-                    <Separator />
-                    <div>
-                      <h4 className="text-sm font-medium mb-2">Detail Pesanan</h4>
-                      <div className="space-y-2">
+                    <Separator className="my-6" />
+                    <div className="bg-gradient-to-br from-orange-50 to-amber-50 p-5 rounded-xl border border-orange-100">
+                      <div className="flex items-center gap-2 mb-4">
+                        <ShoppingBag className="h-5 w-5 text-orange-600" />
+                        <h4 className="text-base font-bold text-gray-900">Detail Pesanan</h4>
+                      </div>
+                      <div className="space-y-3">
                         {items.map((item, index) => (
-                          <div key={index} className="flex justify-between items-center text-sm">
+                          <div key={index} className="flex justify-between items-center bg-white p-3 rounded-lg shadow-sm">
                             <div className="flex-1">
-                              <span className="font-medium">{item.name || 'Item'}</span>
-                              <span className="text-gray-500 ml-2">x{item.quantity}</span>
+                              <span className="font-semibold text-gray-900">{item.name || 'Item'}</span>
+                              <span className="text-orange-600 font-medium ml-2">×{item.quantity}</span>
                             </div>
-                            <span className="font-medium">
+                            <span className="font-bold text-gray-900">
                               Rp {(item.price * item.quantity).toLocaleString()}
                             </span>
                           </div>
@@ -400,19 +473,22 @@ export default async function MyOrdersPage() {
                 {/* Notes */}
                 {order.notes && (
                   <>
-                    <Separator />
-                    <div>
-                      <h4 className="text-sm font-medium mb-1">Catatan</h4>
-                      <p className="text-sm text-gray-600">{order.notes}</p>
+                    <Separator className="my-6" />
+                    <div className="bg-blue-50 p-4 rounded-lg border border-blue-100">
+                      <h4 className="text-sm font-bold text-gray-900 mb-2 flex items-center gap-2">
+                        <AlertCircle className="h-4 w-4 text-blue-600" />
+                        Catatan Pesanan
+                      </h4>
+                      <p className="text-sm text-gray-700 italic">{order.notes}</p>
                     </div>
                   </>
                 )}
 
                 {/* Total */}
-                <Separator />
-                <div className="flex justify-between items-center">
-                  <span className="text-lg font-semibold">Total Pembayaran</span>
-                  <span className="text-lg font-bold text-primary">
+                <Separator className="my-6" />
+                <div className="flex justify-between items-center bg-gradient-to-r from-orange-500 to-orange-600 p-5 rounded-xl shadow-lg">
+                  <span className="text-lg font-bold text-white">Total Pembayaran</span>
+                  <span className="text-2xl font-bold text-white">
                     Rp {order.totalAmount.toLocaleString()}
                   </span>
                 </div>

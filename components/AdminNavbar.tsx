@@ -13,7 +13,8 @@ import {
   ChevronLeft,
   FileChartColumn,
   Menu,
-  X
+  X,
+  Star
 } from 'lucide-react'
 import { useState, useEffect } from 'react'
 import { useSession, signOut } from 'next-auth/react'
@@ -23,6 +24,7 @@ const sidebarLinks = [
   { name: 'Users', href: '/admin/users', icon: Users },
   { name: 'Category', href: '/admin/category', icon: BookUp },
   { name: 'Menu', href: '/admin/menu', icon: Album },
+  { name: 'Reviews', href: '/admin/reviews', icon: Star },
   { name: 'Courier', href: '/admin/kurir', icon: Car },
   { name: 'Report', href: '/admin/reports', icon: FileChartColumn },
   { name: 'Home', href: '/', icon: Home },

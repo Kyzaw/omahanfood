@@ -10,6 +10,10 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
+import { Badge } from "@/components/ui/badge";
+import { MapPin, Clock, Package, ShoppingCart, Plus, Minus, Trash2, CheckCircle } from "lucide-react";
 
 interface CheckoutItem {
   id: string;
@@ -53,13 +57,49 @@ export default function CheckoutPage() {
   const [items, setItems] = useState<CheckoutItem[]>([]);
   const [address, setAddress] = useState<Address>({
     name: "",
-    phone: "",
+    phone: "+62",
     fullAddress: "",
   });
   const [deliveryTime, setDeliveryTime] = useState<string>("");
   const [note, setNote] = useState<string>("");
   const [isLoading, setIsLoading] = useState(false);
   const [snapLoaded, setSnapLoaded] = useState(false);
+  const [jenisPaket, setJenisPaket] = useState<string>("HARIAN");
+  const [phoneError, setPhoneError] = useState<string>("");
+
+  const paketMultiplier = jenisPaket === "HARIAN" ? 1 : jenisPaket === "MINGGUAN" ? 6 : 25;
+  const total = items.reduce((acc, item) => acc + item.price * paketMultiplier * item.quantity, 0);
+
+  // Phone validation function
+  const validatePhoneNumber = (phone: string): boolean => {
+    // Check if starts with +62
+    if (!phone.startsWith('+62')) {
+      setPhoneError("Nomor telepon harus diawali dengan +62");
+      return false;
+    }
+    
+    // Check total length (max 13 characters: +62 + max 10 digits)
+    if (phone.length > 13) {
+      setPhoneError("Nomor telepon maksimal 13 karakter");
+      return false;
+    }
+    
+    // Check minimum length (min 10 characters: +62 + min 7 digits)
+    if (phone.length < 10) {
+      setPhoneError("Nomor telepon minimal 10 karakter");
+      return false;
+    }
+    
+    // Check if only digits after +62
+    const digits = phone.substring(3);
+    if (!/^\d+$/.test(digits)) {
+      setPhoneError("Nomor telepon hanya boleh mengandung angka setelah +62");
+      return false;
+    }
+    
+    setPhoneError("");
+    return true;
+  };
 
   // Load Midtrans Snap
   useEffect(() => {
@@ -134,7 +174,30 @@ export default function CheckoutPage() {
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target;
-    setAddress((prev) => ({ ...prev, [name]: value }));
+    
+    // Special handling for phone input
+    if (name === 'phone') {
+      // Prevent deleting the +62 prefix
+      if (value.length < 3) {
+        return; // Don't allow deletion below +62
+      }
+      
+      // Only allow digits after +62
+      const prefix = value.substring(0, 3);
+      const digits = value.substring(3).replace(/[^\d]/g, '');
+      
+      // Limit to 13 characters total (+62 + max 10 digits)
+      if (digits.length > 10) {
+        return; // Don't allow more digits
+      }
+      
+      const cleanedValue = prefix + digits;
+      
+      setAddress((prev) => ({ ...prev, [name]: cleanedValue }));
+      validatePhoneNumber(cleanedValue);
+    } else {
+      setAddress((prev) => ({ ...prev, [name]: value }));
+    }
   };
 
   const saveAddress = () => {
@@ -145,10 +208,9 @@ export default function CheckoutPage() {
       return;
     }
 
-    // Basic phone validation
-    const phoneRegex = /^08\d{8,12}$/;
-    if (!phoneRegex.test(phone.replace(/\s+/g, ''))) {
-      toast.error("❌ Format nomor telepon tidak valid. Gunakan format 08xxxxxxxxxx");
+    // Validate phone number before saving
+    if (!validatePhoneNumber(phone)) {
+      toast.error("❌ " + phoneError);
       return;
     }
 
@@ -221,11 +283,6 @@ export default function CheckoutPage() {
     toast.success("✅ Item dihapus dari keranjang");
   };
 
-  const [jenisPaket, setJenisPaket] = useState<string>("HARIAN")
-  const paketMultiplier = jenisPaket === "HARIAN" ? 1 : jenisPaket === "MINGGUAN" ? 6 : 25;
-
-  const total = items.reduce((acc, item) => acc + item.price * paketMultiplier * item.quantity, 0);
-
   const validateCheckoutData = () => {
     if (!session?.user?.id) {
       toast.error("❌ Anda harus login terlebih dahulu.");
@@ -240,6 +297,12 @@ export default function CheckoutPage() {
     const { name, phone, fullAddress } = address;
     if (!name.trim() || !phone.trim() || !fullAddress.trim()) {
       toast.error("❌ Harap lengkapi alamat pengiriman terlebih dahulu.");
+      return false;
+    }
+
+    // Validate phone number format
+    if (!validatePhoneNumber(phone)) {
+      toast.error("❌ " + phoneError);
       return false;
     }
 
@@ -278,9 +341,9 @@ export default function CheckoutPage() {
         deliveryTime: deliveryTime.toUpperCase(),
         items: updatedItems,
         totalAmount,
-        jenisPaket, // Tambahkan jenis paket ke payload
+        jenisPaket,
         address: `${address.name}, ${address.phone}, ${address.fullAddress}`,
-        paymentMethod: "PENDING", // Will be updated after payment
+        paymentMethod: "PENDING",
         notes: note.trim() || null,
       };
 
@@ -334,7 +397,7 @@ export default function CheckoutPage() {
             setItems([]);
             setAddress({
               name: "",
-              phone: "",
+              phone: "+62",
               fullAddress: ""
             });
             setDeliveryTime("");
@@ -367,265 +430,372 @@ export default function CheckoutPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-red-50 md:pt-25">
-      {/* Mobile-first container with better spacing */}
-      <div className="max-w-4xl mx-auto px-3 sm:px-4 lg:px-8 py-4 sm:py-6 lg:py-10 pb-32 sm:pb-24">
-        {/* Header with better mobile spacing */}
-        <div className="mb-4 sm:mb-6">
-          <h1 className="text-2xl sm:text-3xl font-bold text-orange-600">Checkout</h1>
-        </div>
-
-        {/* Alamat Pengiriman - Mobile optimized */}
-        <section className="bg-white border rounded-xl sm:rounded-2xl shadow-sm mb-4 sm:mb-6 overflow-hidden">
-          <div className="p-4 sm:p-6">
-            <h2 className="text-lg sm:text-xl font-semibold mb-4">Alamat Pengiriman</h2>
-            <div className="space-y-4 sm:space-y-0 sm:grid sm:grid-cols-2 sm:gap-4 lg:gap-6">
-              <div className="space-y-2">
-                <Label htmlFor="name" className="text-sm font-medium">Nama Penerima *</Label>
-                <Input
-                  id="name"
-                  name="name"
-                  value={address.name}
-                  onChange={handleAddressChange}
-                  placeholder="Nama lengkap"
-                  className="h-11"
-                  required
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="phone" className="text-sm font-medium">Nomor Telepon *</Label>
-                <Input
-                  id="phone"
-                  name="phone"
-                  type="tel"
-                  value={address.phone}
-                  onChange={handleAddressChange}
-                  placeholder="08xxxxxxxxxx"
-                  className="h-11"
-                  required
-                />
-              </div>
-              <div className="sm:col-span-2 space-y-2">
-                <Label htmlFor="fullAddress" className="text-sm font-medium">Alamat Lengkap *</Label>
-                <Textarea
-                  id="fullAddress"
-                  name="fullAddress"
-                  value={address.fullAddress}
-                  onChange={handleAddressChange}
-                  placeholder="Jalan, No Rumah, Kelurahan, Kecamatan, Kota"
-                  rows={3}
-                  className="resize-none"
-                  required
-                />
-                <Button
-                  variant="link"
-                  onClick={fetchCurrentAddress}
-                  className="p-0 h-auto text-sm text-orange-600 hover:underline"
-                  type="button"
-                >
-                  📍 Gunakan Lokasi Saat Ini
-                </Button>
-              </div>
+    <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-red-50 pt-20 sm:pt-24 md:pt-28">
+      <div className="max-w-6xl mx-auto px-3 sm:px-4 py-4 sm:py-6 md:py-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
+          {/* Left Column - Forms */}
+          <div className="lg:col-span-2 space-y-4 sm:space-y-6">
+            {/* Header */}
+            <div className="text-center lg:text-left">
+              <h1 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent mb-2">Checkout</h1>
+              <p className="text-gray-600 text-sm sm:text-base">Lengkapi detail pesanan Anda untuk melanjutkan</p>
             </div>
 
-            <Button
-              onClick={saveAddress}
-              className="mt-4 sm:mt-6 w-full sm:w-auto bg-orange-600 hover:bg-orange-700 text-white h-11"
-              type="button"
-            >
-              Simpan Alamat
-            </Button>
-          </div>
-        </section>
-
-        {/* Waktu Pengiriman - Mobile optimized */}
-        <section className="bg-white border rounded-xl sm:rounded-2xl shadow-sm mb-4 sm:mb-6">
-          <div className="p-4 sm:p-6">
-            <h2 className="text-lg sm:text-xl font-semibold">Pilih Waktu Pengiriman *</h2>
-            <h2 className="text-sm sm:text-sm font-semibold mb-4 ">Note : Jika order sekarang maka akan dikirim besok</h2>
-            <RadioGroup
-              value={deliveryTime}
-              onValueChange={setDeliveryTime}
-              className="space-y-3 sm:space-y-0 sm:flex sm:gap-6 lg:gap-8"
-            >
-              {[
-                { value: "PAGI", label: "Pagi", time: "(05:00)" },
-                { value: "SIANG", label: "Siang", time: "(10:00)" },
-                { value: "SORE", label: "Sore", time: "(15:00)" }
-              ].map((time) => (
-                <div key={time.value} className="flex items-center space-x-3">
-                  <RadioGroupItem value={time.value} id={time.value} className="mt-0.5" />
-                  <Label htmlFor={time.value} className="cursor-pointer flex-1 sm:flex-none">
-                    <span className="font-medium">{time.label}</span>
-                    <span className="block sm:inline sm:ml-1 text-sm text-gray-600">{time.time}</span>
-                  </Label>
-                </div>
-              ))}
-            </RadioGroup>
-          </div>
-          
-        </section>
-
-        <section className="bg-white border rounded-xl sm:rounded-2xl shadow-sm mb-4 sm:mb-6">
-          <div className="p-4 sm:p-6">
-            <h2 className="text-lg sm:text-xl font-semibold">Pilih Jenis Paket *</h2>
-            <h3 className="text-sm font-semibold mb-4 text-gray-700">Note: Hari minggu dan tanggal merah libur</h3>
-
-            <RadioGroup
-              value={jenisPaket}
-              onValueChange={setJenisPaket}
-              className="space-y-3 sm:space-y-0 sm:flex sm:gap-6 lg:gap-8"
-            >
-              {[
-                { value: "HARIAN", label: "Harian (1x/hari)" },
-                { value: "MINGGUAN", label: "Mingguan (6x/minggu)" },
-                { value: "BULANAN", label: "Bulanan (25x/bulan)" },
-              ].map((item) => (
-                <div key={item.value} className="flex items-center space-x-3">
-                  <RadioGroupItem value={item.value} id={item.value} className="mt-0.5" />
-                  <Label htmlFor={item.value} className="cursor-pointer font-medium text-gray-800">
-                    {item.label}
-                  </Label>
-                </div>
-              ))}
-            </RadioGroup>
-          </div>
-        </section>
-
-        {/* Catatan Tambahan - Mobile optimized */}
-        <section className="bg-white border rounded-xl sm:rounded-2xl shadow-sm mb-4 sm:mb-6">
-          <div className="p-4 sm:p-6">
-            <h2 className="text-lg sm:text-xl font-semibold mb-4">Catatan Tambahan (Opsional)</h2>
-            <Textarea
-              value={note}
-              onChange={(e) => setNote(e.target.value)}
-              placeholder="Contoh: Alergi, Catatan Khusus, dll."
-              rows={3}
-              maxLength={500}
-              className="resize-none"
-            />
-            <p className="text-xs sm:text-sm text-gray-500 mt-2">
-              {note.length}/500 karakter
-            </p>
-          </div>
-        </section>
-
-        {/* Keranjang - Mobile optimized */}
-        {items.length === 0 ? (
-          <div className="bg-white rounded-xl sm:rounded-2xl border shadow-sm">
-            <div className="text-center py-12 px-4">
-              <div className="text-4xl mb-4">🛒</div>
-              <p className="text-gray-500 text-base sm:text-lg mb-6">Keranjang Anda kosong.</p>
-              <Button 
-                onClick={() => router.push("/")}
-                className="bg-orange-600 hover:bg-orange-700 text-white px-6 h-11"
-              >
-                Mulai Belanja
-              </Button>
-            </div>
-          </div>
-        ) : (
-          <>
-            {/* Cart Items - Mobile optimized */}
-            <div className="space-y-3 sm:space-y-4 mb-4 sm:mb-6">
-              {items.map((item) => (
-                <div
-                  key={item.id}
-                  className="bg-white border rounded-xl sm:rounded-2xl shadow-sm overflow-hidden"
-                >
-                  <div className="p-4">
-                    {/* Mobile: Stack layout, Desktop: Flex layout */}
-                    <div className="flex gap-3 sm:gap-4">
-                      {/* Product Image */}
-                      <div className="flex-shrink-0">
-                        <div className="w-16 h-16 sm:w-20 sm:h-20 bg-gray-100 rounded-lg overflow-hidden">
-                          {item.image ? (
-                            <img
-                              src={item.image}
-                              alt={item.name}
-                              className="object-cover w-full h-full"
-                            />
-                          ) : (
-                            <div className="w-full h-full flex items-center justify-center text-gray-400 text-xs">
-                              No Image
-                            </div>
-                          )}
-                        </div>
-                      </div>
-
-                      {/* Product Info */}
-                      <div className="flex-1 min-w-0">
-                        <h3 className="font-semibold text-sm sm:text-base line-clamp-2">{item.name}</h3>
-                        <p className="text-gray-500 text-xs sm:text-sm mt-1">
-                          Rp {item.price.toLocaleString("id-ID")}
-                        </p>
-                        <p className="text-xs sm:text-sm text-gray-600 font-medium mt-1">
-                          Subtotal: Rp {(item.price * item.quantity).toLocaleString("id-ID")}
-                        </p>
-                      </div>
-                    </div>
-
-                    {/* Quantity Controls and Remove Button */}
-                    <div className="flex items-center justify-between mt-4">
-                      <div className="flex items-center gap-2 sm:gap-3">
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          onClick={() => decreaseQty(item.id)}
-                          className="h-8 w-8 p-0 text-base font-bold"
-                          disabled={isLoading}
-                        >
-                          −
-                        </Button>
-                        <span className="text-base font-medium min-w-[2rem] text-center">{item.quantity}</span>
-                        <Button
-                          size="sm"
-                          onClick={() => increaseQty(item.id)}
-                          className="h-8 w-8 p-0 text-base font-bold bg-orange-500 hover:bg-orange-600"
-                          disabled={isLoading}
-                        >
-                          +
-                        </Button>
-                      </div>
-                      <Button
-                        size="sm"
-                        variant="destructive"
-                        onClick={() => removeItem(item.id)}
-                        className="h-8 px-3 text-sm"
-                        disabled={isLoading}
-                      >
-                        🗑️
-                      </Button>
-                    </div>
+            {/* Delivery Address Card */}
+            <Card className="bg-white/95 backdrop-blur-xl border border-gray-100 shadow-lg">
+              <CardHeader className="pb-4 px-4 sm:px-6">
+                <CardTitle className="flex items-center gap-2 text-lg font-semibold bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent">
+                  <MapPin className="w-4 h-4 sm:w-5 sm:h-5 text-orange-500" />
+                  Alamat Pengiriman
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4 px-4 sm:px-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="name" className="text-sm font-semibold text-gray-700">
+                      Nama Penerima <span className="text-red-500">*</span>
+                    </Label>
+                    <Input
+                      id="name"
+                      name="name"
+                      value={address.name}
+                      onChange={handleAddressChange}
+                      placeholder="Nama lengkap"
+                      className="h-10 sm:h-11 border-gray-200 focus:border-orange-500 focus:ring-orange-500 rounded-xl text-sm"
+                      required
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="phone" className="text-sm font-semibold text-gray-700">
+                      Nomor Telepon <span className="text-red-500">*</span>
+                    </Label>
+                    <Input
+                      id="phone"
+                      name="phone"
+                      type="tel"
+                      value={address.phone}
+                      onChange={handleAddressChange}
+                      placeholder="+628123456789"
+                      className={`h-10 sm:h-11 border-gray-200 focus:border-orange-500 focus:ring-orange-500 rounded-xl text-sm ${phoneError ? 'border-red-500 focus:border-red-500' : ''}`}
+                      required
+                    />
+                    {phoneError && (
+                      <p className="text-xs text-red-500 mt-1">{phoneError}</p>
+                    )}
                   </div>
                 </div>
-              ))}
+                <div className="space-y-2">
+                  <Label htmlFor="fullAddress" className="text-sm font-semibold text-gray-700">
+                    Alamat Lengkap <span className="text-red-500">*</span>
+                  </Label>
+                  <Textarea
+                    id="fullAddress"
+                    name="fullAddress"
+                    value={address.fullAddress}
+                    onChange={handleAddressChange}
+                    placeholder="Jalan, No Rumah, Kelurahan, Kecamatan, Kota"
+                    rows={3}
+                    className="resize-none border-gray-200 focus:border-orange-500 focus:ring-orange-500 rounded-xl text-sm"
+                    required
+                  />
+                </div>
+                <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
+                  <Button
+                    variant="outline"
+                    onClick={fetchCurrentAddress}
+                    className="flex items-center gap-2 border-orange-200 text-orange-600 hover:bg-gradient-to-r hover:from-orange-50 hover:to-red-50 rounded-xl transition-all duration-300 hover:scale-105 text-sm h-10 sm:h-11"
+                    type="button"
+                  >
+                    <MapPin className="w-3 h-3 sm:w-4 sm:h-4" />
+                    <span className="text-xs sm:text-sm">Gunakan Lokasi Saat Ini</span>
+                  </Button>
+                  <Button
+                    onClick={saveAddress}
+                    className="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 text-sm h-10 sm:h-11"
+                    type="button"
+                  >
+                    <CheckCircle className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
+                    <span className="text-xs sm:text-sm">Simpan Alamat</span>
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Delivery Options */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+              <Card className="bg-white/95 backdrop-blur-xl border border-gray-100 shadow-lg">
+                <CardHeader className="pb-4 px-4 sm:px-6">
+                  <CardTitle className="flex items-center gap-2 text-lg font-semibold bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent">
+                    <Clock className="w-4 h-4 sm:w-5 sm:h-5 text-orange-500" />
+                    Waktu Pengiriman
+                  </CardTitle>
+                  <p className="text-xs sm:text-sm text-gray-600">Order sekarang, dikirim besok</p>
+                </CardHeader>
+                <CardContent className="px-4 sm:px-6">
+                  <RadioGroup
+                    value={deliveryTime}
+                    onValueChange={setDeliveryTime}
+                    className="space-y-3"
+                  >
+                    {[
+                      { value: "PAGI", label: "Pagi", time: "05:00 WIB", desc: "Sarapan pagi" },
+                      { value: "SIANG", label: "Siang", time: "10:00 WIB", desc: "Makan siang" },
+                      { value: "SORE", label: "Sore", time: "15:00 WIB", desc: "Makan sore" }
+                    ].map((time) => (
+                      <div key={time.value} className="flex items-center space-x-3 p-3 rounded-xl border border-gray-200 hover:bg-gradient-to-r hover:from-orange-50 hover:to-red-50 transition-all duration-300 hover:scale-105">
+                        <RadioGroupItem value={time.value} id={time.value} className="text-orange-500" />
+                        <Label htmlFor={time.value} className="cursor-pointer flex-1">
+                          <div className="flex items-center justify-between">
+                            <div>
+                              <span className="font-semibold text-gray-900 text-sm">{time.label}</span>
+                              <p className="text-xs sm:text-sm text-gray-600">{time.desc}</p>
+                            </div>
+                            <span className="text-xs sm:text-sm font-semibold text-orange-600">{time.time}</span>
+                          </div>
+                        </Label>
+                      </div>
+                    ))}
+                  </RadioGroup>
+                </CardContent>
+              </Card>
+
+              <Card className="bg-white/95 backdrop-blur-xl border border-gray-100 shadow-lg">
+                <CardHeader className="pb-4 px-4 sm:px-6">
+                  <CardTitle className="flex items-center gap-2 text-lg font-semibold bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent">
+                    <Package className="w-4 h-4 sm:w-5 sm:h-5 text-orange-500" />
+                    Jenis Paket
+                  </CardTitle>
+                  <p className="text-xs sm:text-sm text-gray-600">Hari minggu & tanggal merah libur</p>
+                </CardHeader>
+                <CardContent className="px-4 sm:px-6">
+                  <RadioGroup
+                    value={jenisPaket}
+                    onValueChange={setJenisPaket}
+                    className="space-y-3"
+                  >
+                    {[
+                      { value: "HARIAN", label: "Harian", desc: "1x pengiriman per hari", multiplier: 1 },
+                      { value: "MINGGUAN", label: "Mingguan", desc: "6x pengiriman per minggu", multiplier: 6 },
+                      { value: "BULANAN", label: "Bulanan", desc: "25x pengiriman per bulan", multiplier: 25 }
+                    ].map((item) => (
+                      <div key={item.value} className="flex items-center space-x-3 p-3 rounded-xl border border-gray-200 hover:bg-gradient-to-r hover:from-orange-50 hover:to-red-50 transition-all duration-300 hover:scale-105">
+                        <RadioGroupItem value={item.value} id={item.value} className="text-orange-500" />
+                        <Label htmlFor={item.value} className="cursor-pointer flex-1">
+                          <div>
+                            <span className="font-semibold text-gray-900 text-sm">{item.label}</span>
+                            <p className="text-xs sm:text-sm text-gray-600">{item.desc}</p>
+                          </div>
+                        </Label>
+                        <Badge variant="outline" className="text-orange-600 border-orange-200 bg-gradient-to-r from-orange-50 to-red-50 text-xs">
+                          ×{item.multiplier}
+                        </Badge>
+                      </div>
+                    ))}
+                  </RadioGroup>
+                </CardContent>
+              </Card>
             </div>
 
-            {/* Total Summary - Mobile optimized */}
-            <div className="bg-orange-50 border border-orange-200 rounded-xl sm:rounded-2xl p-4 sm:p-6 mb-4 sm:mb-6">
-              <div className="text-center sm:text-right space-y-2">
-                <p className="text-sm sm:text-base text-gray-700">
-                  Total Items: <span className="font-semibold">{items.reduce((acc, item) => acc + item.quantity, 0)}</span>
-                </p>
-                <p className="text-xl sm:text-2xl font-bold text-orange-600">
-                  Total Bayar: Rp {total.toLocaleString("id-ID")}
-                </p>
+            {/* Additional Notes */}
+            <Card className="bg-white/95 backdrop-blur-xl border border-gray-100 shadow-lg">
+              <CardHeader className="pb-4 px-4 sm:px-6">
+                <CardTitle className="text-lg font-semibold bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent">Catatan Tambahan</CardTitle>
+                <p className="text-xs sm:text-sm text-gray-600">Alergi, preferensi, atau instruksi khusus</p>
+              </CardHeader>
+              <CardContent className="px-4 sm:px-6">
+                <Textarea
+                  value={note}
+                  onChange={(e) => setNote(e.target.value)}
+                  placeholder="Contoh: Tidak pakai sambal, Alergi kacang, dll."
+                  rows={3}
+                  maxLength={500}
+                  className="resize-none border-gray-200 focus:border-orange-500 focus:ring-orange-500 rounded-xl text-sm"
+                />
+                <div className="flex justify-between items-center mt-2">
+                  <p className="text-xs text-gray-500">
+                    {note.length}/500 karakter
+                  </p>
+                  <Badge variant="secondary" className="text-xs bg-gradient-to-r from-orange-50 to-red-50 text-orange-600 border-orange-200">
+                    Opsional
+                  </Badge>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Cart Items */}
+            <Card className="bg-white/95 backdrop-blur-xl border border-gray-100 shadow-lg">
+              <CardHeader className="pb-4 px-4 sm:px-6">
+                <CardTitle className="flex items-center gap-2 text-lg font-semibold bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent">
+                  <ShoppingCart className="w-4 h-4 sm:w-5 sm:h-5 text-orange-500" />
+                  Keranjang Belanja
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="px-4 sm:px-6">
+                {items.length === 0 ? (
+                  <div className="text-center py-8 sm:py-12">
+                    <div className="w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-r from-orange-100 to-red-100 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
+                      <ShoppingCart className="w-8 h-8 sm:w-10 sm:h-10 text-orange-500" />
+                    </div>
+                    <p className="text-gray-500 text-base sm:text-lg mb-4 sm:mb-6 font-medium">Keranjang Anda kosong</p>
+                    <Button 
+                      onClick={() => router.push("/")}
+                      className="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 text-sm h-10 sm:h-11 px-4 sm:px-6"
+                    >
+                      Mulai Belanja
+                    </Button>
+                  </div>
+                ) : (
+                  <div className="space-y-4">
+                    {items.map((item, index) => (
+                      <div key={item.id}>
+                        <div className="flex gap-3 sm:gap-4 p-3 sm:p-4 rounded-xl bg-gradient-to-r from-orange-50/50 to-red-50/50 hover:from-orange-50 hover:to-red-50 transition-all duration-300">
+                          <div className="flex-shrink-0">
+                            <div className="w-16 h-16 sm:w-20 sm:h-20 bg-gray-100 rounded-xl overflow-hidden shadow-sm">
+                              {item.image ? (
+                                <img
+                                  src={item.image}
+                                  alt={item.name}
+                                  className="object-cover w-full h-full"
+                                />
+                              ) : (
+                                <div className="w-full h-full flex items-center justify-center text-gray-400">
+                                  <Package className="w-6 h-6 sm:w-8 sm:h-8" />
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <h3 className="font-semibold text-gray-900 line-clamp-2 text-sm sm:text-base">{item.name}</h3>
+                            <p className="text-gray-600 text-xs sm:text-sm mt-1">
+                              Rp {item.price.toLocaleString("id-ID")}
+                            </p>
+                            <div className="flex items-center justify-between mt-3">
+                              <div className="flex items-center gap-2">
+                                <Button
+                                  size="sm"
+                                  variant="outline"
+                                  onClick={() => decreaseQty(item.id)}
+                                  className="h-7 w-7 sm:h-8 sm:w-8 p-0 border-gray-200 hover:bg-gray-50 rounded-xl transition-all duration-300 hover:scale-105"
+                                  disabled={isLoading}
+                                >
+                                  <Minus className="w-3 h-3" />
+                                </Button>
+                                <span className="font-semibold min-w-[2rem] text-center text-gray-900 text-sm">{item.quantity}</span>
+                                <Button
+                                  size="sm"
+                                  onClick={() => increaseQty(item.id)}
+                                  className="h-7 w-7 sm:h-8 sm:w-8 p-0 bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 rounded-xl transition-all duration-300 hover:scale-105"
+                                  disabled={isLoading}
+                                >
+                                  <Plus className="w-3 h-3" />
+                                </Button>
+                              </div>
+                              <div className="flex items-center gap-2 sm:gap-3">
+                                <span className="font-bold text-orange-600 text-sm sm:text-base">
+                                  Rp {(item.price * item.quantity * paketMultiplier).toLocaleString("id-ID")}
+                                </span>
+                                <Button
+                                  size="sm"
+                                  variant="outline"
+                                  onClick={() => removeItem(item.id)}
+                                  className="h-7 w-7 sm:h-8 sm:w-8 p-0 text-red-500 border-red-200 hover:bg-red-50 rounded-xl transition-all duration-300 hover:scale-105"
+                                  disabled={isLoading}
+                                >
+                                  <Trash2 className="w-3 h-3" />
+                                </Button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        {index < items.length - 1 && <Separator className="my-4 bg-gradient-to-r from-orange-200 to-red-200" />}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Right Column - Order Summary */}
+          <div className="lg:col-span-1">
+            <div className="sticky top-24 sm:top-28 md:top-32 space-y-4 sm:space-y-6">
+              {/* Order Summary Card */}
+              <Card className="bg-white/95 backdrop-blur-xl border border-gray-100 shadow-lg">
+                <CardHeader className="pb-4 px-4 sm:px-6">
+                  <CardTitle className="text-lg font-semibold bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent">Ringkasan Pesanan</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4 px-4 sm:px-6">
+                  {items.length > 0 && (
+                    <>
+                      <div className="space-y-2">
+                        <div className="flex justify-between text-sm">
+                          <span className="text-gray-600 font-medium">Total Items</span>
+                          <span className="font-semibold">{items.reduce((acc, item) => acc + item.quantity, 0)} produk</span>
+                        </div>
+                        <div className="flex justify-between text-sm">
+                          <span className="text-gray-600 font-medium">Jenis Paket</span>
+                          <span className="font-semibold capitalize">{jenisPaket.toLowerCase()}</span>
+                        </div>
+                        <div className="flex justify-between text-sm">
+                          <span className="text-gray-600 font-medium">Multiplier</span>
+                          <span className="font-semibold">×{paketMultiplier}</span>
+                        </div>
+                      </div>
+                      <Separator className="bg-gradient-to-r from-orange-200 to-red-200" />
+                      <div className="flex justify-between items-center">
+                        <span className="text-gray-900 font-bold">Total Pembayaran</span>
+                        <div className="text-right">
+                          <p className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent">
+                            Rp {total.toLocaleString("id-ID")}
+                          </p>
+                          <p className="text-xs text-gray-500 mt-1">
+                            Termasuk biaya pengiriman
+                          </p>
+                        </div>
+                      </div>
+                      <Separator className="bg-gradient-to-r from-orange-200 to-red-200" />
+                      <div className="space-y-2">
+                        <div className="flex items-center gap-2 text-sm text-gray-600">
+                          <CheckCircle className="w-4 h-4 text-green-500" />
+                          <span className="font-medium">Pembayaran aman & terpercaya</span>
+                        </div>
+                      </div>
+                    </>
+                  )}
+                </CardContent>
+              </Card>
+
+              {/* Checkout Button */}
+              {items.length > 0 && (
+                <Button
+                  onClick={handleCheckout}
+                  disabled={isLoading || !snapLoaded}
+                  className="w-full bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white py-3 sm:py-4 rounded-xl font-bold text-sm sm:text-base shadow-lg hover:shadow-xl disabled:opacity-50 transition-all duration-300 hover:scale-105"
+                >
+                  {isLoading ? (
+                    <span className="flex items-center gap-2">
+                      <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                      Memproses...
+                    </span>
+                  ) : (
+                    <span className="flex items-center justify-center gap-2">
+                      <span>Checkout & Bayar</span>
+                      <span className="text-sm font-bold">→</span>
+                    </span>
+                  )}
+                </Button>
+              )}
+
+              {/* Security Badge */}
+              <div className="text-center">
+                <div className="inline-flex items-center gap-2 px-4 sm:px-6 py-2 sm:py-3 bg-gradient-to-r from-green-50 to-emerald-50 text-green-700 rounded-full text-xs sm:text-sm font-semibold shadow-md border border-green-100">
+                  <CheckCircle className="w-3 h-3 sm:w-4 sm:h-4" />
+                  <span>100% Aman & Terjamin</span>
+                </div>
               </div>
             </div>
-
-            {/* Checkout Button - Mobile optimized with fixed position */}
-            <div className="sm:text-right">
-              <Button
-                onClick={handleCheckout}
-                disabled={isLoading || !snapLoaded}
-                className="w-full sm:w-auto bg-orange-600 hover:bg-orange-700 text-white px-6 sm:px-8 py-3 rounded-xl font-semibold transition shadow-md disabled:opacity-50 h-12 text-base"
-              >
-                {isLoading ? "Memproses..." : "Checkout & Bayar"}
-              </Button>
-            </div>
-          </>
-        )}
+          </div>
+        </div>
       </div>
     </div>
   );
