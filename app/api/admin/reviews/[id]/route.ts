@@ -5,7 +5,7 @@ import { prisma } from "@/lib/prisma";
 // DELETE - Delete a review (Admin only)
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await auth();
@@ -14,7 +14,7 @@ export async function DELETE(
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const reviewId = params.id;
+    const { id: reviewId } = await params;
 
     // Check if review exists
     const review = await prisma.review.findUnique({
