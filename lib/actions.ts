@@ -19,7 +19,7 @@ type RegisterState = {
   message?: string;
 };
 
-export const getUserRole = async (email: string): Promise<"ADMIN" | "USER" | "KURIR" | "DAPUR" | null> => {
+export const getUserRole = async (email: string): Promise<"ADMIN" | "USER" | "KURIR" | null> => {
   try {
     const user = await prisma.user.findUnique({
       where: { email },

@@ -1,4 +1,4 @@
-﻿"use client"
+"use client"
 
 import { useState } from "react"
 import { User, Role } from "@/app/generated/prisma"
@@ -45,8 +45,6 @@ export function UsersTable({ users }: UsersTableProps) {
         return "bg-red-100 text-red-800 border-red-200"
       case "USER":
         return "bg-green-100 text-green-800 border-green-200"
-      case "DAPUR":
-        return "bg-orange-100 text-orange-800 border-orange-200"
       case "KURIR":
         return "bg-purple-100 text-purple-800 border-purple-200"
       default:
@@ -58,7 +56,6 @@ export function UsersTable({ users }: UsersTableProps) {
     switch (role) {
       case "ADMIN":
       case "USER":
-      case "DAPUR":
       case "KURIR":
       default:
         return ""

@@ -46,7 +46,6 @@ export namespace $Enums {
   export const Role: {
   USER: 'USER',
   ADMIN: 'ADMIN',
-  DAPUR: 'DAPUR',
   KURIR: 'KURIR'
 };
 
