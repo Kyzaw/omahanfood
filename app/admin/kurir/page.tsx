@@ -17,7 +17,7 @@ import {
   CheckCircle
 } from "lucide-react";
 import { revalidatePath } from "next/cache";
-import AdminSidebar from "@/components/AdminNavbar";
+import AdminSidebar from "@/components/admin/AdminNavbar";
 
 interface OrderItem {
   quantity: number;

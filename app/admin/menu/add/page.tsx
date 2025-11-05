@@ -1,4 +1,4 @@
-import MenuForm from "@/components/MenuForm"
+import MenuForm from "@/components/admin/MenuForm"
 import prisma from "@/lib/prisma"
 
 export default async function MenuPage() {

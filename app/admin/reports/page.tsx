@@ -2,11 +2,11 @@
 
 import React, { useState } from 'react';
 import { useReports } from '@/hooks/useReports';
-import { StatsCard } from '@/components/reports/StatsCard';
-import { SalesChart } from '@/components/reports/SalesChart';
-import { ProductTable } from '@/components/reports/ProductTable';
-import { CategoryChart } from '@/components/reports/CategoryChart';
-import { TransactionTable } from '@/components/reports/TransactionTable';
+import { StatsCard } from '@/components/admin/reports/StatsCard';
+import { SalesChart } from '@/components/admin/reports/SalesChart';
+import { ProductTable } from '@/components/admin/reports/ProductTable';
+import { CategoryChart } from '@/components/admin/reports/CategoryChart';
+import { TransactionTable } from '@/components/admin/reports/TransactionTable';
 import { 
   TrendingUp, 
   ShoppingCart, 
@@ -17,7 +17,7 @@ import {
   Download,
   BarChart3,
 } from 'lucide-react';
-import AdminSidebar from '@/components/AdminNavbar';
+import AdminSidebar from '@/components/admin/AdminNavbar';
 
 const ReportsPage = () => {
   const [dateRange, setDateRange] = useState('week');

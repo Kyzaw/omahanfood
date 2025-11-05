@@ -16,9 +16,9 @@ import {
   Filter,
   ArrowLeft
 } from "lucide-react";
-import AdminSidebar from "@/components/AdminNavbar";
+import AdminSidebar from "@/components/admin/AdminNavbar";
 import Link from "next/link";
-import { OrdersTable } from "@/components/OrdersTable";
+import { OrdersTable } from "@/components/admin/OrdersTable";
 
 interface OrderItem {
   quantity: number;

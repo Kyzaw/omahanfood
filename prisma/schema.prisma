@@ -78,7 +78,6 @@ model Review {
 enum Role {
   USER
   ADMIN
-  DAPUR
   KURIR
 }
 

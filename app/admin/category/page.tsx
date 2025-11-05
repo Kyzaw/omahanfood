@@ -1,6 +1,6 @@
 import { prisma } from "@/lib/prisma";
-import CategoryTable from "@/components/CategoryTable";
-import AdminSidebar from "@/components/AdminNavbar";
+import CategoryTable from "@/components/admin/CategoryTable";
+import AdminSidebar from "@/components/admin/AdminNavbar";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";

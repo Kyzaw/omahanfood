@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Star, TrendingUp, MessageSquare, AlertCircle } from "lucide-react";
 import { ReviewsTable } from "@/components/admin/ReviewsTable";
-import AdminNavbar from "@/components/AdminNavbar";
+import AdminNavbar from "@/components/admin/AdminNavbar";
 
 export default async function AdminReviewsPage() {
   const session = await auth();

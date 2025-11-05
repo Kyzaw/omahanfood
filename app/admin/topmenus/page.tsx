@@ -15,7 +15,7 @@ import {
   ShoppingCart,
   Award
 } from "lucide-react";
-import AdminSidebar from "@/components/AdminNavbar";
+import AdminSidebar from "@/components/admin/AdminNavbar";
 import Link from "next/link";
 
 interface OrderItem {

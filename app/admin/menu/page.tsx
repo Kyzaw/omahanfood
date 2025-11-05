@@ -1,6 +1,6 @@
 import { prisma } from "@/lib/prisma";
-import MenuTable from "@/components/MenuTable";
-import AdminSidebar from "@/components/AdminNavbar";
+import MenuTable from "@/components/admin/MenuTable";
+import AdminSidebar from "@/components/admin/AdminNavbar";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { FolderKanban, Menu, Plus } from "lucide-react";

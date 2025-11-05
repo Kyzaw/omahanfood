@@ -5,7 +5,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Star } from "lucide-react";
-import { ReviewList } from "@/components/ReviewList";
+import { ReviewList } from "@/components/admin/ReviewList";
 
 interface MenuDetailPageProps {
   params: Promise<{

@@ -4,7 +4,7 @@ import { UploadImageMenu } from "@/lib/actions"
 import { useActionState, useState } from "react"
 import Link from "next/link"
 import { ArrowLeft, Upload, DollarSign, FileText, Tag, Image as ImageIcon, Plus, X } from "lucide-react"
-import AdminSidebar from "@/components/AdminNavbar"
+import AdminSidebar from "@/components/admin/AdminNavbar"
 
 const MenuForm = ({ categories }: { categories: { id: string, name: string }[] }) => {
   const [state, formAction] = useActionState(UploadImageMenu, null)

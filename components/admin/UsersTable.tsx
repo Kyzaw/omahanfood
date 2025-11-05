@@ -20,7 +20,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { UserForm, DeleteUserButton } from "@/components/UserForm"
+import { UserForm, DeleteUserButton } from "@/components/admin/UserForm"
 
 interface UserWithStats extends User {
   _count: {

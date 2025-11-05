@@ -1,7 +1,7 @@
-﻿import AdminSidebar from '@/components/AdminNavbar'
-import { StatsCard } from "@/components/StatsCard"
-import { OrdersTable } from "@/components/OrdersTable"
-import { TopMenus } from "@/components/TopMenus"
+﻿import AdminSidebar from '@/components/admin/AdminNavbar'
+import { StatsCard } from "@/components/admin/StatsCard"
+import { OrdersTable } from "@/components/admin/OrdersTable"
+import { TopMenus } from "@/components/admin/TopMenus"
 import { prisma } from "@/lib/prisma"
 import Link from 'next/link'
 

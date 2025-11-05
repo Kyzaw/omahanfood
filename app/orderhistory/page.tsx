@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
-import { Clock, MapPin, Package, Star } from "lucide-react";
+import { Clock, MapPin, Package, Star, CheckCircle2, CreditCard, History, ShoppingBag } from "lucide-react";
 import { ReviewDialog } from "@/components/ReviewDialog";
 
 interface OrderItem {
@@ -97,9 +97,17 @@ export default function OrderHistoryPage() {
 
   if (isLoading) {
     return (
-      <div className="container mx-auto p-4 max-w-4xl md:pt-35">
-        <div className="text-center py-12">
-          <p className="text-gray-500">Memuat riwayat pesanan...</p>
+      <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-red-50">
+        <div className="container mx-auto p-4 max-w-5xl md:pt-35 min-h-[70vh] flex items-center justify-center">
+          <div className="text-center py-12">
+            <div className="relative mb-6">
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="w-32 h-32 bg-gradient-to-br from-orange-100 to-orange-50 rounded-full blur-2xl opacity-50 animate-pulse"></div>
+              </div>
+              <History className="relative mx-auto h-20 w-20 text-orange-400 mb-4 animate-pulse" strokeWidth={1.5} />
+            </div>
+            <p className="text-gray-600 text-lg font-medium">Memuat riwayat pesanan...</p>
+          </div>
         </div>
       </div>
     );
@@ -107,185 +115,221 @@ export default function OrderHistoryPage() {
 
   if (orders.length === 0) {
     return (
-      <div className="container mx-auto p-4 max-w-4xl md:pt-35">
-        <div className="text-center py-12">
-          <Package className="mx-auto h-16 w-16 text-gray-400 mb-4" />
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">
-            Riwayat Pesanan
-          </h2>
-          <p className="text-gray-500 mb-6">
-            Belum ada pesanan yang selesai.
-          </p>
+      <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-red-50">
+        <div className="container mx-auto p-4 max-w-5xl md:pt-35 min-h-[70vh] flex items-center justify-center">
+          <div className="text-center py-12">
+            <div className="relative mb-6">
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="w-32 h-32 bg-gradient-to-br from-orange-100 to-orange-50 rounded-full blur-2xl opacity-50"></div>
+              </div>
+              <History className="relative mx-auto h-20 w-20 text-orange-400 mb-4" strokeWidth={1.5} />
+            </div>
+            <h2 className="text-3xl font-bold text-gray-900 mb-3">Belum Ada Riwayat</h2>
+            <p className="text-gray-500 mb-6 max-w-md mx-auto">
+              Anda belum memiliki pesanan yang selesai. Pesanan yang telah selesai akan muncul di sini.
+            </p>
+            <a href="/" className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-xl hover:from-orange-600 hover:to-red-600 transition-all duration-300 font-medium shadow-lg hover:shadow-xl transform hover:scale-105">
+              <ShoppingBag className="h-5 w-5 mr-2" />
+              Mulai Belanja
+            </a>
+          </div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="container mx-auto p-4 max-w-4xl mb-23 md:pt-35">
-      <div className="mb-6">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">
-          Riwayat Pesanan
-        </h1>
-        <p className="text-gray-600">
-          Pesanan yang telah selesai dan dapat direview
-        </p>
-      </div>
+    <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-red-50">
+      <div className="container mx-auto p-4 max-w-5xl mb-23 md:pt-35">
+        <div className="mb-8">
+          <div className="flex items-center gap-3 mb-3">
+            <div className="p-2 bg-gradient-to-br from-orange-500 to-red-500 rounded-xl shadow-lg">
+              <History className="h-6 w-6 text-white" />
+            </div>
+            <h1 className="text-4xl font-bold text-gray-900">Riwayat Pesanan</h1>
+          </div>
+          <p className="text-gray-600 text-lg">
+            Pesanan yang telah selesai dan dapat direview
+          </p>
+          <div className="mt-4 flex items-center gap-2 text-sm">
+            <Badge variant="secondary" className="bg-green-50 text-green-700 border-green-200">
+              {orders.length} Pesanan Selesai
+            </Badge>
+          </div>
+        </div>
 
-      <div className="space-y-4">
-        {orders.map((order) => {
-          const items = Array.isArray(order.items) ? order.items : [];
-          const itemCount = items.reduce((sum, item) => sum + item.quantity, 0);
+        <div className="space-y-6">
+          {orders.map((order) => {
+            const items = Array.isArray(order.items) ? order.items : [];
+            const itemCount = items.reduce((sum, item) => sum + item.quantity, 0);
 
-          return (
-            <Card
-              key={order.id}
-              className="shadow-sm hover:shadow-md transition-shadow"
-            >
-              <CardHeader className="pb-3">
-                <div className="flex items-center justify-between">
-                  <CardTitle className="text-lg font-semibold">
-                    Order #{order.id.slice(-8).toUpperCase()}
-                  </CardTitle>
-                  <Badge className="bg-green-100 text-green-800 border-0">
-                    Selesai
-                  </Badge>
-                </div>
-                <div className="flex items-center text-sm text-gray-500">
-                  <Clock className="h-4 w-4 mr-1" />
-                  {new Date(order.createdAt).toLocaleString("id-ID", {
-                    weekday: "long",
-                    year: "numeric",
-                    month: "long",
-                    day: "numeric",
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  })}
-                </div>
-              </CardHeader>
-
-              <CardContent className="space-y-4">
-                {/* Order Summary */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="space-y-3">
-                    <div className="flex items-start space-x-2">
-                      <Package className="h-4 w-4 mt-0.5 text-gray-400" />
-                      <div className="flex-1">
-                        <p className="text-sm font-medium">Total Item</p>
-                        <p className="text-sm text-gray-600">{itemCount} item</p>
+            return (
+              <Card
+                key={order.id}
+                className="shadow-md hover:shadow-xl transition-all duration-300 border-2 border-gray-100 overflow-hidden"
+              >
+                {/* Success indicator bar */}
+                <div className="h-1.5 bg-gradient-to-r from-green-400 to-emerald-500" />
+                
+                <CardHeader className="pb-4 bg-gradient-to-br from-green-50 to-white">
+                  <div className="flex items-start justify-between gap-4">
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2 mb-2">
+                        <CardTitle className="text-xl font-bold text-gray-900">
+                          Order #{order.id.slice(-8).toUpperCase()}
+                        </CardTitle>
                       </div>
-                    </div>
-
-                    <div className="flex items-start space-x-2">
-                      <Clock className="h-4 w-4 mt-0.5 text-gray-400" />
-                      <div className="flex-1">
-                        <p className="text-sm font-medium">Waktu Pengiriman</p>
-                        <p className="text-sm text-gray-600">
-                          {getDeliveryTimeLabel(
-                            order.deliveryTime as DeliveryTime
-                          )}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="space-y-3">
-                    <div className="flex items-start space-x-2">
-                      <MapPin className="h-4 w-4 mt-0.5 text-gray-400" />
-                      <div className="flex-1">
-                        <p className="text-sm font-medium">Metode Pembayaran</p>
-                        <p className="text-sm text-gray-600">
-                          {order.paymentMethod}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Order Items with Review Buttons */}
-                {items.length > 0 && (
-                  <>
-                    <Separator />
-                    <div>
-                      <h4 className="text-sm font-medium mb-3">
-                        Detail Pesanan
-                      </h4>
-                      <div className="space-y-3">
-                        {items.map((item, index) => {
-                          const menuId = item.id;  // Use the id field which contains menuId
-                          const reviewed = hasReviewed(order.id, menuId);
-
-                          return (
-                            <div
-                              key={index}
-                              className="flex justify-between items-center gap-4"
-                            >
-                              <div className="flex-1">
-                                <div className="flex justify-between items-start">
-                                  <div>
-                                    <span className="font-medium text-sm">
-                                      {item.name || "Item"}
-                                    </span>
-                                    <span className="text-gray-500 ml-2 text-sm">
-                                      x{item.quantity}
-                                    </span>
-                                  </div>
-                                  <span className="font-medium text-sm">
-                                    Rp{" "}
-                                    {(item.price * item.quantity).toLocaleString()}
-                                  </span>
-                                </div>
-                              </div>
-                              <Button
-                                size="sm"
-                                variant={reviewed ? "reviewed" : "review"}
-                                onClick={() =>
-                                  handleReviewClick(
-                                    order.id,
-                                    menuId,
-                                    item.name
-                                  )
-                                }
-                                disabled={reviewed}
-                                className="flex items-center gap-1"
-                              >
-                                <Star className={`h-3 w-3 ${reviewed ? "fill-green-500" : ""}`} />
-                                {reviewed ? "Sudah Review" : "Beri Review"}
-                              </Button>
-                            </div>
-                          );
+                      <div className="flex items-center text-sm text-gray-500">
+                        <Clock className="h-4 w-4 mr-1.5" />
+                        {new Date(order.createdAt).toLocaleString("id-ID", {
+                          weekday: "long",
+                          year: "numeric",
+                          month: "long",
+                          day: "numeric",
+                          hour: "2-digit",
+                          minute: "2-digit",
                         })}
                       </div>
                     </div>
-                  </>
-                )}
+                    <Badge 
+                      className="bg-green-50 text-green-700 border-green-200 border px-4 py-2 font-semibold flex items-center gap-2"
+                      variant="secondary"
+                    >
+                      <CheckCircle2 className="h-4 w-4" />
+                      Selesai
+                    </Badge>
+                  </div>
+                </CardHeader>
 
-                {/* Total */}
-                <Separator />
-                <div className="flex justify-between items-center">
-                  <span className="text-lg font-semibold">
-                    Total Pembayaran
-                  </span>
-                  <span className="text-lg font-bold text-primary">
-                    Rp {order.totalAmount.toLocaleString()}
-                  </span>
-                </div>
-              </CardContent>
-            </Card>
-          );
-        })}
+                <CardContent className="space-y-6 pt-6">
+                  {/* Order Summary */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="space-y-4">
+                      <div className="flex items-start space-x-3 p-3 rounded-lg bg-gray-50 border border-gray-100">
+                        <div className="p-2 bg-white rounded-lg shadow-sm">
+                          <Package className="h-5 w-5 text-orange-500" />
+                        </div>
+                        <div className="flex-1">
+                          <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">Total Item</p>
+                          <p className="text-base font-semibold text-gray-900 mt-0.5">{itemCount} item</p>
+                        </div>
+                      </div>
+
+                      <div className="flex items-start space-x-3 p-3 rounded-lg bg-gray-50 border border-gray-100">
+                        <div className="p-2 bg-white rounded-lg shadow-sm">
+                          <Clock className="h-5 w-5 text-blue-500" />
+                        </div>
+                        <div className="flex-1">
+                          <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">Waktu Pengiriman</p>
+                          <p className="text-base font-semibold text-gray-900 mt-0.5">
+                            {getDeliveryTimeLabel(
+                              order.deliveryTime as DeliveryTime
+                            )}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="space-y-4">
+                      <div className="flex items-start space-x-3 p-3 rounded-lg bg-gray-50 border border-gray-100">
+                        <div className="p-2 bg-white rounded-lg shadow-sm">
+                          <CreditCard className="h-5 w-5 text-green-500" />
+                        </div>
+                        <div className="flex-1">
+                          <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">Metode Pembayaran</p>
+                          <p className="text-base font-semibold text-gray-900 mt-0.5">
+                            {order.paymentMethod}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Order Items with Review Buttons */}
+                  {items.length > 0 && (
+                    <>
+                      <Separator className="my-6" />
+                      <div className="bg-gradient-to-br from-orange-50 to-amber-50 p-5 rounded-xl border border-orange-100">
+                        <div className="flex items-center gap-2 mb-4">
+                          <ShoppingBag className="h-5 w-5 text-orange-600" />
+                          <h4 className="text-base font-bold text-gray-900">Detail Pesanan</h4>
+                        </div>
+                        <div className="space-y-3">
+                          {items.map((item, index) => {
+                            const menuId = item.id;
+                            const reviewed = hasReviewed(order.id, menuId);
+
+                            return (
+                              <div
+                                key={index}
+                                className="flex justify-between items-center gap-4 bg-white p-4 rounded-lg shadow-sm"
+                              >
+                                <div className="flex-1">
+                                  <div className="flex justify-between items-start mb-2">
+                                    <div>
+                                      <span className="font-semibold text-gray-900">
+                                        {item.name || "Item"}
+                                      </span>
+                                      <span className="text-orange-600 font-medium ml-2">
+                                        ×{item.quantity}
+                                      </span>
+                                    </div>
+                                    <span className="font-bold text-gray-900">
+                                      Rp {(item.price * item.quantity).toLocaleString()}
+                                    </span>
+                                  </div>
+                                  <Button
+                                    size="sm"
+                                    variant={reviewed ? "reviewed" : "review"}
+                                    onClick={() =>
+                                      handleReviewClick(
+                                        order.id,
+                                        menuId,
+                                        item.name
+                                      )
+                                    }
+                                    disabled={reviewed}
+                                    className="flex items-center gap-1.5 mt-2"
+                                  >
+                                    <Star className={`h-4 w-4 ${reviewed ? "fill-green-500" : ""}`} />
+                                    {reviewed ? "Sudah Review" : "Beri Review"}
+                                  </Button>
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    </>
+                  )}
+
+                  {/* Total */}
+                  <Separator className="my-6" />
+                  <div className="flex justify-between items-center bg-gradient-to-r from-orange-500 to-orange-600 p-5 rounded-xl shadow-lg">
+                    <span className="text-lg font-bold text-white">
+                      Total Pembayaran
+                    </span>
+                    <span className="text-2xl font-bold text-white">
+                      Rp {order.totalAmount.toLocaleString()}
+                    </span>
+                  </div>
+                </CardContent>
+              </Card>
+            );
+          })}
+        </div>
+
+        {/* Review Dialog */}
+        <ReviewDialog
+          open={reviewDialog.open}
+          onOpenChange={(open) =>
+            setReviewDialog({ ...reviewDialog, open })
+          }
+          orderId={reviewDialog.orderId}
+          menuId={reviewDialog.menuId}
+          menuName={reviewDialog.menuName}
+        />
       </div>
-
-      {/* Review Dialog */}
-      <ReviewDialog
-        open={reviewDialog.open}
-        onOpenChange={(open) =>
-          setReviewDialog({ ...reviewDialog, open })
-        }
-        orderId={reviewDialog.orderId}
-        menuId={reviewDialog.menuId}
-        menuName={reviewDialog.menuName}
-      />
     </div>
   );
 }

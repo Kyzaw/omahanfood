@@ -5,7 +5,7 @@ import { useFormState } from "react-dom"
 import Link from "next/link"
 import { useState } from "react"
 import { ArrowLeft, Upload, Image as ImageIcon, Plus, X } from "lucide-react"
-import AdminSidebar from "@/components/AdminNavbar"
+import AdminSidebar from "@/components/admin/AdminNavbar"
 
 const CategoryForm = () => {
   const [state, formAction] = useFormState(UploadImageCategory, null)
