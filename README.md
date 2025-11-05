@@ -204,12 +204,6 @@ Untuk dokumentasi lengkap, lihat file:
 2. Pilih environment (Sandbox untuk testing)
 3. Copy Client Key dan Server Key dari Settings → Access Keys
 
-**Google Maps:**
-1. Buka [Google Cloud Console](https://console.cloud.google.com/)
-2. Buat project baru atau pilih existing project
-3. Enable Maps JavaScript API dan Places API
-4. Buat API Key di Credentials
-
 **AUTH_SECRET:**
 ```bash
 # Generate random secret
@@ -234,7 +228,6 @@ npm start
 ### User Roles
 - `USER` - Customer biasa
 - `ADMIN` - Administrator sistem
-- `DAPUR` - Staff dapur
 - `KURIR` - Kurir pengiriman
 
 ### Order Status Flow
@@ -269,20 +262,6 @@ npm start
 ```
 
 **Note:** Pastikan PostgreSQL database sudah running dan accessible dari production server.
-
-## 🤝 Contributing
-
-Contributions are welcome! Please follow these steps:
-
-1. Fork the repository
-2. Create feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to branch (`git push origin feature/AmazingFeature`)
-5. Open Pull Request
-
-## 📝 License
-
-This project is licensed under the MIT License.
 
 ## 👨‍💻 Author
 
