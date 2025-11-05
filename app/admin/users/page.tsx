@@ -29,7 +29,6 @@ export default async function UsersPage() {
     total: users.length,
     admins: users.filter(u => u.role === "ADMIN").length,
     users: users.filter(u => u.role === "USER").length,
-    dapur: users.filter(u => u.role === "DAPUR").length,
     kurir: users.filter(u => u.role === "KURIR").length,
   }
 
@@ -116,21 +115,6 @@ export default async function UsersPage() {
             </div>
           </div>
 
-          {/* Kitchen Staff Stats - Show if exists */}
-          {userStats.dapur > 0 && (
-            <div className="bg-white rounded-xl md:rounded-2xl shadow-sm border border-slate-200 p-4 md:p-6 hover:shadow-md transition-shadow duration-300">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 md:w-12 md:h-12 bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg md:rounded-xl flex items-center justify-center">
-                  <span className="text-white text-sm md:text-base">👨‍🍳</span>
-                </div>
-                <div>
-                  <p className="text-xs md:text-sm font-medium text-slate-600">Kitchen Staff</p>
-                  <p className="text-xl md:text-2xl font-bold text-orange-600">{userStats.dapur}</p>
-                </div>
-              </div>
-            </div>
-          )}
-
           {/* Users Table */}
           <div className="bg-white p-4 rounded-xl md:rounded-2xl shadow-sm border border-slate-200 overflow-hidden hover:shadow-md transition-shadow duration-300">
             <div className="px-4 md:px-6 py-4 md:py-5 border-b border-slate-100 bg-gradient-to-r from-slate-50 to-white">
@@ -216,16 +200,6 @@ export default async function UsersPage() {
                   {userStats.total > 0 ? Math.round((userStats.kurir / userStats.total) * 100) : 0}%
                 </div>
               </div>
-              
-              {userStats.dapur > 0 && (
-                <div className="text-center p-3 md:p-4 bg-orange-50 rounded-lg border border-orange-200">
-                  <div className="text-lg md:text-2xl font-bold text-orange-600">{userStats.dapur}</div>
-                  <div className="text-xs md:text-sm text-orange-700 font-medium">Kitchen</div>
-                  <div className="text-xs text-orange-600 mt-1">
-                    {userStats.total > 0 ? Math.round((userStats.dapur / userStats.total) * 100) : 0}%
-                  </div>
-                </div>
-              )}
             </div>
           </div>
         </div>
