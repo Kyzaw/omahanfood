@@ -52,8 +52,8 @@ export function TermsOfServicePage() {
               <section className="mb-8">
                 <h2 className="text-2xl font-bold text-gray-900 mb-4">1. Acceptance of Terms</h2>
                 <p className="text-gray-700 leading-relaxed mb-4">
-                  By accessing and using Omahan Food services, you accept and agree to be bound by the terms 
-                  and provision of this agreement. If you do not agree to abide by the above, please do not 
+                  By accessing and using Omahan Food services, you accept and agree to be bound by the terms
+                  and provision of this agreement. If you do not agree to abide by the above, please do not
                   use this service.
                 </p>
               </section>
@@ -61,7 +61,7 @@ export function TermsOfServicePage() {
               <section className="mb-8">
                 <h2 className="text-2xl font-bold text-gray-900 mb-4">2. Description of Service</h2>
                 <p className="text-gray-700 leading-relaxed mb-4">
-                  Omahan Food is a digital platform that connects customers with restaurants and food vendors. 
+                  Omahan Food is a digital platform that connects customers with restaurants and food vendors.
                   We provide food ordering, delivery coordination, and payment processing services.
                 </p>
                 <ul className="list-disc list-inside text-gray-700 space-y-2">
@@ -75,7 +75,7 @@ export function TermsOfServicePage() {
               <section className="mb-8">
                 <h2 className="text-2xl font-bold text-gray-900 mb-4">3. User Account</h2>
                 <p className="text-gray-700 leading-relaxed mb-4">
-                  To use our services, you must create an account and provide accurate information. 
+                  To use our services, you must create an account and provide accurate information.
                   You are responsible for maintaining the confidentiality of your account credentials.
                 </p>
                 <div className="bg-orange-50 border-l-4 border-orange-500 p-4 my-4">
@@ -88,7 +88,7 @@ export function TermsOfServicePage() {
               <section className="mb-8">
                 <h2 className="text-2xl font-bold text-gray-900 mb-4">4. Orders and Payment</h2>
                 <p className="text-gray-700 leading-relaxed mb-4">
-                  All orders are subject to acceptance by the restaurant. Prices are as displayed at the time 
+                  All orders are subject to acceptance by the restaurant. Prices are as displayed at the time
                   of ordering. Payment must be made in full before order processing.
                 </p>
                 <h3 className="text-lg font-semibold text-gray-900 mb-2">Cancellation Policy:</h3>
@@ -102,7 +102,7 @@ export function TermsOfServicePage() {
               <section className="mb-8">
                 <h2 className="text-2xl font-bold text-gray-900 mb-4">5. Delivery Terms</h2>
                 <p className="text-gray-700 leading-relaxed mb-4">
-                  Delivery times are estimates and may vary due to weather, traffic, or high demand. 
+                  Delivery times are estimates and may vary due to weather, traffic, or high demand.
                   Omahan Food is not responsible for delays beyond our control.
                 </p>
               </section>
@@ -121,7 +121,7 @@ export function TermsOfServicePage() {
               <section className="mb-8">
                 <h2 className="text-2xl font-bold text-gray-900 mb-4">7. Limitation of Liability</h2>
                 <p className="text-gray-700 leading-relaxed mb-4">
-                  Omahan Food shall not be liable for any indirect, incidental, special, consequential, or 
+                  Omahan Food shall not be liable for any indirect, incidental, special, consequential, or
                   punitive damages resulting from your use of the service.
                 </p>
               </section>
@@ -129,7 +129,7 @@ export function TermsOfServicePage() {
               <section className="mb-8">
                 <h2 className="text-2xl font-bold text-gray-900 mb-4">8. Changes to Terms</h2>
                 <p className="text-gray-700 leading-relaxed mb-4">
-                  We reserve the right to modify these terms at any time. Users will be notified of any 
+                  We reserve the right to modify these terms at any time. Users will be notified of any
                   material changes via email or platform notification.
                 </p>
               </section>
@@ -209,10 +209,10 @@ export function PrivacyPolicyPage() {
               <section className="mb-8">
                 <h2 className="text-2xl font-bold text-gray-900 mb-4">1. Information We Collect</h2>
                 <p className="text-gray-700 leading-relaxed mb-4">
-                  We collect information you provide directly to us, information we obtain automatically 
+                  We collect information you provide directly to us, information we obtain automatically
                   when you use our services, and information from third parties.
                 </p>
-                
+
                 <div className="space-y-4">
                   <div className="bg-orange-50 rounded-lg p-4">
                     <h3 className="font-semibold text-gray-900 mb-2">Personal Information:</h3>
@@ -223,7 +223,7 @@ export function PrivacyPolicyPage() {
                       <li>Profile photos and reviews</li>
                     </ul>
                   </div>
-                  
+
                   <div className="bg-blue-50 rounded-lg p-4">
                     <h3 className="font-semibold text-gray-900 mb-2">Automatically Collected:</h3>
                     <ul className="list-disc list-inside text-gray-700 text-sm space-y-1">
@@ -256,7 +256,7 @@ export function PrivacyPolicyPage() {
                 <p className="text-gray-700 leading-relaxed mb-4">
                   We may share your information in the following circumstances:
                 </p>
-                
+
                 <div className="space-y-4">
                   <div className="border border-gray-200 rounded-lg p-4">
                     <button
@@ -265,9 +265,8 @@ export function PrivacyPolicyPage() {
                     >
                       <h3 className="font-semibold text-gray-900">With Restaurants & Delivery Partners</h3>
                       <svg
-                        className={`w-5 h-5 text-gray-500 transform transition-transform ${
-                          activeSection === 'restaurants' ? 'rotate-180' : ''
-                        }`}
+                        className={`w-5 h-5 text-gray-500 transform transition-transform ${activeSection === 'restaurants' ? 'rotate-180' : ''
+                          }`}
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
@@ -277,7 +276,7 @@ export function PrivacyPolicyPage() {
                     </button>
                     {activeSection === 'restaurants' && (
                       <div className="mt-3 text-gray-700 text-sm">
-                        We share order details, delivery addresses, and contact information necessary 
+                        We share order details, delivery addresses, and contact information necessary
                         to fulfill your orders with our restaurant and delivery partners.
                       </div>
                     )}
@@ -290,9 +289,8 @@ export function PrivacyPolicyPage() {
                     >
                       <h3 className="font-semibold text-gray-900">Service Providers</h3>
                       <svg
-                        className={`w-5 h-5 text-gray-500 transform transition-transform ${
-                          activeSection === 'service' ? 'rotate-180' : ''
-                        }`}
+                        className={`w-5 h-5 text-gray-500 transform transition-transform ${activeSection === 'service' ? 'rotate-180' : ''
+                          }`}
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
@@ -302,7 +300,7 @@ export function PrivacyPolicyPage() {
                     </button>
                     {activeSection === 'service' && (
                       <div className="mt-3 text-gray-700 text-sm">
-                        We work with third-party service providers for payment processing, analytics, 
+                        We work with third-party service providers for payment processing, analytics,
                         customer support, and marketing services.
                       </div>
                     )}
@@ -313,7 +311,7 @@ export function PrivacyPolicyPage() {
               <section className="mb-8">
                 <h2 className="text-2xl font-bold text-gray-900 mb-4">4. Data Security</h2>
                 <p className="text-gray-700 leading-relaxed mb-4">
-                  We implement appropriate technical and organizational measures to protect your personal 
+                  We implement appropriate technical and organizational measures to protect your personal
                   information against unauthorized access, alteration, disclosure, or destruction.
                 </p>
                 <div className="bg-green-50 border border-green-200 rounded-lg p-4">
@@ -363,16 +361,16 @@ export function PrivacyPolicyPage() {
               <section className="mb-8">
                 <h2 className="text-2xl font-bold text-gray-900 mb-4">6. Cookies and Tracking</h2>
                 <p className="text-gray-700 leading-relaxed mb-4">
-                  We use cookies and similar technologies to enhance your experience, analyze usage, 
+                  We use cookies and similar technologies to enhance your experience, analyze usage,
                   and provide personalized content. You can manage your cookie preferences in your browser settings.
                 </p>
               </section>
 
               <section className="mb-8">
-                <h2 className="text-2xl font-bold text-gray-900 mb-4">7. Children's Privacy</h2>
+                <h2 className="text-2xl font-bold text-gray-900 mb-4">7. Children&apos;s Privacy</h2>
                 <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
                   <p className="text-yellow-800 font-medium">
-                    Our services are not intended for children under 18 years of age. We do not knowingly 
+                    Our services are not intended for children under 18 years of age. We do not knowingly
                     collect personal information from children under 18.
                   </p>
                 </div>

@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { redirect } from "next/navigation";
+import Link from "next/link";
 import { Clock, MapPin, CreditCard, Package, User, CheckCircle2, Truck, ChefHat, ShoppingBag, AlertCircle } from "lucide-react";
 
 interface OrderItem {
@@ -32,7 +33,7 @@ function isValidOrderItem(item: unknown): item is JsonOrderItem {
   if (typeof item !== 'object' || item === null) {
     return false;
   }
-  
+
   const jsonItem = item as Record<string, unknown>;
   return (
     'name' in jsonItem ||
@@ -137,7 +138,7 @@ function getDeliveryTimeLabel(deliveryTime: DeliveryTime) {
 // Helper function to parse address string
 function parseAddressString(addressString: string): AddressData | null {
   // Try different patterns to extract name, phone, and address
-  
+
   // Pattern 1: "Nama | 08123456789 | Jl. Address"
   const pattern1 = addressString.split(' | ');
   if (pattern1.length === 3) {
@@ -147,7 +148,7 @@ function parseAddressString(addressString: string): AddressData | null {
       alamat: pattern1[2].trim()
     };
   }
-  
+
   // Pattern 2: "Nama, 08123456789, Jl. Address"
   const pattern2 = addressString.split(', ');
   if (pattern2.length >= 3) {
@@ -157,7 +158,7 @@ function parseAddressString(addressString: string): AddressData | null {
       alamat: pattern2.slice(2).join(', ').trim()
     };
   }
-  
+
   // Pattern 3: "Nama - 08123456789 - Jl. Address"
   const pattern3 = addressString.split(' - ');
   if (pattern3.length === 3) {
@@ -167,19 +168,19 @@ function parseAddressString(addressString: string): AddressData | null {
       alamat: pattern3[2].trim()
     };
   }
-  
+
   // Pattern 4: Extract phone number with regex and split accordingly
   const phoneRegex = /(\+62|62|0)[\s-]?8[1-9][0-9]{6,10}/g;
   const phoneMatch = addressString.match(phoneRegex);
-  
+
   if (phoneMatch && phoneMatch.length > 0) {
     const phone = phoneMatch[0];
     const parts = addressString.split(phone);
-    
+
     if (parts.length === 2) {
       const beforePhone = parts[0].trim().replace(/[,|-]$/, '').trim();
       const afterPhone = parts[1].trim().replace(/^[,|-]/, '').trim();
-      
+
       return {
         nama: beforePhone || '',
         noHp: phone,
@@ -187,15 +188,15 @@ function parseAddressString(addressString: string): AddressData | null {
       };
     }
   }
-  
+
   // Pattern 5: Try to extract phone from anywhere in the string
   if (phoneMatch && phoneMatch.length > 0) {
     const phone = phoneMatch[0];
     const withoutPhone = addressString.replace(phone, '').trim();
-    
+
     // Split remaining text, assume first part is name, rest is address
     const parts = withoutPhone.split(/[,|-]/).map(p => p.trim()).filter(p => p);
-    
+
     if (parts.length >= 2) {
       return {
         nama: parts[0],
@@ -210,7 +211,7 @@ function parseAddressString(addressString: string): AddressData | null {
       };
     }
   }
-  
+
   // If no pattern matches, return null to show as single string
   return null;
 }
@@ -254,10 +255,10 @@ export default async function MyOrdersPage() {
           </div>
           <h2 className="text-3xl font-bold text-gray-900 mb-3">Belum Ada Pesanan</h2>
           <p className="text-gray-500 mb-6 max-w-md mx-auto">Anda belum memiliki pesanan yang sedang diproses. Mulai pesan makanan favorit Anda sekarang!</p>
-          <a href="/" className="inline-flex items-center px-6 py-3 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors font-medium shadow-sm">
+          <Link href="/" className="inline-flex items-center px-6 py-3 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors font-medium shadow-sm">
             <ShoppingBag className="h-5 w-5 mr-2" />
             Mulai Belanja
-          </a>
+          </Link>
         </div>
       </div>
     );
@@ -294,7 +295,7 @@ export default async function MyOrdersPage() {
             }
             return { name: '', quantity: 1, price: 0 } satisfies OrderItem;
           });
-          
+
           const items = parsedItems;
           const itemCount = items.reduce((sum, item) => sum + item.quantity, 0);
           const StatusIcon = getStatusIcon(order.status as OrderStatus);
@@ -304,12 +305,12 @@ export default async function MyOrdersPage() {
             <Card key={order.id} className="shadow-md hover:shadow-xl transition-all duration-300 border-2 border-gray-100 overflow-hidden">
               {/* Progress bar */}
               <div className="h-1.5 bg-gray-100">
-                <div 
+                <div
                   className="h-full bg-gradient-to-r from-orange-400 to-orange-500 transition-all duration-500"
                   style={{ width: `${progress}%` }}
                 />
               </div>
-              
+
               <CardHeader className="pb-4 bg-gradient-to-br from-gray-50 to-white">
                 <div className="flex items-start justify-between gap-4">
                   <div className="flex-1">
@@ -330,7 +331,7 @@ export default async function MyOrdersPage() {
                       })}
                     </div>
                   </div>
-                  <Badge 
+                  <Badge
                     className={`${getStatusColor(order.status as OrderStatus)} border px-4 py-2 font-semibold flex items-center gap-2`}
                     variant="secondary"
                   >
@@ -373,7 +374,7 @@ export default async function MyOrdersPage() {
                           } catch {
                             // If not JSON, try to parse as delimited string
                             const parsedAddress = parseAddressString(order.address);
-                            
+
                             if (parsedAddress && parsedAddress.alamat) {
                               return (
                                 <p className="text-sm text-gray-900 font-medium leading-relaxed">
@@ -382,7 +383,7 @@ export default async function MyOrdersPage() {
                               );
                             }
                           }
-                          
+
                           // Fallback to showing as single string
                           return <p className="text-sm text-gray-900 font-medium leading-relaxed">{order.address}</p>;
                         })()}

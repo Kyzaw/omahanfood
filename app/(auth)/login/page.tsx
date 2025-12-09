@@ -14,7 +14,7 @@ export default function LoginPage() {
   const [fieldErrors, setFieldErrors] = useState<{ email?: string; password?: string }>({});
   const [loading, setLoading] = useState(false);
   const { data: session } = useSession();
-  
+
   // Jika user sudah login, langsung redirect
   if (session?.user) {
     router.push("/redirect");
@@ -95,7 +95,7 @@ export default function LoginPage() {
               <div className="absolute bottom-20 right-16 w-24 h-24 bg-white rounded-full"></div>
               <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-40 h-40 bg-white rounded-full"></div>
             </div>
-            
+
             <div className="relative z-10 flex flex-col justify-center items-center text-center px-8 py-16 h-full">
               <div className="mb-8">
                 <Image
@@ -106,15 +106,15 @@ export default function LoginPage() {
                   className="rounded-full shadow-2xl border-4 border-white/20 object-cover"
                 />
               </div>
-              
+
               <h1 className="text-4xl lg:text-5xl font-bold text-white mb-4 drop-shadow-lg">
                 Omahan Food
               </h1>
-              
+
               <p className="text-orange-100 text-lg lg:text-xl max-w-sm leading-relaxed">
                 Nikmati pengalaman kuliner yang tak terlupakan dengan hidangan lezat dan berkualitas tinggi
               </p>
-              
+
               {/* Decorative Elements */}
               <div className="mt-12 flex space-x-4">
                 <div className="w-3 h-3 bg-white/30 rounded-full animate-pulse"></div>
@@ -167,11 +167,10 @@ export default function LoginPage() {
                       name="email"
                       type="email"
                       placeholder="Enter your email"
-                      className={`pl-10 sm:pl-12 pr-3 sm:pr-4 py-2.5 sm:py-3 text-sm sm:text-base border-2 rounded-lg sm:rounded-xl transition-all duration-200 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 ${
-                        fieldErrors.email 
-                          ? 'border-red-300 focus:border-red-500 focus:ring-red-500' 
+                      className={`pl-10 sm:pl-12 pr-3 sm:pr-4 py-2.5 sm:py-3 text-sm sm:text-base border-2 rounded-lg sm:rounded-xl transition-all duration-200 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 ${fieldErrors.email
+                          ? 'border-red-300 focus:border-red-500 focus:ring-red-500'
                           : 'border-gray-200 hover:border-gray-300'
-                      }`}
+                        }`}
                       aria-invalid={fieldErrors.email ? "true" : undefined}
                     />
                   </div>
@@ -200,11 +199,10 @@ export default function LoginPage() {
                       name="password"
                       type="password"
                       placeholder="Enter your password"
-                      className={`pl-10 sm:pl-12 pr-3 sm:pr-4 py-2.5 sm:py-3 text-sm sm:text-base border-2 rounded-lg sm:rounded-xl transition-all duration-200 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 ${
-                        fieldErrors.password 
-                          ? 'border-red-300 focus:border-red-500 focus:ring-red-500' 
+                      className={`pl-10 sm:pl-12 pr-3 sm:pr-4 py-2.5 sm:py-3 text-sm sm:text-base border-2 rounded-lg sm:rounded-xl transition-all duration-200 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 ${fieldErrors.password
+                          ? 'border-red-300 focus:border-red-500 focus:ring-red-500'
                           : 'border-gray-200 hover:border-gray-300'
-                      }`}
+                        }`}
                       aria-invalid={fieldErrors.password ? "true" : undefined}
                     />
                   </div>
@@ -239,9 +237,9 @@ export default function LoginPage() {
 
               <div className="mt-6 sm:mt-8 text-center">
                 <p className="text-sm sm:text-base text-gray-600">
-                  Don't have an account?{" "}
-                  <a 
-                    href="/register" 
+                  Don&apos;t have an account?{" "}
+                  <a
+                    href="/register"
                     className="font-semibold text-orange-600 hover:text-orange-700 transition-colors duration-200 underline decoration-2 underline-offset-2 sm:underline-offset-4 hover:decoration-orange-700"
                   >
                     Register

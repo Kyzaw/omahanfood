@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 import { Clock, MapPin, Package, Star, CheckCircle2, CreditCard, History, ShoppingBag } from "lucide-react";
 import { ReviewDialog } from "@/components/ReviewDialog";
 
@@ -128,10 +129,10 @@ export default function OrderHistoryPage() {
             <p className="text-gray-500 mb-6 max-w-md mx-auto">
               Anda belum memiliki pesanan yang selesai. Pesanan yang telah selesai akan muncul di sini.
             </p>
-            <a href="/" className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-xl hover:from-orange-600 hover:to-red-600 transition-all duration-300 font-medium shadow-lg hover:shadow-xl transform hover:scale-105">
+            <Link href="/" className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-xl hover:from-orange-600 hover:to-red-600 transition-all duration-300 font-medium shadow-lg hover:shadow-xl transform hover:scale-105">
               <ShoppingBag className="h-5 w-5 mr-2" />
               Mulai Belanja
-            </a>
+            </Link>
           </div>
         </div>
       </div>
@@ -170,7 +171,7 @@ export default function OrderHistoryPage() {
               >
                 {/* Success indicator bar */}
                 <div className="h-1.5 bg-gradient-to-r from-green-400 to-emerald-500" />
-                
+
                 <CardHeader className="pb-4 bg-gradient-to-br from-green-50 to-white">
                   <div className="flex items-start justify-between gap-4">
                     <div className="flex-1">
@@ -191,7 +192,7 @@ export default function OrderHistoryPage() {
                         })}
                       </div>
                     </div>
-                    <Badge 
+                    <Badge
                       className="bg-green-50 text-green-700 border-green-200 border px-4 py-2 font-semibold flex items-center gap-2"
                       variant="secondary"
                     >

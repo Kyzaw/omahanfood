@@ -24,10 +24,15 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Edit2, Trash2, Check, X, Plus, Image as ImageIcon, MoreVertical } from "lucide-react";
 
+interface MenuItem {
+  id: string;
+  name: string;
+}
+
 export default function CategoryTable({
   categories = [],
 }: {
-  categories: { id: string; name: string; image?: string; menus?: any[] }[];
+  categories: { id: string; name: string; image?: string; menus?: MenuItem[] }[];
 }) {
   const [editId, setEditId] = useState<string | null>(null);
   const [editName, setEditName] = useState("");
@@ -60,7 +65,7 @@ export default function CategoryTable({
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ 
+        body: JSON.stringify({
           name: editName.trim(),
           image: editImage.trim() || undefined
         }),
@@ -132,8 +137,8 @@ export default function CategoryTable({
               </TableRow>
             ) : (
               categories.map((cat) => (
-                <TableRow 
-                  key={cat.id} 
+                <TableRow
+                  key={cat.id}
                   className="border-b border-slate-100 last:border-b-0 hover:bg-slate-50/50 transition-colors group"
                 >
                   <TableCell className="py-6 px-0">
@@ -312,7 +317,7 @@ export default function CategoryTable({
                       <p className="text-xs text-slate-500">ID: {cat.id}</p>
                     </div>
                   </div>
-                  
+
                   <Input
                     value={editName}
                     onChange={(e) => setEditName(e.target.value)}
@@ -320,7 +325,7 @@ export default function CategoryTable({
                     className="border-blue-200 focus:border-blue-500 focus:ring-blue-500"
                     autoFocus
                   />
-                  
+
                   <Input
                     value={editImage}
                     onChange={(e) => setEditImage(e.target.value)}
@@ -435,7 +440,7 @@ export default function CategoryTable({
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter className="flex flex-col sm:flex-row gap-2 sm:space-x-2 pt-4">
-            <AlertDialogCancel 
+            <AlertDialogCancel
               onClick={() => setOpenDeleteDialog(false)}
               className="w-full sm:w-auto border-slate-200 text-slate-700 hover:bg-slate-50"
             >

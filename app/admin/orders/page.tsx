@@ -87,17 +87,17 @@ function getItemCount(items: JsonValue): number {
     if (typeof items === 'string') {
       const parsed = JSON.parse(items);
       if (Array.isArray(parsed)) {
-        return parsed.reduce((sum: number, item: any) => sum + ((item?.quantity) || 0), 0);
+        return parsed.reduce((sum: number, item: unknown) => sum + ((item as { quantity?: number })?.quantity || 0), 0);
       } else if (parsed && typeof parsed === 'object') {
-        return Object.values(parsed).reduce((sum: number, item: any) => sum + ((item?.quantity) || 0), 0);
+        return Object.values(parsed).reduce((sum: number, item: unknown) => sum + ((item as { quantity?: number })?.quantity || 0), 0);
       }
     } else if (Array.isArray(items)) {
-      return items.reduce((sum: number, item: any) => sum + ((item?.quantity) || 0), 0);
+      return items.reduce((sum: number, item: unknown) => sum + ((item as { quantity?: number })?.quantity || 0), 0);
     } else if (items && typeof items === 'object') {
-      return Object.values(items).reduce((sum: number, item: any) => sum + ((item?.quantity) || 0), 0);
+      return Object.values(items).reduce((sum: number, item: unknown) => sum + ((item as { quantity?: number })?.quantity || 0), 0);
     }
-  } catch (error) {
-    console.warn('Failed to parse items:', error);
+  } catch (_error) {
+    // Failed to parse items, return 0
   }
   return 0;
 }

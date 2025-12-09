@@ -15,7 +15,7 @@ const reviewSchema = z.object({
 export async function POST(request: NextRequest) {
   try {
     const session = await auth();
-    
+
     if (!session?.user?.id) {
       return NextResponse.json(
         { error: "Unauthorized" },
@@ -25,7 +25,7 @@ export async function POST(request: NextRequest) {
 
     const body = await request.json();
     const validatedData = reviewSchema.parse(body);
-    
+
     console.log("Review request data:", validatedData);
 
     // Verify that the order belongs to the user and is completed
@@ -75,9 +75,9 @@ export async function POST(request: NextRequest) {
 
     // Verify that the menu exists in the order items
     const orderItems = Array.isArray(order.items) ? order.items : [];
-    const menuInOrder = orderItems.some((item: any) => {
+    const menuInOrder = orderItems.some((item: unknown) => {
       // Check if the menuId matches (items store menuId as 'id' field)
-      return item.id === validatedData.menuId;
+      return (item as { id?: string })?.id === validatedData.menuId;
     });
 
     if (!menuInOrder) {
