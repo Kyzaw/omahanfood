@@ -5,6 +5,8 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { FolderKanban, Menu, Plus } from "lucide-react";
 
+export const dynamic = 'force-dynamic';
+
 export default async function MenuPage() {
   // Fetch menus with their category relationship
   const menus = await prisma.menu.findMany({
@@ -24,7 +26,7 @@ export default async function MenuPage() {
   // Calculate stats
   const totalMenus = menus.length;
   const categoriesUsed = new Set(menus.map(menu => menu.category?.id)).size;
-  const avgPrice = menus.length > 0 
+  const avgPrice = menus.length > 0
     ? Math.round(menus.reduce((sum, menu) => sum + (menu.price || 0), 0) / menus.length)
     : 0;
 
@@ -143,7 +145,7 @@ export default async function MenuPage() {
                       </p>
                     </div>
                   </div>
-                  
+
                   {/* Desktop Add Button */}
                   <div className="hidden md:flex items-center gap-4">
                     <span className="text-xs md:text-sm text-slate-500 bg-slate-100 px-2 md:px-3 py-1 rounded-full">
@@ -158,7 +160,7 @@ export default async function MenuPage() {
                   </div>
                 </div>
               </div>
-              
+
               <div className="p-0">
                 {menus.length > 0 ? (
                   <div className="overflow-x-auto">

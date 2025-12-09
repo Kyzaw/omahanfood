@@ -6,11 +6,11 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { redirect } from "next/navigation";
-import { 
-  Clock, 
-  MapPin, 
-  Package, 
-  User, 
+import {
+  Clock,
+  MapPin,
+  Package,
+  User,
   Truck,
   UserPlus,
   AlertCircle,
@@ -97,10 +97,10 @@ async function assignCourierToOrder(formData: FormData) {
     // Update order to assign the courier
     await prisma.order.update({
       where: { id: orderId },
-      data: { 
+      data: {
         courierId,
         status: 'SIAP_KIRIM',
-       },
+      },
     });
 
     revalidatePath("/admin/kurir");
@@ -113,7 +113,7 @@ async function assignCourierToOrder(formData: FormData) {
 // Server action untuk unassign kurir
 async function unassignCourierFromOrder(orderId: string) {
   "use server";
-  
+
   try {
     const session = await auth();
     const userId = session?.user?.id;
@@ -194,7 +194,7 @@ function getItemCount(items: JsonValue): number {
   if (!items || !Array.isArray(items)) {
     return 0;
   }
-  
+
   return items.reduce<number>((sum, item) => {
     if (item && typeof item === 'object' && 'quantity' in item && typeof item.quantity === 'number') {
       return sum + item.quantity;
@@ -243,6 +243,8 @@ function CourierAssignmentForm({ order, couriers }: { order: Order, couriers: Co
     </div>
   );
 }
+
+export const dynamic = 'force-dynamic';
 
 export default async function AdminOrdersPage() {
   try {
@@ -310,7 +312,7 @@ export default async function AdminOrdersPage() {
     return (
       <div className="min-h-screen bg-slate-50">
         <AdminSidebar />
-        
+
         {/* Main content with responsive spacing */}
         <main className="md:ml-64 min-h-screen transition-all duration-300 ease-in-out">
           {/* Header Section */}
@@ -354,7 +356,7 @@ export default async function AdminOrdersPage() {
                   </div>
                 </CardContent>
               </Card>
-              
+
               <Card className="hover:shadow-md transition-shadow bg-white border border-slate-200">
                 <CardContent className="p-4 md:p-6">
                   <div className="flex items-center space-x-2 md:space-x-3">
@@ -445,7 +447,7 @@ export default async function AdminOrdersPage() {
                     <p className="text-sm text-red-600">{unassignedOrders.length} pesanan menunggu assignment</p>
                   </div>
                 </div>
-                
+
                 <div className="space-y-3 md:space-y-4">
                   {unassignedOrders.map((order) => {
                     const itemCount = getItemCount(order.items);
@@ -457,7 +459,7 @@ export default async function AdminOrdersPage() {
                             <CardTitle className="text-base md:text-lg font-semibold">
                               Order #{order.id.slice(-8).toUpperCase()}
                             </CardTitle>
-                            <Badge 
+                            <Badge
                               className={`${getStatusColor(order.status)} border text-xs w-fit`}
                               variant="secondary"
                             >
@@ -565,7 +567,7 @@ export default async function AdminOrdersPage() {
                             <CardTitle className="text-base md:text-lg font-semibold">
                               Order #{order.id.slice(-8).toUpperCase()}
                             </CardTitle>
-                            <Badge 
+                            <Badge
                               className={`${getStatusColor(order.status)} border text-xs w-fit`}
                               variant="secondary"
                             >
@@ -645,7 +647,7 @@ export default async function AdminOrdersPage() {
     );
   } catch (error) {
     console.error("Error loading admin orders page:", error);
-    
+
     return (
       <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4">
         <Card className="border-red-200 bg-red-50 max-w-lg w-full">

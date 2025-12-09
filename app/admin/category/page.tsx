@@ -5,6 +5,8 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 
+export const dynamic = 'force-dynamic';
+
 export default async function CategoryPage() {
   const categories = await prisma.category.findMany({
     include: { menus: true },
@@ -79,10 +81,10 @@ export default async function CategoryPage() {
                   <div>
                     <p className="text-xs md:text-sm font-medium text-slate-600">Most Popular</p>
                     <p className="text-sm md:text-base font-bold text-slate-800 truncate">
-                      {categories.length > 0 
-                        ? categories.reduce((prev, current) => 
-                            prev.menus.length > current.menus.length ? prev : current
-                          ).name 
+                      {categories.length > 0
+                        ? categories.reduce((prev, current) =>
+                          prev.menus.length > current.menus.length ? prev : current
+                        ).name
                         : 'No categories'
                       }
                     </p>
@@ -98,7 +100,7 @@ export default async function CategoryPage() {
                   <div>
                     <p className="text-xs md:text-sm font-medium text-slate-600">Avg Items/Category</p>
                     <p className="text-xl md:text-2xl font-bold text-slate-800">
-                      {categories.length > 0 
+                      {categories.length > 0
                         ? Math.round(categories.reduce((sum, cat) => sum + cat.menus.length, 0) / categories.length)
                         : 0
                       }
@@ -125,7 +127,7 @@ export default async function CategoryPage() {
                       </p>
                     </div>
                   </div>
-                  
+
                   {/* Search or Filter could go here */}
                   <div className="flex items-center gap-2">
                     <span className="text-xs md:text-sm text-slate-500 bg-slate-100 px-2 md:px-3 py-1 rounded-full">
@@ -140,7 +142,7 @@ export default async function CategoryPage() {
                   </div>
                 </div>
               </div>
-              
+
               <div className="p-0">
                 {/* Wrapper for horizontal scroll on mobile */}
                 <div className="overflow-x-auto">

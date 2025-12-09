@@ -5,6 +5,8 @@ import { TopMenus } from "@/components/admin/TopMenus"
 import { prisma } from "@/lib/prisma"
 import Link from 'next/link'
 
+export const dynamic = 'force-dynamic';
+
 export default async function AdminPage() {
   const [userCount, orderCount, menuCount, categoryCount, totalRevenue, recentOrders, topMenusData] = await Promise.all([
     prisma.user.count(),
@@ -25,7 +27,7 @@ export default async function AdminPage() {
   return (
     <div className="min-h-screen bg-slate-50">
       <AdminSidebar />
-      
+
       {/* Main content with responsive spacing */}
       <main className="md:ml-64 min-h-screen transition-all duration-300 ease-in-out">
         {/* Header Section */}
@@ -42,16 +44,16 @@ export default async function AdminPage() {
             <div className="flex items-center justify-end">
               <div className="text-right bg-slate-50 px-3 md:px-4 py-2 rounded-lg border border-slate-200">
                 <p className="text-xs md:text-sm font-semibold text-slate-800">
-                  {new Date().toLocaleDateString('en-US', { 
-                    weekday: 'short', 
-                    month: 'short', 
-                    day: 'numeric' 
+                  {new Date().toLocaleDateString('en-US', {
+                    weekday: 'short',
+                    month: 'short',
+                    day: 'numeric'
                   })}
                 </p>
                 <p className="text-xs text-slate-500">
-                  {new Date().toLocaleTimeString('en-US', { 
-                    hour: '2-digit', 
-                    minute: '2-digit' 
+                  {new Date().toLocaleTimeString('en-US', {
+                    hour: '2-digit',
+                    minute: '2-digit'
                   })}
                 </p>
               </div>
@@ -63,29 +65,29 @@ export default async function AdminPage() {
         <div className="p-4 md:p-8 space-y-6 md:space-y-8 bg-slate-50 min-h-screen">
           {/* Stats Cards - Responsive grid */}
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 md:gap-6">
-            <StatsCard 
-              title="Total Revenue" 
+            <StatsCard
+              title="Total Revenue"
               value={Math.round(totalRevenue / 1)}
               icon="💰"
             />
-            <StatsCard 
-              title="Total Users" 
+            <StatsCard
+              title="Total Users"
               value={userCount}
               icon="👥"
             />
-            <StatsCard 
-              title="Total Orders" 
+            <StatsCard
+              title="Total Orders"
               value={orderCount}
               icon="📦"
             />
-            <StatsCard 
-              title="Menu Items" 
+            <StatsCard
+              title="Menu Items"
               value={menuCount}
               icon="🍽️"
             />
             <div className="col-span-2 sm:col-span-1">
-              <StatsCard 
-                title="Categories" 
+              <StatsCard
+                title="Categories"
                 value={categoryCount}
                 icon="📂"
               />
@@ -166,14 +168,14 @@ export default async function AdminPage() {
                     <span className="text-xs md:text-sm font-semibold text-blue-700">Add Menu Item</span>
                   </div>
                 </Link>
-                
+
                 <Link href="/admin/reports" className="group flex items-center justify-center p-4 md:p-6 bg-gradient-to-br from-green-50 to-green-100 hover:from-green-100 hover:to-green-200 rounded-xl border border-green-200 transition-all duration-300 hover:scale-105 hover:shadow-lg">
                   <div className="text-center">
                     <div className="text-2xl md:text-3xl mb-2 md:mb-3 group-hover:scale-110 transition-transform">📊</div>
                     <span className="text-xs md:text-sm font-semibold text-green-700">View Reports</span>
                   </div>
                 </Link>
-                
+
                 <Link href="/admin/users" className="group flex items-center justify-center p-4 md:p-6 bg-gradient-to-br from-purple-50 to-purple-100 hover:from-purple-100 hover:to-purple-200 rounded-xl border border-purple-200 transition-all duration-300 hover:scale-105 hover:shadow-lg sm:col-span-2 lg:col-span-1">
                   <div className="text-center">
                     <div className="text-2xl md:text-3xl mb-2 md:mb-3 group-hover:scale-110 transition-transform">👤</div>

@@ -1,6 +1,8 @@
 import MenuForm from "@/components/admin/MenuForm"
 import prisma from "@/lib/prisma"
 
+export const dynamic = 'force-dynamic';
+
 export default async function MenuPage() {
   const categories = await prisma.category.findMany({
     select: { id: true, name: true }

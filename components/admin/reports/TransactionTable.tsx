@@ -1,4 +1,7 @@
 import React from 'react';
+import Link from 'next/link';
+import { Eye } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 import { formatCurrency, formatDate, getStatusColor, getStatusText } from '@/hooks/useReports';
 
 interface Transaction {
@@ -39,6 +42,9 @@ export const TransactionTable: React.FC<TransactionTableProps> = ({ transactions
                 </th>
                 <th className="px-3 py-3 text-center text-xs font-bold text-slate-600 uppercase tracking-wider">
                   Status
+                </th>
+                <th className="px-3 py-3 text-center text-xs font-bold text-slate-600 uppercase tracking-wider">
+                  Actions
                 </th>
               </tr>
             </thead>
@@ -81,11 +87,23 @@ export const TransactionTable: React.FC<TransactionTableProps> = ({ transactions
                         {getStatusText(transaction.status)}
                       </span>
                     </td>
+                    <td className="px-3 py-4 text-center">
+                      <Link href={`/admin/reports/invoice/${transaction.id}`}>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="gap-1 text-xs hover:bg-indigo-50 hover:text-indigo-600"
+                        >
+                          <Eye className="h-3 w-3" />
+                          <span className="hidden lg:inline">View</span>
+                        </Button>
+                      </Link>
+                    </td>
                   </tr>
                 ))
               ) : (
                 <tr>
-                  <td colSpan={5} className="px-6 py-12 text-center text-slate-500">
+                  <td colSpan={6} className="px-6 py-12 text-center text-slate-500">
                     <div className="flex flex-col items-center space-y-2">
                       <div className="w-12 h-12 bg-slate-100 rounded-full flex items-center justify-center">
                         <span className="text-2xl">🧾</span>
@@ -147,6 +165,20 @@ export const TransactionTable: React.FC<TransactionTableProps> = ({ transactions
                 <div className="text-base font-bold text-green-600">
                   {formatCurrency(transaction.total)}
                 </div>
+              </div>
+              
+              {/* View Details Button */}
+              <div className="mt-3 pt-3 border-t border-slate-100">
+                <Link href={`/admin/reports/invoice/${transaction.id}`} className="w-full">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="w-full gap-2 text-xs"
+                  >
+                    <Eye className="h-3 w-3" />
+                    View Invoice Details
+                  </Button>
+                </Link>
               </div>
             </div>
           ))

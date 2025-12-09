@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { redirect } from "next/navigation";
-import { 
+import {
   Star,
   TrendingUp,
   Package,
@@ -38,6 +38,8 @@ interface MenuWithOrderCount {
   createdAt: Date;
 }
 
+export const dynamic = 'force-dynamic';
+
 export default async function TopMenusPage() {
   try {
     const session = await auth();
@@ -60,15 +62,15 @@ export default async function TopMenusPage() {
     return (
       <div className="min-h-screen bg-slate-50">
         <AdminSidebar />
-        
+
         {/* Main content with responsive spacing */}
         <main className="md:ml-64 min-h-screen transition-all duration-300 ease-in-out">
           {/* Header Section */}
           <div className="bg-white border-b border-slate-200 px-4 md:px-6 py-4 md:py-6 shadow-sm mt-16 md:mt-0">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
               <div className="flex items-center gap-3 md:gap-4">
-                <Link 
-                  href="/admin" 
+                <Link
+                  href="/admin"
                   className="p-2 hover:bg-slate-100 rounded-lg transition-colors flex-shrink-0"
                 >
                   <ArrowLeft className="h-4 w-4 md:h-5 md:w-5 text-slate-600" />
@@ -106,11 +108,10 @@ export default async function TopMenusPage() {
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
                   {top3Menus.map((menu, index) => (
-                    <Card key={menu.id} className={`border-l-4 shadow-sm hover:shadow-md transition-shadow ${
-                      index === 0 ? 'border-l-yellow-500 bg-gradient-to-br from-yellow-50 to-white' : 
-                      index === 1 ? 'border-l-slate-400 bg-gradient-to-br from-slate-50 to-white' : 
-                      'border-l-orange-600 bg-gradient-to-br from-orange-50 to-white'
-                    }`}>
+                    <Card key={menu.id} className={`border-l-4 shadow-sm hover:shadow-md transition-shadow ${index === 0 ? 'border-l-yellow-500 bg-gradient-to-br from-yellow-50 to-white' :
+                      index === 1 ? 'border-l-slate-400 bg-gradient-to-br from-slate-50 to-white' :
+                        'border-l-orange-600 bg-gradient-to-br from-orange-50 to-white'
+                      }`}>
                       <CardHeader className="pb-3">
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-2">
@@ -205,8 +206,8 @@ export default async function TopMenusPage() {
                               <td className="px-4 py-4">
                                 <div className="flex items-start gap-3">
                                   {menu.image ? (
-                                    <img 
-                                      src={menu.image} 
+                                    <img
+                                      src={menu.image}
                                       alt={menu.name}
                                       className="w-12 h-12 rounded-lg object-cover flex-shrink-0 border border-slate-200"
                                     />
@@ -261,8 +262,8 @@ export default async function TopMenusPage() {
                               </span>
                             </div>
                             {menu.image ? (
-                              <img 
-                                src={menu.image} 
+                              <img
+                                src={menu.image}
                                 alt={menu.name}
                                 className="w-16 h-16 rounded-lg object-cover flex-shrink-0 border border-slate-200"
                               />
@@ -280,7 +281,7 @@ export default async function TopMenusPage() {
                               </Badge>
                             </div>
                           </div>
-                          
+
                           <div className="flex items-center justify-between pt-3 border-t border-slate-100">
                             <div className="flex items-center gap-2">
                               <ShoppingCart className="h-4 w-4 text-blue-500" />
@@ -329,7 +330,7 @@ export default async function TopMenusPage() {
                     }, {} as Record<string, { count: number; orders: number }>);
 
                     const bestCategory = Object.entries(categoryStats)
-                      .sort(([,a], [,b]) => b.orders - a.orders)[0];
+                      .sort(([, a], [, b]) => b.orders - a.orders)[0];
 
                     return bestCategory ? (
                       <div className="space-y-3">
@@ -338,10 +339,10 @@ export default async function TopMenusPage() {
                           {bestCategory[1].orders} total orders from {bestCategory[1].count} menu items
                         </p>
                         <div className="w-full bg-slate-200 rounded-full h-2">
-                          <div 
-                            className="bg-gradient-to-r from-blue-500 to-blue-600 h-2 rounded-full transition-all" 
-                            style={{ 
-                              width: `${Math.min((bestCategory[1].orders / totalOrders) * 100, 100)}%` 
+                          <div
+                            className="bg-gradient-to-r from-blue-500 to-blue-600 h-2 rounded-full transition-all"
+                            style={{
+                              width: `${Math.min((bestCategory[1].orders / totalOrders) * 100, 100)}%`
                             }}
                           ></div>
                         </div>

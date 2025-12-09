@@ -13,6 +13,8 @@ interface UserWithStats extends User {
   }
 }
 
+export const dynamic = 'force-dynamic';
+
 export default async function UsersPage() {
   const users = await prisma.user.findMany({
     include: {
@@ -35,7 +37,7 @@ export default async function UsersPage() {
   return (
     <div className="min-h-screen bg-slate-50">
       <AdminSidebar />
-      
+
       {/* Main content with responsive spacing */}
       <main className="md:ml-64 min-h-screen transition-all duration-300 ease-in-out">
         {/* Header Section */}
@@ -132,7 +134,7 @@ export default async function UsersPage() {
                     </p>
                   </div>
                 </div>
-                
+
                 {/* Desktop Add User Button */}
                 <div className="hidden sm:flex items-center gap-4">
                   <span className="text-xs md:text-sm text-slate-500 bg-slate-100 px-2 md:px-3 py-1 rounded-full">
@@ -147,7 +149,7 @@ export default async function UsersPage() {
                 <UserForm />
               </div>
             </div>
-            
+
             <div className="p-0">
               <Suspense fallback={
                 <div className="flex items-center justify-center py-12">
@@ -175,7 +177,7 @@ export default async function UsersPage() {
                 <p className="text-xs md:text-sm text-slate-600">User roles across the platform</p>
               </div>
             </div>
-            
+
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 md:gap-4">
               <div className="text-center p-3 md:p-4 bg-red-50 rounded-lg border border-red-200">
                 <div className="text-lg md:text-2xl font-bold text-red-600">{userStats.admins}</div>
@@ -184,7 +186,7 @@ export default async function UsersPage() {
                   {userStats.total > 0 ? Math.round((userStats.admins / userStats.total) * 100) : 0}%
                 </div>
               </div>
-              
+
               <div className="text-center p-3 md:p-4 bg-green-50 rounded-lg border border-green-200">
                 <div className="text-lg md:text-2xl font-bold text-green-600">{userStats.users}</div>
                 <div className="text-xs md:text-sm text-green-700 font-medium">Customers</div>
@@ -192,7 +194,7 @@ export default async function UsersPage() {
                   {userStats.total > 0 ? Math.round((userStats.users / userStats.total) * 100) : 0}%
                 </div>
               </div>
-              
+
               <div className="text-center p-3 md:p-4 bg-purple-50 rounded-lg border border-purple-200">
                 <div className="text-lg md:text-2xl font-bold text-purple-600">{userStats.kurir}</div>
                 <div className="text-xs md:text-sm text-purple-700 font-medium">Couriers</div>

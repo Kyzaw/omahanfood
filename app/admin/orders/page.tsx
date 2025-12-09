@@ -6,11 +6,11 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { redirect } from "next/navigation";
-import { 
-  Clock, 
-  MapPin, 
-  Package, 
-  User, 
+import {
+  Clock,
+  MapPin,
+  Package,
+  User,
   Truck,
   Search,
   Filter,
@@ -102,6 +102,8 @@ function getItemCount(items: JsonValue): number {
   return 0;
 }
 
+export const dynamic = 'force-dynamic';
+
 export default async function AdminOrdersPage() {
   try {
     const session = await auth();
@@ -151,15 +153,15 @@ export default async function AdminOrdersPage() {
     return (
       <div className="min-h-screen bg-slate-50">
         <AdminSidebar />
-        
+
         {/* Main content with responsive margin */}
         <main className="md:ml-64 min-h-screen transition-all duration-300 ease-in-out">
           {/* Header Section - Mobile Optimized */}
           <div className="bg-white border-b border-slate-200 px-4 md:px-6 py-4 md:py-6 shadow-sm pt-20 md:pt-6">
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
               <div className="flex items-center gap-3 md:gap-4">
-                <Link 
-                  href="/admin" 
+                <Link
+                  href="/admin"
                   className="p-2 hover:bg-slate-100 rounded-lg transition-colors"
                 >
                   <ArrowLeft className="h-5 w-5 text-slate-600" />
@@ -200,7 +202,7 @@ export default async function AdminOrdersPage() {
                   </div>
                 </CardContent>
               </Card>
-              
+
               <Card className="border-l-4 border-l-blue-500">
                 <CardHeader className="pb-2 px-3 md:px-6 pt-3 md:pt-6">
                   <CardTitle className="text-xs md:text-sm font-medium text-slate-600">Processing</CardTitle>
@@ -211,7 +213,7 @@ export default async function AdminOrdersPage() {
                   </div>
                 </CardContent>
               </Card>
-              
+
               <Card className="border-l-4 border-l-purple-500">
                 <CardHeader className="pb-2 px-3 md:px-6 pt-3 md:pt-6">
                   <CardTitle className="text-xs md:text-sm font-medium text-slate-600">Shipped</CardTitle>
@@ -222,7 +224,7 @@ export default async function AdminOrdersPage() {
                   </div>
                 </CardContent>
               </Card>
-              
+
               <Card className="border-l-4 border-l-green-500">
                 <CardHeader className="pb-2 px-3 md:px-6 pt-3 md:pt-6">
                   <CardTitle className="text-xs md:text-sm font-medium text-slate-600">Completed</CardTitle>
@@ -233,7 +235,7 @@ export default async function AdminOrdersPage() {
                   </div>
                 </CardContent>
               </Card>
-              
+
               <Card className="border-l-4 border-l-red-500 col-span-2 md:col-span-1">
                 <CardHeader className="pb-2 px-3 md:px-6 pt-3 md:pt-6">
                   <CardTitle className="text-xs md:text-sm font-medium text-slate-600">Cancelled</CardTitle>
