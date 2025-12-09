@@ -4,18 +4,19 @@ import { prisma } from "@/lib/prisma"
 import Credentials from "next-auth/providers/credentials"
 import { SigninSchema } from "@/lib/zod"
 import { compareSync } from "bcrypt-ts"
- 
+import type { Adapter } from "next-auth/adapters"
+
 export const { handlers, signIn, signOut, auth } = NextAuth({
-  adapter: PrismaAdapter(prisma),
-  session:{strategy:"jwt"},
-  pages:{
+  adapter: PrismaAdapter(prisma) as Adapter,
+  session: { strategy: "jwt" },
+  pages: {
     signIn: "/login"
   },
   providers: [
     Credentials({
-      credentials:{
-        email:{},
-        password:{},
+      credentials: {
+        email: {},
+        password: {},
       },
       authorize: async (credentials) => {
         const validateFields = SigninSchema.safeParse(credentials)
@@ -24,13 +25,13 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           return null
         }
 
-        const {email, password} = validateFields.data
+        const { email, password } = validateFields.data
 
         const user = await prisma.user.findUnique({
-          where: {email}
+          where: { email }
         })
-        
-        if(!user || !user.password) {
+
+        if (!user || !user.password) {
           throw new Error("No User Found")
         }
 
@@ -43,11 +44,11 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     })
   ],
   callbacks: {
-    jwt({token, user}) {
-      if(user) token.role = user.role
+    jwt({ token, user }) {
+      if (user) token.role = user.role
       return token
     },
-    session({session, token}) {
+    session({ session, token }) {
       session.user.id = token.sub
       session.user.role = token.role
       return session
