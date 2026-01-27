@@ -1,0 +1,25 @@
+'use client';
+
+import { usePathname } from 'next/navigation';
+import Navbar from '@/components/navbar';
+
+export default function LayoutWrapper({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  const pathname = usePathname();
+
+  const hideNavbarOn = ['/login', '/register', '/admin', '/kurir', '/admin/category', '/admin/menu', '/admin/menu/add', 
+    '/admin/category/add', "/admin/kurir", "/admin/reports", "/redirect", "/admin/orders", "/admin/topmenus", "/admin/users", "/termsofservice", "/privacypolicy", "/admin/reviews"];
+
+  // Check if pathname matches any hideNavbarOn paths or starts with /admin/reports/invoice (for dynamic routes)
+  const shouldHideNavbar = hideNavbarOn.includes(pathname) || pathname.startsWith('/admin/reports/invoice');
+
+  return (
+    <>
+      {!shouldHideNavbar && <Navbar />}
+      <main>{children}</main>
+    </>
+  );
+}

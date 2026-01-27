@@ -1,0 +1,13 @@
+import { prisma } from "@/lib/prisma";
+import { NextResponse } from "next/server";
+
+export async function POST(req: Request) {
+  const body = await req.json();
+  await prisma.category.create({
+    data: {
+      name: body.name,
+      image: body.image || null,
+    },
+  });
+  return NextResponse.json({ success: true });
+}

@@ -1,0 +1,213 @@
+'use client'
+
+import { useState } from 'react'
+import Link from 'next/link'
+import { ChevronDown, ShoppingCart, Home, FileText, User, Shield, Truck, History } from 'lucide-react'
+import { useSession } from 'next-auth/react'
+import Image from 'next/image'
+import { signOut } from 'next-auth/react'
+import useCheckoutQty from '@/hooks/useCheckoutQty'
+
+export default function Navbar() {
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false)
+  const [activeMobileTab, setActiveMobileTab] = useState('home')
+  const { data: session } = useSession()
+  const user = session?.user
+  const qty = useCheckoutQty()
+
+  const mobileMenuItems = [
+    { id: 'home', label: 'Home', href: '/', icon: <Home className="w-5 h-5" /> },
+    { id: 'myorders', label: 'Orders', href: '/myorders', icon: <FileText className="w-5 h-5" /> },
+    { id: 'history', label: 'History', href: '/orderhistory', icon: <History className="w-5 h-5" /> },
+    { id: 'checkout', label: 'Cart', href: '/checkout', icon: (
+      <div className="relative">
+        <ShoppingCart className="w-5 h-5" />
+        {qty > 0 && (
+          <span className="absolute -top-2 -right-2 bg-gradient-to-r from-red-500 to-pink-500 text-white text-[10px] w-5 h-5 flex items-center justify-center rounded-full font-bold shadow-lg">
+            {qty > 99 ? '99+' : qty}
+          </span>
+        )}
+      </div>
+    )},
+    user
+      ? { id: 'profile', label: 'Profile', href: '/profile', icon: <User className="w-5 h-5" /> }
+      : { id: 'signin', label: 'Sign In', href: '/login', icon: <User className="w-5 h-5" /> },
+  ]
+
+  return (
+    <>
+      {/* Desktop & Tablet Navbar */}
+      <nav className="hidden md:flex fixed top-0 left-1/2 -translate-x-1/2 z-[100] bg-white/95 backdrop-blur-xl shadow-2xl rounded-3xl px-4 md:px-6 lg:px-8 py-3 md:py-4 justify-between items-center max-w-7xl w-[95%] mt-4 md:mt-6 border border-gray-100">
+        {/* Logo & Navigation */}
+        <div className="flex items-center space-x-2 gap-4 md:gap-8 lg:gap-12">
+          <div className="flex items-center space-x-2 md:space-x-3">
+            <div className="relative">
+              <img
+                src="/logo-removebg.png"
+                alt="Branding Image"
+                className="w-12 h-9 md:w-14 md:h-11 lg:w-16 lg:h-12 rounded-xl object-cover shadow-md"
+              />
+              <div className="absolute -top-1 -right-1 w-3 h-3 md:w-4 md:h-4 bg-gradient-to-r from-orange-500 to-red-500 rounded-full animate-pulse"></div>
+            </div>
+            <div className="hidden lg:block">
+              <h1 className="font-bold text-lg bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent">
+                FoodApp
+              </h1>
+            </div>
+          </div>
+          
+          <ul className="flex space-x-2 md:space-x-4 lg:space-x-6 text-xs md:text-sm font-semibold">
+            <li>
+              <Link href="/" className="text-gray-700 hover:text-orange-600 transition-all duration-300 hover:scale-105 px-2 md:px-3 py-2 rounded-xl hover:bg-orange-50 flex items-center">
+                <span className="hidden lg:inline">Home</span>
+                <Home className="w-4 h-4 lg:hidden" />
+              </Link>
+            </li>
+            <li>
+              <Link href="/myorders" className="text-gray-700 hover:text-orange-600 transition-all duration-300 hover:scale-105 px-2 md:px-3 py-2 rounded-xl hover:bg-orange-50 flex items-center">
+                <span className="hidden lg:inline">My Orders</span>
+                <FileText className="w-4 h-4 lg:hidden" />
+              </Link>
+            </li>
+            <li>
+              <Link href="/orderhistory" className="text-gray-700 hover:text-orange-600 transition-all duration-300 hover:scale-105 px-2 md:px-3 py-2 rounded-xl hover:bg-orange-50 flex items-center gap-1 md:gap-2">
+                <History className="w-4 h-4" />
+                <span className="hidden lg:inline">History</span>
+              </Link>
+            </li>
+            {user?.role === 'ADMIN' && (
+              <li>
+                <Link href="/admin" className="text-gray-700 hover:text-purple-600 transition-all duration-300 hover:scale-105 px-2 md:px-3 py-2 rounded-xl hover:bg-purple-50 flex items-center gap-1 md:gap-2">
+                  <Shield className="w-4 h-4" />
+                  <span className="hidden lg:inline">Admin</span>
+                </Link>
+              </li>
+            )}
+            {user?.role === 'KURIR' && (
+              <li>
+                <Link href="/kurir" className="text-gray-700 hover:text-purple-600 transition-all duration-300 hover:scale-105 px-2 md:px-3 py-2 rounded-xl hover:bg-purple-50 flex items-center gap-1 md:gap-2">
+                  <Truck className="w-4 h-4" />
+                  <span className="hidden lg:inline">Kurir</span>
+                </Link>
+              </li>
+            )}
+          </ul>
+        </div>
+
+        {/* Right Section */}
+        <div className="flex items-center space-x-3 md:space-x-4 lg:space-x-6">
+          {user ? (
+            <>
+              <Link href="/checkout" className="relative group">
+                <div className="p-2 md:p-2.5 lg:p-3 rounded-xl md:rounded-2xl bg-gradient-to-r from-orange-100 to-red-100 hover:from-orange-200 hover:to-red-200 transition-all duration-300 group-hover:scale-110 group-hover:shadow-lg">
+                  <ShoppingCart className="w-5 h-5 md:w-5.5 md:h-5.5 lg:w-6 lg:h-6 text-orange-600 group-hover:text-red-600 transition-colors" />
+                  {qty > 0 && (
+                    <span className="absolute -top-1 -right-1 bg-gradient-to-r from-red-500 to-pink-500 text-white text-[10px] md:text-xs px-1.5 md:px-2 py-0.5 md:py-1 rounded-full font-bold shadow-lg animate-bounce">
+                      {qty > 99 ? '99+' : qty}
+                    </span>
+                  )}
+                </div>
+              </Link>
+
+              <div className="relative">
+                <button 
+                  onClick={() => setIsDropdownOpen(!isDropdownOpen)} 
+                  className="flex items-center space-x-2 md:space-x-3 bg-gradient-to-r from-gray-50 to-gray-100 hover:from-orange-50 hover:to-red-50 px-2 md:px-3 lg:px-4 py-2 md:py-2.5 lg:py-3 rounded-xl md:rounded-2xl transition-all duration-300 hover:shadow-lg group"
+                >
+                  <div className="relative">
+                    {user.image ? (
+                      <Image
+                        src={user.image}
+                        alt="Profile"
+                        width={32}
+                        height={32}
+                        className="rounded-full object-cover ring-2 ring-orange-200 group-hover:ring-orange-400 transition-all md:w-9 md:h-9"
+                      />
+                    ) : (
+                      <div className="w-8 h-8 md:w-9 md:h-9 rounded-full bg-gradient-to-r from-orange-500 to-red-500 flex items-center justify-center text-xs md:text-sm font-bold text-white uppercase shadow-lg">
+                        {user.name?.charAt(0) || "U"}
+                      </div>
+                    )}
+                    <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 md:w-4 md:h-4 bg-green-500 rounded-full border-2 border-white"></div>
+                  </div>
+                  <div className="hidden lg:block text-left">
+                    <p className="text-sm font-semibold text-gray-800">
+                      {user.name?.split(' ')[0] || 'User'}
+                    </p>
+                    <p className="text-xs text-gray-500 capitalize">
+                      {user.role?.toLowerCase() || 'member'}
+                    </p>
+                  </div>
+                  <ChevronDown className={`w-3 h-3 md:w-4 md:h-4 text-gray-600 transition-transform duration-300 ${isDropdownOpen ? 'rotate-180' : ''}`} />
+                </button>
+
+                {isDropdownOpen && (
+                  <div className="absolute right-0 mt-3 bg-white/95 backdrop-blur-xl border border-gray-100 shadow-2xl rounded-2xl py-3 w-48 z-20 animate-in slide-in-from-top-2">
+                    <Link href="/profile">
+                      <div className="flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-gradient-to-r hover:from-orange-50 hover:to-red-50 hover:text-orange-600 cursor-pointer transition-all duration-200 mx-2 rounded-xl">
+                        <User className="w-4 h-4 mr-3" />
+                        Profile Settings
+                      </div>
+                    </Link>
+                    <div className="h-px bg-gray-200 mx-4 my-2"></div>
+                    <button
+                      onClick={() => signOut()}
+                      className="w-full flex items-center px-4 py-3 text-sm text-red-500 hover:bg-red-50 hover:text-red-600 transition-all duration-200 mx-2 rounded-xl"
+                    >
+                      <svg className="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H3" />
+                      </svg>
+                      Sign Out
+                    </button>
+                  </div>
+                )}
+              </div>
+            </>
+          ) : (
+            <div className="flex items-center space-x-2 md:space-x-3">
+              <Link href="/login">
+                <button className="text-xs md:text-sm font-semibold text-gray-700 px-3 md:px-5 lg:px-6 py-2 md:py-2.5 lg:py-3 rounded-xl md:rounded-2xl hover:bg-gray-100 transition-all duration-300 hover:scale-105">
+                  Sign In
+                </button>
+              </Link>
+              <Link href="/register">
+                <button className="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white px-3 md:px-5 lg:px-6 py-2 md:py-2.5 lg:py-3 rounded-xl md:rounded-2xl text-xs md:text-sm font-semibold shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
+                  Get Started
+                </button>
+              </Link>
+            </div>
+          )}
+        </div>
+      </nav>
+
+      {/* Mobile Bottom Navbar */}
+      <nav className="md:hidden fixed bottom-4 left-1/2 transform -translate-x-1/2 z-[100] bg-white/95 backdrop-blur-xl shadow-2xl rounded-3xl px-1 py-2.5 flex justify-around items-center w-[95vw] max-w-md border border-gray-100">
+        {mobileMenuItems.map((item) => {
+          const isActive = activeMobileTab === item.id
+          return (
+            <Link
+              key={item.id}
+              href={item.href}
+              onClick={() => setActiveMobileTab(item.id)}
+              className={`flex flex-col items-center justify-center cursor-pointer px-2 py-2.5 rounded-2xl transition-all duration-300 flex-1 max-w-[80px] ${
+                isActive 
+                  ? 'bg-gradient-to-r from-orange-500 to-red-500 text-white shadow-lg transform scale-105' 
+                  : 'text-gray-600 hover:bg-gray-100 hover:text-orange-600 hover:scale-105'
+              }`}
+            >
+              <div className={`transition-all duration-300 ${isActive ? 'scale-110 mb-0.5' : ''}`}>
+                {item.icon}
+              </div>
+              <span className={`text-[10px] mt-1 font-medium ${isActive ? 'font-semibold' : ''} whitespace-nowrap`}>
+                {item.label}
+              </span>
+              {isActive && (
+                <div className="absolute -bottom-1 w-6 h-1 bg-white rounded-full opacity-80"></div>
+              )}
+            </Link>
+          )
+        })}
+      </nav>
+    </>
+  )
+}
