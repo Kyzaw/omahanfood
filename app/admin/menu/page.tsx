@@ -64,7 +64,7 @@ export default async function MenuPage() {
         <div className="p-4 md:p-8 space-y-6 md:space-y-8">
           <div className="max-w-full">
             {/* Stats Cards */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-6 md:mb-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 mb-6 md:mb-8">
               <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-4 md:p-6 hover:shadow-md transition-shadow duration-300">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center">
@@ -85,20 +85,6 @@ export default async function MenuPage() {
                   <div>
                     <p className="text-xs md:text-sm font-medium text-slate-600">Categories</p>
                     <p className="text-xl md:text-2xl font-bold text-slate-800">{categoriesUsed}</p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-4 md:p-6 hover:shadow-md transition-shadow duration-300">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl flex items-center justify-center">
-                    <span className="text-white text-lg">💰</span>
-                  </div>
-                  <div>
-                    <p className="text-xs md:text-sm font-medium text-slate-600">Average Price</p>
-                    <p className="text-xl md:text-2xl font-bold text-slate-800">
-                      {avgPrice > 0 ? `Rp ${avgPrice.toLocaleString()}` : 'Rp 0'}
-                    </p>
                   </div>
                 </div>
               </div>

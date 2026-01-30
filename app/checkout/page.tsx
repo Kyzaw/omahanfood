@@ -431,7 +431,7 @@ export default function CheckoutPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-red-50 pt-20 sm:pt-24 md:pt-28">
+    <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-red-50 pb-15 sm:pt-24 md:pt-28">
       <div className="max-w-6xl mx-auto px-3 sm:px-4 py-4 sm:py-6 md:py-8">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
           {/* Left Column - Forms */}
@@ -736,10 +736,6 @@ export default function CheckoutPage() {
                         <div className="flex justify-between text-sm">
                           <span className="text-gray-600 font-medium">Jenis Paket</span>
                           <span className="font-semibold capitalize">{jenisPaket.toLowerCase()}</span>
-                        </div>
-                        <div className="flex justify-between text-sm">
-                          <span className="text-gray-600 font-medium">Multiplier</span>
-                          <span className="font-semibold">×{paketMultiplier}</span>
                         </div>
                       </div>
                       <Separator className="bg-gradient-to-r from-orange-200 to-red-200" />
