@@ -22,7 +22,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { Edit2, Trash2, Check, X, Plus, Image as ImageIcon, MoreVertical } from "lucide-react";
+import { Edit2, Trash2, Check, X, Plus, Image as ImageIcon, MoreVertical, FolderOpen } from "lucide-react";
 
 interface MenuItem {
   id: string;
@@ -118,7 +118,7 @@ export default function CategoryTable({
                 <TableCell colSpan={4} className="text-center py-16 text-slate-500 border-0">
                   <div className="flex flex-col items-center space-y-4">
                     <div className="w-20 h-20 bg-slate-100 rounded-full flex items-center justify-center">
-                      <div className="text-4xl">📂</div>
+                      <FolderOpen className="w-10 h-10 text-slate-400" />
                     </div>
                     <div>
                       <p className="font-semibold text-slate-800 text-xl mb-2">No categories found</p>
@@ -272,7 +272,7 @@ export default function CategoryTable({
         {categories.length === 0 ? (
           <div className="bg-white rounded-2xl border border-slate-200 p-8 text-center">
             <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <div className="text-3xl">📂</div>
+              <FolderOpen className="w-8 h-8 text-slate-400" />
             </div>
             <h3 className="text-lg font-semibold text-slate-800 mb-2">
               No categories yet

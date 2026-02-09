@@ -4,6 +4,7 @@ import { OrdersTable } from "@/components/admin/OrdersTable"
 import { TopMenus } from "@/components/admin/TopMenus"
 import { prisma } from "@/lib/prisma"
 import Link from 'next/link'
+import { DollarSign, Users, ShoppingCart, UtensilsCrossed, FolderOpen, ClipboardList, Star, Zap, BarChart3, User } from 'lucide-react'
 
 export const dynamic = 'force-dynamic';
 
@@ -68,28 +69,28 @@ export default async function AdminPage() {
             <StatsCard
               title="Total Revenue"
               value={Math.round(totalRevenue / 1)}
-              icon="💰"
+              icon={<DollarSign className="w-5 h-5 md:w-7 md:h-7 text-emerald-600" />}
             />
             <StatsCard
               title="Total Users"
               value={userCount}
-              icon="👥"
+              icon={<Users className="w-5 h-5 md:w-7 md:h-7 text-blue-600" />}
             />
             <StatsCard
               title="Total Orders"
               value={orderCount}
-              icon="📦"
+              icon={<ShoppingCart className="w-5 h-5 md:w-7 md:h-7 text-orange-600" />}
             />
             <StatsCard
               title="Menu Items"
               value={menuCount}
-              icon="🍽️"
+              icon={<UtensilsCrossed className="w-5 h-5 md:w-7 md:h-7 text-purple-600" />}
             />
             <div className="col-span-2 sm:col-span-1">
               <StatsCard
                 title="Categories"
                 value={categoryCount}
-                icon="📂"
+                icon={<FolderOpen className="w-5 h-5 md:w-7 md:h-7 text-amber-600" />}
               />
             </div>
           </div>
@@ -102,7 +103,7 @@ export default async function AdminPage() {
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2 md:gap-3">
                     <div className="w-8 md:w-10 h-8 md:h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center">
-                      <span className="text-white text-sm md:text-lg">📋</span>
+                      <ClipboardList className="text-white w-4 md:w-5 h-4 md:h-5" />
                     </div>
                     <h2 className="text-lg md:text-xl font-bold text-slate-800">
                       Recent Orders
@@ -131,7 +132,7 @@ export default async function AdminPage() {
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2 md:gap-3">
                     <div className="w-8 md:w-10 h-8 md:h-10 bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl flex items-center justify-center">
-                      <span className="text-white text-sm md:text-lg">⭐</span>
+                      <Star className="text-white w-4 md:w-5 h-4 md:h-5" />
                     </div>
                     <h2 className="text-lg md:text-xl font-bold text-slate-800">
                       Top Performing Menus
@@ -153,7 +154,7 @@ export default async function AdminPage() {
             <div className="px-4 md:px-6 py-4 md:py-5 border-b border-slate-100 bg-gradient-to-r from-slate-50 to-white">
               <div className="flex items-center gap-2 md:gap-3">
                 <div className="w-8 md:w-10 h-8 md:h-10 bg-gradient-to-br from-purple-500 to-pink-600 rounded-xl flex items-center justify-center">
-                  <span className="text-white text-sm md:text-lg">⚡</span>
+                  <Zap className="text-white w-4 md:w-5 h-4 md:h-5" />
                 </div>
                 <h2 className="text-lg md:text-xl font-bold text-slate-800">
                   Quick Actions
@@ -164,21 +165,27 @@ export default async function AdminPage() {
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4">
                 <Link href="/admin/menu/add" className="group flex items-center justify-center p-4 md:p-6 bg-gradient-to-br from-blue-50 to-blue-100 hover:from-blue-100 hover:to-blue-200 rounded-xl border border-blue-200 transition-all duration-300 hover:scale-105 hover:shadow-lg">
                   <div className="text-center">
-                    <div className="text-2xl md:text-3xl mb-2 md:mb-3 group-hover:scale-110 transition-transform">🍽️</div>
+                    <div className="flex justify-center mb-2 md:mb-3 group-hover:scale-110 transition-transform">
+                      <UtensilsCrossed className="w-6 md:w-8 h-6 md:h-8 text-blue-600" />
+                    </div>
                     <span className="text-xs md:text-sm font-semibold text-blue-700">Add Menu Item</span>
                   </div>
                 </Link>
 
                 <Link href="/admin/reports" className="group flex items-center justify-center p-4 md:p-6 bg-gradient-to-br from-green-50 to-green-100 hover:from-green-100 hover:to-green-200 rounded-xl border border-green-200 transition-all duration-300 hover:scale-105 hover:shadow-lg">
                   <div className="text-center">
-                    <div className="text-2xl md:text-3xl mb-2 md:mb-3 group-hover:scale-110 transition-transform">📊</div>
+                    <div className="flex justify-center mb-2 md:mb-3 group-hover:scale-110 transition-transform">
+                      <BarChart3 className="w-6 md:w-8 h-6 md:h-8 text-green-600" />
+                    </div>
                     <span className="text-xs md:text-sm font-semibold text-green-700">View Reports</span>
                   </div>
                 </Link>
 
                 <Link href="/admin/users" className="group flex items-center justify-center p-4 md:p-6 bg-gradient-to-br from-purple-50 to-purple-100 hover:from-purple-100 hover:to-purple-200 rounded-xl border border-purple-200 transition-all duration-300 hover:scale-105 hover:shadow-lg sm:col-span-2 lg:col-span-1">
                   <div className="text-center">
-                    <div className="text-2xl md:text-3xl mb-2 md:mb-3 group-hover:scale-110 transition-transform">👤</div>
+                    <div className="flex justify-center mb-2 md:mb-3 group-hover:scale-110 transition-transform">
+                      <User className="w-6 md:w-8 h-6 md:h-8 text-purple-600" />
+                    </div>
                     <span className="text-xs md:text-sm font-semibold text-purple-700">Manage Users</span>
                   </div>
                 </Link>

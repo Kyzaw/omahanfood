@@ -78,14 +78,14 @@ export default function CheckoutPage() {
       return false;
     }
 
-    // Check total length (max 13 characters: +62 + max 10 digits)
-    if (phone.length > 13) {
+    // Check total length (max 13 characters: +62 + max 13 digits)
+    if (phone.length > 15) {
       setPhoneError("Nomor telepon maksimal 13 karakter");
       return false;
     }
 
-    // Check minimum length (min 10 characters: +62 + min 7 digits)
-    if (phone.length < 10) {
+    // Check minimum length (min 12 characters: +62 + min 7 digits)
+    if (phone.length < 12) {
       setPhoneError("Nomor telepon minimal 10 karakter");
       return false;
     }
@@ -186,8 +186,8 @@ export default function CheckoutPage() {
       const prefix = value.substring(0, 3);
       const digits = value.substring(3).replace(/[^\d]/g, '');
 
-      // Limit to 13 characters total (+62 + max 10 digits)
-      if (digits.length > 10) {
+      // Limit to 15 characters total (+62 + max 10 digits)
+      if (digits.length > 12) {
         return; // Don't allow more digits
       }
 

@@ -3,7 +3,7 @@ import CategoryTable from "@/components/admin/CategoryTable";
 import AdminSidebar from "@/components/admin/AdminNavbar";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Plus } from "lucide-react";
+import { Plus, FolderOpen, UtensilsCrossed, BarChart3, ClipboardList, Star } from "lucide-react";
 
 export const dynamic = 'force-dynamic';
 
@@ -50,7 +50,7 @@ export default async function CategoryPage() {
               <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-4 md:p-6 hover:shadow-md transition-shadow duration-300">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center">
-                    <span className="text-white text-lg">📂</span>
+                    <FolderOpen className="text-white w-5 h-5" />
                   </div>
                   <div>
                     <p className="text-xs md:text-sm font-medium text-slate-600">Total Categories</p>
@@ -62,7 +62,7 @@ export default async function CategoryPage() {
               <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-4 md:p-6 hover:shadow-md transition-shadow duration-300">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 bg-gradient-to-br from-green-500 to-green-600 rounded-xl flex items-center justify-center">
-                    <span className="text-white text-lg">🍽️</span>
+                    <UtensilsCrossed className="text-white w-5 h-5" />
                   </div>
                   <div>
                     <p className="text-xs md:text-sm font-medium text-slate-600">Total Menu Items</p>
@@ -76,7 +76,7 @@ export default async function CategoryPage() {
               <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-4 md:p-6 hover:shadow-md transition-shadow duration-300">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl flex items-center justify-center">
-                    <span className="text-white text-lg">⭐</span>
+                    <Star className="text-white w-5 h-5" />
                   </div>
                   <div>
                     <p className="text-xs md:text-sm font-medium text-slate-600">Most Popular</p>
@@ -95,7 +95,7 @@ export default async function CategoryPage() {
               <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-4 md:p-6 hover:shadow-md transition-shadow duration-300">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl flex items-center justify-center">
-                    <span className="text-white text-lg">📊</span>
+                    <BarChart3 className="text-white w-5 h-5" />
                   </div>
                   <div>
                     <p className="text-xs md:text-sm font-medium text-slate-600">Avg Items/Category</p>
@@ -116,7 +116,7 @@ export default async function CategoryPage() {
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                   <div className="flex items-center gap-2 md:gap-3">
                     <div className="w-8 md:w-10 h-8 md:h-10 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl flex items-center justify-center">
-                      <span className="text-white text-sm md:text-lg">📋</span>
+                      <ClipboardList className="text-white w-4 md:w-5 h-4 md:h-5" />
                     </div>
                     <div>
                       <h2 className="text-lg md:text-xl font-bold text-slate-800">
@@ -155,7 +155,7 @@ export default async function CategoryPage() {
             {categories.length === 0 && (
               <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-8 md:p-12 text-center">
                 <div className="w-16 h-16 md:w-20 md:h-20 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <span className="text-2xl md:text-3xl">📂</span>
+                  <FolderOpen className="w-8 md:w-10 h-8 md:h-10 text-slate-400" />
                 </div>
                 <h3 className="text-lg md:text-xl font-semibold text-slate-800 mb-2">
                   No Categories Found

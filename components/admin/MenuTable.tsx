@@ -23,7 +23,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { Badge } from "@/components/ui/badge";
-import { Edit2, Trash2, Check, X, Plus, Image as ImageIcon } from "lucide-react";
+import { Edit2, Trash2, Check, X, Plus, Image as ImageIcon, UtensilsCrossed } from "lucide-react";
 
 interface Menu {
   id: string;
@@ -157,7 +157,7 @@ export default function MenuTable({ menus }: { menus: Menu[] }) {
                   <TableCell colSpan={5} className="text-center py-20 text-slate-500 border-0">
                     <div className="flex flex-col items-center space-y-6">
                       <div className="w-24 h-24 bg-slate-100 rounded-full flex items-center justify-center">
-                        <div className="text-5xl">🍽️</div>
+                        <UtensilsCrossed className="w-12 h-12 text-slate-400" />
                       </div>
                       <div>
                         <p className="font-semibold text-slate-800 text-2xl mb-3">No menu items found</p>
@@ -352,7 +352,7 @@ export default function MenuTable({ menus }: { menus: Menu[] }) {
         {menus.length === 0 ? (
           <div className="bg-white rounded-2xl border border-slate-200 p-8 text-center">
             <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <div className="text-3xl">🍽️</div>
+              <UtensilsCrossed className="w-8 h-8 text-slate-400" />
             </div>
             <h3 className="text-lg font-semibold text-slate-800 mb-2">
               No menu items yet

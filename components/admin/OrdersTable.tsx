@@ -1,3 +1,6 @@
+import React from 'react';
+import { CheckCircle, Clock, RefreshCw, XCircle, Truck, ClipboardList, PackageX } from 'lucide-react';
+
 interface Order {
     id: string;
     status: string;
@@ -37,19 +40,19 @@ export function OrdersTable({ orders }: { orders: Order[] }) {
         switch (status.toLowerCase()) {
             case 'completed':
             case 'delivered':
-                return '✅';
+                return <CheckCircle className="w-4 h-4 text-green-600" />;
             case 'pending':
-                return '⏳';
+                return <Clock className="w-4 h-4 text-yellow-600" />;
             case 'processing':
-                return '🔄';
+                return <RefreshCw className="w-4 h-4 text-blue-600" />;
             case 'cancelled':
             case 'failed':
-                return '❌';
+                return <XCircle className="w-4 h-4 text-red-600" />;
             case 'shipped':
             case 'on-delivery':
-                return '🚚';
+                return <Truck className="w-4 h-4 text-purple-600" />;
             default:
-                return '📋';
+                return <ClipboardList className="w-4 h-4 text-gray-600" />;
         }
     };
 
@@ -83,7 +86,9 @@ export function OrdersTable({ orders }: { orders: Order[] }) {
         <div className="space-y-4">
             {orders.length === 0 ? (
                 <div className="text-center py-12">
-                    <div className="text-6xl mb-4">📦</div>
+                    <div className="flex justify-center mb-4">
+                        <PackageX className="w-12 h-12 text-slate-400" />
+                    </div>
                     <h3 className="text-lg font-semibold text-slate-600 mb-2">No Recent Orders</h3>
                     <p className="text-sm text-slate-500">Orders will appear here once customers start placing them.</p>
                 </div>

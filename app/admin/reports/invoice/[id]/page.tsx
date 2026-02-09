@@ -424,9 +424,36 @@ export default function InvoiceDetailPage() {
           font-size: 24px;
         }
         
+        .items-table {
+          font-size: 12px;
+        }
+        
         .items-table th,
         .items-table td {
-          padding: 12px 10px;
+          padding: 10px 8px;
+          font-size: 12px;
+        }
+        
+        .items-table th:nth-child(3),
+        .items-table td:nth-child(3) {
+          display: none;
+        }
+        
+        .item-name {
+          font-size: 13px;
+        }
+        
+        .info-grid {
+          grid-template-columns: 1fr;
+          gap: 10px;
+        }
+        
+        .info-label {
+          min-width: 100px;
+          font-size: 13px;
+        }
+        
+        .info-value {
           font-size: 13px;
         }
       }
@@ -607,24 +634,24 @@ export default function InvoiceDetailPage() {
 
         {/* Content */}
         <div className="p-4 md:p-8">
-          <div className="max-w-5xl mx-auto space-y-6">
+          <div className="max-w-5xl mx-auto space-y-4 md:space-y-6">
             {/* Invoice Header Card */}
             <Card className="shadow-sm">
-              <CardHeader className="bg-gradient-to-r from-indigo-50 to-purple-50 border-b border-slate-200">
-                <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+              <CardHeader className="bg-gradient-to-r from-indigo-50 to-purple-50 border-b border-slate-200 p-4 md:p-6">
+                <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 md:gap-4">
                   <div>
-                    <CardTitle className="text-xl md:text-2xl font-bold text-slate-800 mb-2">
+                    <CardTitle className="text-lg md:text-2xl font-bold text-slate-800 mb-1 md:mb-2">
                       {order.invoice}
                     </CardTitle>
-                    <p className="text-sm text-slate-600">Omahan Food Katering</p>
+                    <p className="text-xs md:text-sm text-slate-600">Omahan Food Katering</p>
                   </div>
-                  <Badge className={`${getStatusColor(order.status)} px-4 py-2 text-sm font-semibold`}>
+                  <Badge className={`${getStatusColor(order.status)} px-3 md:px-4 py-1.5 md:py-2 text-xs md:text-sm font-semibold self-start md:self-auto`}>
                     {getStatusText(order.status)}
                   </Badge>
                 </div>
               </CardHeader>
-              <CardContent className="p-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <CardContent className="p-4 md:p-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
                   <div className="space-y-2">
                     <div className="flex items-center gap-2 text-slate-600">
                       <Calendar className="h-4 w-4" />
@@ -646,23 +673,23 @@ export default function InvoiceDetailPage() {
             </Card>
 
             {/* Customer & Delivery Info */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
               {/* Customer Information */}
               <Card className="shadow-sm">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2 text-lg">
+                <CardHeader className="p-4 md:p-6">
+                  <CardTitle className="flex items-center gap-2 text-base md:text-lg">
                     <User className="h-5 w-5 text-indigo-600" />
                     Customer Information
                   </CardTitle>
                 </CardHeader>
-                <CardContent className="space-y-3">
+                <CardContent className="space-y-3 p-4 md:p-6 pt-0 md:pt-0">
                   <div>
                     <p className="text-sm text-slate-600">Name</p>
                     <p className="font-semibold text-slate-900">{order.user.name}</p>
                   </div>
                   <div>
                     <p className="text-sm text-slate-600">Email</p>
-                    <p className="font-semibold text-slate-900">{order.user.email}</p>
+                    <p className="font-semibold text-slate-900 break-words">{order.user.email}</p>
                   </div>
                   {addressData.noHp && (
                     <div>
@@ -678,19 +705,19 @@ export default function InvoiceDetailPage() {
 
               {/* Delivery Information */}
               <Card className="shadow-sm">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2 text-lg">
+                <CardHeader className="p-4 md:p-6">
+                  <CardTitle className="flex items-center gap-2 text-base md:text-lg">
                     <Truck className="h-5 w-5 text-purple-600" />
                     Delivery Information
                   </CardTitle>
                 </CardHeader>
-                <CardContent className="space-y-3">
+                <CardContent className="space-y-3 p-4 md:p-6 pt-0 md:pt-0">
                   <div>
                     <p className="text-sm text-slate-600 flex items-center gap-2">
                       <MapPin className="h-4 w-4" />
                       Address
                     </p>
-                    <p className="font-semibold text-slate-900 mt-1">{addressData.alamat || order.address}</p>
+                    <p className="font-semibold text-slate-900 mt-1 break-words">{addressData.alamat || order.address}</p>
                   </div>
                   <div>
                     <p className="text-sm text-slate-600">Delivery Time</p>
@@ -712,14 +739,15 @@ export default function InvoiceDetailPage() {
 
             {/* Order Items */}
             <Card className="shadow-sm">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-lg">
+              <CardHeader className="p-4 md:p-6">
+                <CardTitle className="flex items-center gap-2 text-base md:text-lg">
                   <Package className="h-5 w-5 text-orange-600" />
                   Order Items
                 </CardTitle>
               </CardHeader>
-              <CardContent>
-                <div className="overflow-x-auto">
+              <CardContent className="p-4 md:p-6 pt-0 md:pt-0">
+                {/* Desktop Table View */}
+                <div className="hidden md:block overflow-x-auto">
                   <table className="w-full">
                     <thead className="bg-slate-50">
                       <tr>
@@ -777,25 +805,73 @@ export default function InvoiceDetailPage() {
                     </tfoot>
                   </table>
                 </div>
+
+                {/* Mobile Card View */}
+                <div className="md:hidden space-y-3">
+                  {items.length > 0 ? (
+                    <>
+                      {items.map((item, index) => (
+                        <div
+                          key={index}
+                          className="bg-slate-50 rounded-lg p-4 space-y-3 border border-slate-200"
+                        >
+                          <div className="flex items-start justify-between gap-3">
+                            <div className="flex-1 min-w-0">
+                              <h4 className="font-semibold text-slate-900 text-sm leading-tight mb-1">
+                                {item.name}
+                              </h4>
+                              <p className="text-xs text-slate-600">
+                                Unit Price: {formatCurrency(item.price)}
+                              </p>
+                            </div>
+                            <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800 flex-shrink-0">
+                              ×{item.quantity}
+                            </span>
+                          </div>
+                          <div className="flex items-center justify-between pt-2 border-t border-slate-300">
+                            <span className="text-xs font-medium text-slate-600">Subtotal</span>
+                            <span className="font-bold text-slate-900">
+                              {formatCurrency(item.price * item.quantity)}
+                            </span>
+                          </div>
+                        </div>
+                      ))}
+                      
+                      {/* Mobile Total */}
+                      <div className="bg-gradient-to-r from-green-50 to-emerald-50 rounded-lg p-4 border-2 border-green-200 mt-4">
+                        <div className="flex items-center justify-between">
+                          <span className="font-bold text-slate-900 text-base">Total Amount</span>
+                          <span className="font-bold text-xl text-green-600">
+                            {formatCurrency(order.totalAmount)}
+                          </span>
+                        </div>
+                      </div>
+                    </>
+                  ) : (
+                    <div className="bg-slate-50 rounded-lg p-8 text-center text-slate-500">
+                      No items found
+                    </div>
+                  )}
+                </div>
               </CardContent>
             </Card>
 
             {/* Payment Information */}
             <Card className="shadow-sm">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-lg">
+              <CardHeader className="p-4 md:p-6">
+                <CardTitle className="flex items-center gap-2 text-base md:text-lg">
                   <CreditCard className="h-5 w-5 text-green-600" />
                   Payment Information
                 </CardTitle>
               </CardHeader>
-              <CardContent className="space-y-3">
+              <CardContent className="space-y-3 p-4 md:p-6 pt-0 md:pt-0">
                 <div>
                   <p className="text-sm text-slate-600">Payment Method</p>
                   <p className="font-semibold text-slate-900">{order.paymentMethod}</p>
                 </div>
                 <div>
                   <p className="text-sm text-slate-600">Total Amount</p>
-                  <p className="font-bold text-xl text-green-600">{formatCurrency(order.totalAmount)}</p>
+                  <p className="font-bold text-lg md:text-xl text-green-600">{formatCurrency(order.totalAmount)}</p>
                 </div>
                 {order.notes && (
                   <div>
@@ -803,7 +879,7 @@ export default function InvoiceDetailPage() {
                       <FileText className="h-4 w-4" />
                       Notes
                     </p>
-                    <p className="font-semibold text-slate-900 mt-1">{order.notes}</p>
+                    <p className="font-semibold text-slate-900 mt-1 break-words">{order.notes}</p>
                   </div>
                 )}
               </CardContent>

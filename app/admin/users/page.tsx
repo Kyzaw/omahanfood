@@ -4,7 +4,7 @@ import { UserForm } from "@/components/admin/UserForm"
 import { prisma } from "@/lib/prisma"
 import { User, Role } from "@/app/generated/prisma"
 import { Suspense } from "react"
-import { Users, Shield, User as UserIcon, Truck, UsersIcon } from "lucide-react"
+import { Users, Shield, User as UserIcon, Truck, UsersIcon, BarChart3 } from "lucide-react"
 
 interface UserWithStats extends User {
   _count: {
@@ -170,7 +170,7 @@ export default async function UsersPage() {
           <div className="bg-white rounded-xl md:rounded-2xl shadow-sm border border-slate-200 p-4 md:p-6 hover:shadow-md transition-shadow duration-300">
             <div className="flex items-center gap-3 mb-4">
               <div className="w-8 md:w-10 h-8 md:h-10 bg-gradient-to-br from-purple-500 to-pink-600 rounded-lg md:rounded-xl flex items-center justify-center">
-                <span className="text-white text-sm md:text-lg">📊</span>
+                <BarChart3 className="text-white w-4 md:w-5 h-4 md:h-5" />
               </div>
               <div>
                 <h3 className="text-lg md:text-xl font-bold text-slate-800">Role Distribution</h3>

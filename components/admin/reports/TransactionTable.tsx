@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { Eye, ChevronLeft, ChevronRight, MoreHorizontal } from 'lucide-react';
+import { Eye, ChevronLeft, ChevronRight, MoreHorizontal, Receipt } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { formatCurrency, formatDate, getStatusColor, getStatusText } from '@/hooks/useReports';
 
@@ -138,7 +138,7 @@ export const TransactionTable: React.FC<TransactionTableProps> = ({ transactions
                   <td colSpan={6} className="px-6 py-12 text-center text-slate-500">
                     <div className="flex flex-col items-center space-y-2">
                       <div className="w-12 h-12 bg-slate-100 rounded-full flex items-center justify-center">
-                        <span className="text-2xl">🧾</span>
+                        <Receipt className="w-6 h-6 text-slate-400" />
                       </div>
                       <p className="font-medium">No transactions data</p>
                       <p className="text-sm">Recent transactions will appear here</p>
@@ -217,7 +217,7 @@ export const TransactionTable: React.FC<TransactionTableProps> = ({ transactions
         ) : (
           <div className="bg-white border border-slate-200 rounded-lg p-8 text-center">
             <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <span className="text-3xl">🧾</span>
+              <Receipt className="w-8 h-8 text-slate-400" />
             </div>
             <h3 className="text-lg font-semibold text-slate-800 mb-2">
               No transactions data

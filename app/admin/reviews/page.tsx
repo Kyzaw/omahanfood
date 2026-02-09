@@ -76,26 +76,26 @@ export default async function AdminReviewsPage() {
     <>
       <AdminNavbar />
       <div className="md:ml-64 min-h-screen bg-gray-50">
-        <div className="container mx-auto p-6 space-y-6">
+        <div className="container mx-auto p-4 md:p-6 space-y-4 md:space-y-6 mt-16 md:mt-0">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold">Review Management</h1>
-              <p className="text-gray-600 mt-1">
+              <h1 className="text-2xl md:text-3xl font-bold">Review Management</h1>
+              <p className="text-gray-600 mt-1 text-sm md:text-base">
                 Monitor dan kelola semua review dari customer
               </p>
             </div>
           </div>
 
           {/* Statistics Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
             {/* Total Reviews */}
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Total Reviews</CardTitle>
-                <MessageSquare className="h-4 w-4 text-muted-foreground" />
+                <CardTitle className="text-xs md:text-sm font-medium">Total Reviews</CardTitle>
+                <MessageSquare className="h-3 w-3 md:h-4 md:w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">{totalReviews}</div>
+                <div className="text-xl md:text-2xl font-bold">{totalReviews}</div>
                 <p className="text-xs text-muted-foreground">
                   {reviewsWithComments} dengan komentar
                 </p>
@@ -105,11 +105,11 @@ export default async function AdminReviewsPage() {
             {/* Average Rating */}
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Rating Rata-rata</CardTitle>
-                <Star className="h-4 w-4 text-yellow-500 fill-yellow-500" />
+                <CardTitle className="text-xs md:text-sm font-medium">Rating Rata-rata</CardTitle>
+                <Star className="h-3 w-3 md:h-4 md:w-4 text-yellow-500 fill-yellow-500" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">{averageRating.toFixed(2)}</div>
+                <div className="text-xl md:text-2xl font-bold">{averageRating.toFixed(2)}</div>
                 <div className="flex items-center gap-1 mt-1">
                   {[1, 2, 3, 4, 5].map((star) => (
                     <Star
@@ -127,11 +127,11 @@ export default async function AdminReviewsPage() {
             {/* Recent Reviews */}
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Review Baru</CardTitle>
-                <TrendingUp className="h-4 w-4 text-green-600" />
+                <CardTitle className="text-xs md:text-sm font-medium">Review Baru</CardTitle>
+                <TrendingUp className="h-3 w-3 md:h-4 md:w-4 text-green-600" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">{recentReviews}</div>
+                <div className="text-xl md:text-2xl font-bold">{recentReviews}</div>
                 <p className="text-xs text-muted-foreground">7 hari terakhir</p>
               </CardContent>
             </Card>
@@ -139,11 +139,11 @@ export default async function AdminReviewsPage() {
             {/* Low Ratings */}
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Rating Rendah</CardTitle>
-                <AlertCircle className="h-4 w-4 text-red-600" />
+                <CardTitle className="text-xs md:text-sm font-medium">Rating Rendah</CardTitle>
+                <AlertCircle className="h-3 w-3 md:h-4 md:w-4 text-red-600" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold text-red-600">
+                <div className="text-xl md:text-2xl font-bold text-red-600">
                   {lowRatingReviews}
                 </div>
                 <p className="text-xs text-muted-foreground">Rating 1-2 bintang</p>
@@ -154,7 +154,7 @@ export default async function AdminReviewsPage() {
           {/* Rating Distribution */}
           <Card>
             <CardHeader>
-              <CardTitle>Distribusi Rating</CardTitle>
+              <CardTitle className="text-lg md:text-xl">Distribusi Rating</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
@@ -163,21 +163,21 @@ export default async function AdminReviewsPage() {
                   const percentage = totalReviews > 0 ? (count / totalReviews) * 100 : 0;
 
                   return (
-                    <div key={rating} className="flex items-center gap-4">
-                      <div className="flex items-center gap-1 w-20">
-                        <span className="text-sm font-medium">{rating}</span>
-                        <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+                    <div key={rating} className="flex items-center gap-2 md:gap-4">
+                      <div className="flex items-center gap-1 w-14 md:w-20">
+                        <span className="text-xs md:text-sm font-medium">{rating}</span>
+                        <Star className="h-3 w-3 md:h-4 md:w-4 fill-yellow-400 text-yellow-400" />
                       </div>
                       <div className="flex-1">
-                        <div className="h-4 bg-gray-200 rounded-full overflow-hidden">
+                        <div className="h-3 md:h-4 bg-gray-200 rounded-full overflow-hidden">
                           <div
                             className="h-full bg-gradient-to-r from-orange-500 to-red-500"
                             style={{ width: `${percentage}%` }}
                           />
                         </div>
                       </div>
-                      <div className="w-20 text-right">
-                        <span className="text-sm font-medium">{count}</span>
+                      <div className="w-16 md:w-20 text-right">
+                        <span className="text-xs md:text-sm font-medium">{count}</span>
                         <span className="text-xs text-gray-500 ml-1">
                           ({percentage.toFixed(0)}%)
                         </span>
@@ -192,9 +192,9 @@ export default async function AdminReviewsPage() {
           {/* Reviews Table */}
           <Card>
             <CardHeader>
-              <CardTitle>Semua Review</CardTitle>
+              <CardTitle className="text-lg md:text-xl">Semua Review</CardTitle>
             </CardHeader>
-            <CardContent>
+            <CardContent className="p-3 md:p-6">
               <ReviewsTable reviews={reviews} />
             </CardContent>
           </Card>

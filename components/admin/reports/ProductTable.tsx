@@ -1,4 +1,5 @@
 import React from 'react';
+import { Package } from 'lucide-react';
 import { formatCurrency } from '@/hooks/useReports';
 
 interface Product {
@@ -60,7 +61,7 @@ export const ProductTable: React.FC<ProductTableProps> = ({ products }) => {
                   <td colSpan={4} className="px-6 py-12 text-center text-slate-500">
                     <div className="flex flex-col items-center space-y-2">
                       <div className="w-12 h-12 bg-slate-100 rounded-full flex items-center justify-center">
-                        <span className="text-2xl">📦</span>
+                        <Package className="w-6 h-6 text-slate-400" />
                       </div>
                       <p className="font-medium">No products data</p>
                       <p className="text-sm">Product sales will appear here</p>
@@ -111,7 +112,7 @@ export const ProductTable: React.FC<ProductTableProps> = ({ products }) => {
         ) : (
           <div className="bg-white border border-slate-200 rounded-lg p-8 text-center">
             <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <span className="text-3xl">📦</span>
+              <Package className="w-8 h-8 text-slate-400" />
             </div>
             <h3 className="text-lg font-semibold text-slate-800 mb-2">
               No products data

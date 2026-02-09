@@ -13,7 +13,8 @@ import {
   Search,
   Filter,
   ShoppingCart,
-  Award
+  Award,
+  Medal
 } from "lucide-react";
 import AdminSidebar from "@/components/admin/AdminNavbar";
 import Link from "next/link";
@@ -115,9 +116,11 @@ export default async function TopMenusPage() {
                       <CardHeader className="pb-3">
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-2">
-                            <span className="text-2xl">
-                              {index === 0 ? '🥇' : index === 1 ? '🥈' : '🥉'}
-                            </span>
+                            <Medal className={`w-6 h-6 ${
+                              index === 0 ? 'text-yellow-500' : 
+                              index === 1 ? 'text-slate-400' : 
+                              'text-orange-600'
+                            }`} />
                             <CardTitle className="text-sm font-medium text-slate-600">
                               #{index + 1} Best Seller
                             </CardTitle>
@@ -195,9 +198,13 @@ export default async function TopMenusPage() {
                             <tr key={menu.id} className="hover:bg-slate-50 transition-colors">
                               <td className="px-4 py-4">
                                 <div className="flex items-center gap-2">
-                                  <span className="text-lg">
-                                    {index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : ''}
-                                  </span>
+                                  {index < 3 && (
+                                    <Medal className={`w-5 h-5 ${
+                                      index === 0 ? 'text-yellow-500' : 
+                                      index === 1 ? 'text-slate-400' : 
+                                      'text-orange-600'
+                                    }`} />
+                                  )}
                                   <span className="text-sm font-semibold text-slate-700">
                                     {index + 1}
                                   </span>
@@ -257,9 +264,15 @@ export default async function TopMenusPage() {
                         >
                           <div className="flex items-start gap-3 mb-3">
                             <div className="flex items-center gap-2 flex-shrink-0">
-                              <span className="text-xl">
-                                {index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : `${index + 1}.`}
-                              </span>
+                              {index < 3 ? (
+                                <Medal className={`w-6 h-6 ${
+                                  index === 0 ? 'text-yellow-500' : 
+                                  index === 1 ? 'text-slate-400' : 
+                                  'text-orange-600'
+                                }`} />
+                              ) : (
+                                <span className="text-lg font-semibold text-slate-700">{index + 1}.</span>
+                              )}
                             </div>
                             {menu.image ? (
                               <img

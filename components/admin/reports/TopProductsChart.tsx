@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import { BarChart3 } from 'lucide-react';
 import {
     BarChart,
     Bar,
@@ -167,7 +168,7 @@ export function TopProductsChart({ products }: TopProductsChartProps) {
             ) : (
                 <div className="text-center py-20 bg-slate-50 rounded-3xl border-2 border-dashed border-slate-200">
                     <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center mx-auto mb-4 shadow-sm">
-                        <span className="text-2xl">📊</span>
+                        <BarChart3 className="w-8 h-8 text-slate-400" />
                     </div>
                     <p className="text-slate-500 font-bold uppercase tracking-widest text-xs">No analysis data available</p>
                 </div>

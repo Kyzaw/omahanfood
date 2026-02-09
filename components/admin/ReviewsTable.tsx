@@ -155,8 +155,8 @@ export function ReviewsTable({ reviews: initialReviews }: ReviewsTableProps) {
         Menampilkan {filteredReviews.length} dari {reviews.length} review
       </div>
 
-      {/* Table */}
-      <div className="border rounded-lg overflow-hidden">
+      {/* Desktop Table View */}
+      <div className="hidden md:block border rounded-lg overflow-hidden">
         <Table>
           <TableHeader>
             <TableRow>
@@ -275,6 +275,113 @@ export function ReviewsTable({ reviews: initialReviews }: ReviewsTableProps) {
             )}
           </TableBody>
         </Table>
+      </div>
+
+      {/* Mobile Card View */}
+      <div className="md:hidden space-y-4">
+        {filteredReviews.length === 0 ? (
+          <div className="bg-white rounded-lg border p-8 text-center text-gray-500">
+            Tidak ada review ditemukan
+          </div>
+        ) : (
+          filteredReviews.map((review) => (
+            <div
+              key={review.id}
+              className="bg-white rounded-lg border p-4 space-y-3 shadow-sm"
+            >
+              {/* Menu Info */}
+              <div className="flex items-start gap-3">
+                <div className="relative h-16 w-16 rounded-md overflow-hidden flex-shrink-0">
+                  {review.menu.image ? (
+                    <Image
+                      src={review.menu.image}
+                      alt={review.menu.name}
+                      fill
+                      className="object-cover"
+                    />
+                  ) : (
+                    <div className="h-full w-full bg-gray-200 flex items-center justify-center text-lg font-bold text-gray-400">
+                      {review.menu.name.charAt(0)}
+                    </div>
+                  )}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <h3 className="font-semibold text-sm truncate">
+                    {review.menu.name}
+                  </h3>
+                  <p className="text-xs text-gray-600 mt-0.5">
+                    {review.user.name}
+                  </p>
+                  <p className="text-xs text-gray-500 truncate">
+                    {review.user.email}
+                  </p>
+                </div>
+              </div>
+
+              {/* Rating */}
+              <div className="flex items-center gap-2">
+                <Badge className={getRatingBadge(review.rating)}>
+                  {review.rating}
+                </Badge>
+                <div className="flex">
+                  {[1, 2, 3, 4, 5].map((star) => (
+                    <Star
+                      key={star}
+                      className={`h-4 w-4 ${
+                        star <= review.rating
+                          ? "fill-yellow-400 text-yellow-400"
+                          : "text-gray-300"
+                      }`}
+                    />
+                  ))}
+                </div>
+              </div>
+
+              {/* Comment */}
+              {review.comment ? (
+                <div className="bg-gray-50 rounded-md p-3">
+                  <p className="text-sm text-gray-700 leading-relaxed">
+                    {review.comment}
+                  </p>
+                </div>
+              ) : (
+                <div className="bg-gray-50 rounded-md p-3">
+                  <p className="text-sm text-gray-400 italic">
+                    Tidak ada komentar
+                  </p>
+                </div>
+              )}
+
+              {/* Date and Actions */}
+              <div className="flex items-center justify-between pt-2 border-t">
+                <div className="text-xs text-gray-600">
+                  <p>
+                    {new Date(review.createdAt).toLocaleDateString("id-ID", {
+                      day: "numeric",
+                      month: "short",
+                      year: "numeric",
+                    })}
+                  </p>
+                  <p className="text-gray-500">
+                    {new Date(review.createdAt).toLocaleTimeString("id-ID", {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })}
+                  </p>
+                </div>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => handleDeleteClick(review)}
+                  className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                >
+                  <Trash2 className="h-4 w-4 mr-1" />
+                  <span className="text-xs">Hapus</span>
+                </Button>
+              </div>
+            </div>
+          ))
+        )}
       </div>
 
       {/* Delete Confirmation Dialog */}

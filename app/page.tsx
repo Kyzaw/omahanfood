@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import MenuPage from "@/components/MenuPage";
+import { Star } from "lucide-react";
 
 export default async function HomePage() {
   const categories = await prisma.category.findMany({
@@ -76,7 +77,9 @@ export default async function HomePage() {
           
           <div className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 text-center border border-gray-100">
             <div className="w-12 h-12 mx-auto mb-3 bg-gradient-to-br from-green-500 to-emerald-500 rounded-xl flex items-center justify-center">
-              <span className="text-white font-bold">⚡</span>
+              <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h1l3 8 4-16 4 16 3-8h1" />
+              </svg>
             </div>
             <h3 className="font-semibold text-gray-800">Fast Delivery</h3>
             <p className="text-sm text-gray-500">30 min avg</p>
@@ -84,7 +87,7 @@ export default async function HomePage() {
           
           <div className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 text-center border border-gray-100">
             <div className="w-12 h-12 mx-auto mb-3 bg-gradient-to-br from-purple-500 to-pink-500 rounded-xl flex items-center justify-center">
-              <span className="text-white font-bold">⭐</span>
+              <Star className="text-white w-6 h-6" />
             </div>
             <h3 className="font-semibold text-gray-800">Top Rated</h3>
             <p className="text-sm text-gray-500">4.8+ rating</p>
