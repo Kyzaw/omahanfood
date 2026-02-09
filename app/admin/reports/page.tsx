@@ -1,12 +1,14 @@
 'use client';
 
 import React, { useState } from 'react';
-import { useReports } from '@/hooks/useReports';
+import { useReports, formatCurrency, formatDate } from '@/hooks/useReports';
 import { StatsCard } from '@/components/admin/reports/StatsCard';
 import { SalesChart } from '@/components/admin/reports/SalesChart';
 import { TopProductsChart } from '@/components/admin/reports/TopProductsChart';
 import { CategoryChart } from '@/components/admin/reports/CategoryChart';
 import { TransactionTable } from '@/components/admin/reports/TransactionTable';
+import * as XLSX from 'xlsx';
+import { toast } from 'sonner';
 import {
   TrendingUp,
   ShoppingCart,
@@ -28,8 +30,162 @@ const ReportsPage = () => {
   };
 
   const handleExport = () => {
-    // Implementasi export data (misal CSV atau Excel)
-    console.log('Exporting report data...');
+    if (!reportData.overview && !reportData.products && !reportData.transactions) {
+      toast.error('Tidak ada data untuk diekspor');
+      return;
+    }
+
+    toast.loading('Mengekspor laporan ke Excel...');
+
+    try {
+      // Create a new workbook
+      const wb = XLSX.utils.book_new();
+
+      // Sheet 1: Overview Summary
+      if (reportData.overview) {
+        const overviewData = [
+          ['SALES REPORT - OVERVIEW'],
+          ['Period:', dateRange === 'week' ? '7 Days' : dateRange === 'month' ? '30 Days' : '1 Year'],
+          ['Generated:', new Date().toLocaleString('id-ID')],
+          [],
+          ['SUMMARY STATISTICS'],
+          ['Metric', 'Value'],
+          ['Total Sales', formatCurrency(reportData.overview.totalSales)],
+          ['Total Transactions', reportData.overview.totalTransactions.toString()],
+          ['Average Transaction', formatCurrency(reportData.overview.avgTransaction)],
+          ['Total Products Sold', reportData.overview.totalProductsSold.toString()],
+          [],
+          ['DAILY SALES'],
+          ['Date', 'Sales Amount'],
+          ...reportData.overview.dailySales.map(item => [
+            item.date,
+            item.value
+          ]),
+        ];
+
+        if (reportData.overview.monthlySales.length > 0) {
+          overviewData.push([]);
+          overviewData.push(['MONTHLY SALES']);
+          overviewData.push(['Month', 'Sales Amount']);
+          reportData.overview.monthlySales.forEach(item => {
+            overviewData.push([item.date, item.value]);
+          });
+        }
+
+        const ws1 = XLSX.utils.aoa_to_sheet(overviewData);
+        
+        // Set column widths
+        ws1['!cols'] = [
+          { wch: 25 },
+          { wch: 20 }
+        ];
+        
+        XLSX.utils.book_append_sheet(wb, ws1, 'Overview');
+      }
+
+      // Sheet 2: Products Performance
+      if (reportData.products && reportData.products.products.length > 0) {
+        const productsData = [
+          ['PRODUCTS PERFORMANCE'],
+          ['Period:', dateRange === 'week' ? '7 Days' : dateRange === 'month' ? '30 Days' : '1 Year'],
+          [],
+          ['Product Name', 'Category', 'Quantity Sold', 'Revenue'],
+          ...reportData.products.products.map(product => [
+            product.name,
+            product.category,
+            product.sold,
+            product.revenue
+          ])
+        ];
+
+        const ws2 = XLSX.utils.aoa_to_sheet(productsData);
+        
+        // Set column widths
+        ws2['!cols'] = [
+          { wch: 30 },
+          { wch: 20 },
+          { wch: 15 },
+          { wch: 20 }
+        ];
+        
+        XLSX.utils.book_append_sheet(wb, ws2, 'Products');
+      }
+
+      // Sheet 3: Transactions
+      if (reportData.transactions && reportData.transactions.transactions.length > 0) {
+        const transactionsData = [
+          ['TRANSACTION DETAILS'],
+          ['Period:', dateRange === 'week' ? '7 Days' : dateRange === 'month' ? '30 Days' : '1 Year'],
+          [],
+          ['Invoice', 'Date', 'Customer', 'Items', 'Payment Method', 'Total', 'Status'],
+          ...reportData.transactions.transactions.map(tx => [
+            tx.invoice,
+            formatDate(tx.date),
+            tx.customer,
+            tx.items,
+            tx.paymentMethod,
+            tx.total,
+            tx.status
+          ])
+        ];
+
+        const ws3 = XLSX.utils.aoa_to_sheet(transactionsData);
+        
+        // Set column widths
+        ws3['!cols'] = [
+          { wch: 20 },
+          { wch: 20 },
+          { wch: 25 },
+          { wch: 10 },
+          { wch: 20 },
+          { wch: 20 },
+          { wch: 15 }
+        ];
+        
+        XLSX.utils.book_append_sheet(wb, ws3, 'Transactions');
+      }
+
+      // Sheet 4: Category Performance
+      if (reportData.products && reportData.products.categoryPerformance.length > 0) {
+        const categoryData = [
+          ['CATEGORY PERFORMANCE'],
+          ['Period:', dateRange === 'week' ? '7 Days' : dateRange === 'month' ? '30 Days' : '1 Year'],
+          [],
+          ['Category Name', 'Value', 'Percentage'],
+          ...reportData.products.categoryPerformance.map(cat => [
+            cat.name,
+            cat.value,
+            `${cat.percentage.toFixed(2)}%`
+          ])
+        ];
+
+        const ws4 = XLSX.utils.aoa_to_sheet(categoryData);
+        
+        // Set column widths
+        ws4['!cols'] = [
+          { wch: 25 },
+          { wch: 20 },
+          { wch: 15 }
+        ];
+        
+        XLSX.utils.book_append_sheet(wb, ws4, 'Category Performance');
+      }
+
+      // Generate filename with current date
+      const dateStr = new Date().toISOString().split('T')[0];
+      const periodStr = dateRange === 'week' ? '7Days' : dateRange === 'month' ? '30Days' : '1Year';
+      const filename = `Sales_Report_${periodStr}_${dateStr}.xlsx`;
+
+      // Write the file
+      XLSX.writeFile(wb, filename);
+      
+      toast.dismiss();
+      toast.success(`Laporan berhasil diekspor: ${filename}`);
+    } catch (error) {
+      console.error('Error exporting report:', error);
+      toast.dismiss();
+      toast.error('Gagal mengekspor laporan. Silakan coba lagi.');
+    }
   };
 
   if (error) {
