@@ -85,18 +85,18 @@ export function ReviewDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[500px]">
+      <DialogContent className="sm:max-w-[460px] rounded-2xl">
         <DialogHeader>
-          <DialogTitle>Beri Rating & Review</DialogTitle>
-          <DialogDescription>
-            Bagaimana pengalaman Anda dengan <strong>{menuName}</strong>?
+          <DialogTitle className="text-lg font-bold text-stone-800">Beri Rating & Review</DialogTitle>
+          <DialogDescription className="text-stone-500 text-sm">
+            Bagaimana pengalaman Anda dengan <strong className="text-stone-700">{menuName}</strong>?
           </DialogDescription>
         </DialogHeader>
 
         <div className="space-y-4 py-4">
           {/* Star Rating */}
           <div className="flex flex-col items-center space-y-2">
-            <p className="text-sm font-medium">Rating</p>
+            <p className="text-xs font-semibold text-stone-600">Rating</p>
             <div className="flex gap-2">
               {[1, 2, 3, 4, 5].map((star) => (
                 <button
@@ -110,15 +110,15 @@ export function ReviewDialog({
                   <Star
                     className={`h-8 w-8 ${
                       star <= (hoverRating || rating)
-                        ? "fill-yellow-400 text-yellow-400"
-                        : "text-gray-300"
+                        ? "fill-amber-400 text-amber-400"
+                        : "text-stone-200"
                     }`}
                   />
                 </button>
               ))}
             </div>
             {rating > 0 && (
-              <p className="text-sm text-gray-600">
+              <p className="text-xs text-stone-500">
                 {rating === 1 && "Sangat Buruk"}
                 {rating === 2 && "Buruk"}
                 {rating === 3 && "Cukup"}
@@ -130,7 +130,7 @@ export function ReviewDialog({
 
           {/* Comment */}
           <div className="space-y-2">
-            <label htmlFor="comment" className="text-sm font-medium">
+            <label htmlFor="comment" className="text-xs font-semibold text-stone-600">
               Komentar (Opsional)
             </label>
             <Textarea
@@ -140,8 +140,9 @@ export function ReviewDialog({
               onChange={(e) => setComment(e.target.value)}
               rows={4}
               maxLength={500}
+              className="border-stone-200 rounded-xl focus:ring-orange-500 focus:border-orange-500"
             />
-            <p className="text-xs text-gray-500 text-right">
+            <p className="text-xs text-stone-400 text-right">
               {comment.length}/500
             </p>
           </div>
@@ -152,10 +153,11 @@ export function ReviewDialog({
             variant="outline"
             onClick={() => onOpenChange(false)}
             disabled={isSubmitting}
+            className="rounded-xl border-stone-200"
           >
             Batal
           </Button>
-          <Button onClick={handleSubmit} disabled={isSubmitting || rating === 0} variant="review">
+          <Button onClick={handleSubmit} disabled={isSubmitting || rating === 0} variant="review" className="rounded-xl">
             {isSubmitting ? "Mengirim..." : "Kirim Review"}
           </Button>
         </DialogFooter>

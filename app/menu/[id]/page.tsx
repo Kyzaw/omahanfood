@@ -42,73 +42,77 @@ export default async function MenuDetailPage({ params }: MenuDetailPageProps) {
       : 0;
 
   return (
-    <div className="container mx-auto p-4 max-w-6xl mb-23 md:pt-35">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
-        {/* Menu Image */}
-        <div className="relative aspect-square rounded-lg overflow-hidden">
-          {menu.image ? (
-            <Image
-              src={menu.image}
-              alt={menu.name}
-              fill
-              className="object-cover"
-              priority
-            />
-          ) : (
-            <div className="w-full h-full bg-gradient-to-br from-orange-100 to-red-100 flex items-center justify-center">
-              <span className="text-4xl font-bold text-gray-400">
-                {menu.name.charAt(0)}
-              </span>
-            </div>
-          )}
-        </div>
-
-        {/* Menu Info */}
-        <div className="space-y-6">
-          <div>
-            <Badge className="mb-2">{menu.category.name}</Badge>
-            <h1 className="text-4xl font-bold text-gray-900 mb-2">
-              {menu.name}
-            </h1>
-            
-            {/* Rating Display */}
-            {reviews.length > 0 && (
-              <div className="flex items-center gap-2 mb-4">
-                <div className="flex items-center gap-1">
-                  <Star className="h-5 w-5 fill-yellow-400 text-yellow-400" />
-                  <span className="text-lg font-semibold">
-                    {averageRating.toFixed(1)}
-                  </span>
-                </div>
-                <span className="text-gray-600">
-                  ({reviews.length} {reviews.length === 1 ? "review" : "reviews"})
+    <div className="min-h-screen bg-[#faf9f7]">
+      <div className="hidden md:block h-16" />
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 py-6 md:py-10 pb-24 md:pb-10">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 mb-8">
+          {/* Menu Image */}
+          <div className="relative aspect-square rounded-2xl overflow-hidden bg-stone-100 border border-stone-100 shadow-sm">
+            {menu.image ? (
+              <Image
+                src={menu.image}
+                alt={menu.name}
+                fill
+                className="object-cover"
+                priority
+              />
+            ) : (
+              <div className="w-full h-full bg-stone-100 flex items-center justify-center">
+                <span className="text-4xl font-bold text-stone-300">
+                  {menu.name.charAt(0)}
                 </span>
               </div>
             )}
-
-            <p className="text-gray-600 text-lg leading-relaxed">
-              {menu.description}
-            </p>
           </div>
 
-          <Separator />
+          {/* Menu Info */}
+          <div className="space-y-5">
+            <div>
+              <Badge className="mb-3 bg-orange-50 text-orange-600 border border-orange-100 text-xs font-semibold">{menu.category.name}</Badge>
+              <h1 className="text-2xl sm:text-3xl font-bold text-stone-800 tracking-tight mb-2">
+                {menu.name}
+              </h1>
+              
+              {/* Rating Display */}
+              {reviews.length > 0 && (
+                <div className="flex items-center gap-2 mb-4">
+                  <div className="flex items-center gap-1 bg-amber-50 px-2.5 py-1 rounded-lg border border-amber-100">
+                    <Star className="h-4 w-4 fill-amber-400 text-amber-400" />
+                    <span className="text-sm font-bold text-amber-700">
+                      {averageRating.toFixed(1)}
+                    </span>
+                  </div>
+                  <span className="text-stone-500 text-sm">
+                    ({reviews.length} {reviews.length === 1 ? "ulasan" : "ulasan"})
+                  </span>
+                </div>
+              )}
 
-          <div>
-            <p className="text-3xl font-bold text-primary">
-              Rp {menu.price.toLocaleString()}
-            </p>
-            <p className="text-sm text-gray-500 mt-1">Harga per porsi</p>
+              <p className="text-stone-600 leading-relaxed text-sm">
+                {menu.description}
+              </p>
+            </div>
+
+            <Separator className="bg-stone-100" />
+
+            <div>
+              <p className="text-2xl font-bold text-orange-500">
+                Rp {menu.price.toLocaleString()}
+              </p>
+              <p className="text-xs text-stone-400 mt-1">Harga per porsi</p>
+            </div>
           </div>
         </div>
-      </div>
 
-      {/* Reviews Section */}
-      <Card>
-        <CardContent className="pt-6">
-          <h2 className="text-2xl font-bold mb-6">Rating & Review</h2>
-          <ReviewList menuId={id} />
-        </CardContent>
-      </Card>
+        {/* Reviews Section */}
+        <Card className="bg-white border border-stone-100 shadow-sm rounded-2xl">
+          <CardContent className="pt-6">
+            <h2 className="text-xl font-bold text-stone-800 mb-6">Rating & Ulasan</h2>
+            <ReviewList menuId={id} />
+          </CardContent>
+        </Card>
+      </div>
+      <div className="md:hidden h-20" />
     </div>
   );
 }

@@ -319,60 +319,68 @@ export default async function CourierDashboard() {
   return (
     <div className="min-h-screen bg-slate-50">
       <CourierNavbar />
-      <div className="container mx-auto p-4 max-w-6xl py-8">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-6 md:py-8">
 
 
         {/* Header */}
         <div className="mb-6">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Dashboard Kurir</h1>
-          <p className="text-gray-600">Kelola pengiriman pesanan Anda</p>
+          <h1 className="text-2xl sm:text-3xl font-bold text-slate-800 mb-1">Dashboard Kurir</h1>
+          <p className="text-slate-500 text-sm">Kelola pengiriman pesanan Anda</p>
         </div>
 
         {/* Statistics Cards */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-          <Card>
+          <Card className="border border-slate-200 shadow-sm">
             <CardContent className="p-4">
-              <div className="flex items-center space-x-2">
-                <Package className="h-8 w-8 text-blue-600" />
+              <div className="flex items-center space-x-3">
+                <div className="w-10 h-10 bg-blue-50 rounded-xl flex items-center justify-center">
+                  <Package className="h-5 w-5 text-blue-600" />
+                </div>
                 <div>
-                  <p className="text-sm font-medium text-gray-600">Siap Kirim</p>
-                  <p className="text-2xl font-bold">{statsMap.SIAP_KIRIM || 0}</p>
+                  <p className="text-xs font-medium text-slate-500">Siap Kirim</p>
+                  <p className="text-xl font-bold text-slate-800">{statsMap.SIAP_KIRIM || 0}</p>
                 </div>
               </div>
             </CardContent>
           </Card>
 
-          <Card>
+          <Card className="border border-slate-200 shadow-sm">
             <CardContent className="p-4">
-              <div className="flex items-center space-x-2">
-                <Truck className="h-8 w-8 text-indigo-600" />
+              <div className="flex items-center space-x-3">
+                <div className="w-10 h-10 bg-indigo-50 rounded-xl flex items-center justify-center">
+                  <Truck className="h-5 w-5 text-indigo-600" />
+                </div>
                 <div>
-                  <p className="text-sm font-medium text-gray-600">Sedang Kirim</p>
-                  <p className="text-2xl font-bold">{statsMap.DIKIRIM || 0}</p>
+                  <p className="text-xs font-medium text-slate-500">Sedang Kirim</p>
+                  <p className="text-xl font-bold text-slate-800">{statsMap.DIKIRIM || 0}</p>
                 </div>
               </div>
             </CardContent>
           </Card>
 
-          <Card>
+          <Card className="border border-slate-200 shadow-sm">
             <CardContent className="p-4">
-              <div className="flex items-center space-x-2">
-                <CheckCircle className="h-8 w-8 text-green-600" />
+              <div className="flex items-center space-x-3">
+                <div className="w-10 h-10 bg-emerald-50 rounded-xl flex items-center justify-center">
+                  <CheckCircle className="h-5 w-5 text-emerald-600" />
+                </div>
                 <div>
-                  <p className="text-sm font-medium text-gray-600">Selesai</p>
-                  <p className="text-2xl font-bold">{statsMap.SELESAI || 0}</p>
+                  <p className="text-xs font-medium text-slate-500">Selesai</p>
+                  <p className="text-xl font-bold text-slate-800">{statsMap.SELESAI || 0}</p>
                 </div>
               </div>
             </CardContent>
           </Card>
 
-          <Card>
+          <Card className="border border-slate-200 shadow-sm">
             <CardContent className="p-4">
-              <div className="flex items-center space-x-2">
-                <RefreshCw className="h-8 w-8 text-purple-600" />
+              <div className="flex items-center space-x-3">
+                <div className="w-10 h-10 bg-purple-50 rounded-xl flex items-center justify-center">
+                  <RefreshCw className="h-5 w-5 text-purple-600" />
+                </div>
                 <div>
-                  <p className="text-sm font-medium text-gray-600">Total Aktif</p>
-                  <p className="text-2xl font-bold">{displayOrders.length}</p>
+                  <p className="text-xs font-medium text-slate-500">Total Aktif</p>
+                  <p className="text-xl font-bold text-slate-800">{displayOrders.length}</p>
                 </div>
               </div>
             </CardContent>
@@ -381,11 +389,13 @@ export default async function CourierDashboard() {
 
         {/* Orders List */}
         {displayOrders.length === 0 ? (
-          <Card>
+          <Card className="border border-slate-200 shadow-sm">
             <CardContent className="p-8 text-center">
-              <Package className="mx-auto h-16 w-16 text-gray-400 mb-4" />
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">Tidak Ada Pesanan</h3>
-              <p className="text-gray-500">Belum ada pesanan yang ditugaskan kepada Anda.</p>
+              <div className="w-14 h-14 bg-slate-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                <Package className="h-7 w-7 text-slate-300" />
+              </div>
+              <h3 className="text-lg font-bold text-slate-800 mb-2">Tidak Ada Pesanan</h3>
+              <p className="text-slate-500 text-sm">Belum ada pesanan yang ditugaskan kepada Anda.</p>
               <div className="mt-4 text-sm text-gray-400">
                 <p>Pastikan pesanan di database memiliki courierId yang sesuai dengan ID Anda: {userId}</p>
               </div>

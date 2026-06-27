@@ -12,30 +12,44 @@ const Toaster = ({ ...props }: ToasterProps) => {
       className="toaster group"
       style={
         {
-          "--normal-bg": "var(--popover)",
-          "--normal-text": "var(--popover-foreground)",
-          "--normal-border": "var(--border)",
-          "--success-bg": "oklch(0.95 0.08 60)",
-          "--success-text": "oklch(0.25 0.15 30)",
-          "--success-border": "oklch(0.8 0.12 40)",
-          "--error-bg": "oklch(0.95 0.08 20)",
-          "--error-text": "oklch(0.4 0.18 25)",
-          "--error-border": "oklch(0.7 0.15 20)",
-          "--warning-bg": "oklch(0.97 0.06 45)",
-          "--warning-text": "oklch(0.35 0.12 35)",
-          "--warning-border": "oklch(0.75 0.1 40)",
+          "--normal-bg": "#ffffff",
+          "--normal-text": "#1c1917",
+          "--normal-border": "#e8e3dd",
+          "--success-bg": "#f0fdf4",
+          "--success-text": "#166534",
+          "--success-border": "#bbf7d0",
+          "--error-bg": "#fef2f2",
+          "--error-text": "#991b1b",
+          "--error-border": "#fecaca",
+          "--warning-bg": "#fffbeb",
+          "--warning-text": "#92400e",
+          "--warning-border": "#fde68a",
+          "--info-bg": "#eff6ff",
+          "--info-text": "#1e40af",
+          "--info-border": "#bfdbfe",
         } as React.CSSProperties
       }
       toastOptions={{
         classNames: {
           toast:
-            "group toast group-[.toaster]:bg-background group-[.toaster]:text-foreground group-[.toaster]:border-border group-[.toaster]:shadow-lg rounded-2xl backdrop-blur-sm",
-          description: "group-[.toast]:text-muted-foreground",
+            "group toast group-[.toaster]:bg-white group-[.toaster]:text-stone-800 group-[.toaster]:border group-[.toaster]:border-stone-200/80 group-[.toaster]:shadow-lg group-[.toaster]:shadow-stone-200/40 group-[.toaster]:rounded-2xl group-[.toaster]:backdrop-blur-xl group-[.toaster]:px-4 group-[.toaster]:py-3",
+          title: "group-[.toast]:text-sm group-[.toast]:font-semibold",
+          description: "group-[.toast]:text-stone-500 group-[.toast]:text-xs",
           actionButton:
-            "group-[.toast]:bg-gradient-to-r group-[.toast]:from-orange-500 group-[.toast]:to-red-500 group-[.toast]:text-white group-[.toast]:rounded-xl group-[.toast]:font-medium group-[.toast]:shadow-md hover:shadow-lg transition-all duration-200 hover:scale-105 active:scale-95",
+            "group-[.toast]:bg-orange-500 group-[.toast]:text-white group-[.toast]:rounded-xl group-[.toast]:font-semibold group-[.toast]:text-xs group-[.toast]:shadow-sm group-[.toast]:shadow-orange-200 group-[.toast]:hover:bg-orange-600 group-[.toast]:transition-colors group-[.toast]:duration-200",
           cancelButton:
-            "group-[.toast]:bg-muted group-[.toast]:text-muted-foreground group-[.toast]:rounded-xl group-[.toast]:font-medium hover:bg-muted/80 transition-colors duration-200",
-          icon: "group-[.toast]:text-foreground",
+            "group-[.toast]:bg-stone-100 group-[.toast]:text-stone-600 group-[.toast]:rounded-xl group-[.toast]:font-medium group-[.toast]:text-xs group-[.toast]:hover:bg-stone-200 group-[.toast]:transition-colors group-[.toast]:duration-200",
+          success:
+            "group-[.toaster]:!bg-emerald-50 group-[.toaster]:!border-emerald-200/80 group-[.toaster]:!text-emerald-800 group-[.toaster]:!shadow-emerald-100/40",
+          error:
+            "group-[.toaster]:!bg-red-50 group-[.toaster]:!border-red-200/80 group-[.toaster]:!text-red-800 group-[.toaster]:!shadow-red-100/40",
+          warning:
+            "group-[.toaster]:!bg-amber-50 group-[.toaster]:!border-amber-200/80 group-[.toaster]:!text-amber-800 group-[.toaster]:!shadow-amber-100/40",
+          info:
+            "group-[.toaster]:!bg-blue-50 group-[.toaster]:!border-blue-200/80 group-[.toaster]:!text-blue-800 group-[.toaster]:!shadow-blue-100/40",
+          loading:
+            "group-[.toaster]:!bg-stone-50 group-[.toaster]:!border-stone-200/80 group-[.toaster]:!text-stone-700",
+          icon: "group-[.toast]:mr-1",
         },
       }}
       {...props}

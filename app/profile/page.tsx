@@ -14,14 +14,14 @@ export default function ProfilePage() {
   
   if (!user) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen bg-[#faf9f7] flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-800 mb-4">Please sign in to view your profile</h1>
+          <h1 className="text-xl font-bold text-stone-800 mb-4">Silakan masuk untuk melihat profil</h1>
           <Button
             onClick={() => window.location.href = '/login'}
-            className="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white"
+            className="bg-orange-500 hover:bg-orange-600 text-white rounded-xl"
           >
-            Sign In
+            Masuk
           </Button>
         </div>
       </div>
@@ -29,31 +29,32 @@ export default function ProfilePage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12 px-4 pb-28 md:pt-36 sm:px-6 lg:px-8">
-      <div className="max-w-3xl mx-auto">
+    <div className="min-h-screen bg-[#faf9f7]">
+      <div className="hidden md:block h-16" />
+      <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 md:py-10 pb-24 md:pb-10">
         {/* Profile Header */}
-        <div className="bg-white rounded-2xl shadow-lg p-8 mb-8">
-          <div className="flex items-center space-x-6">
+        <div className="bg-white rounded-2xl border border-stone-100 shadow-sm p-6 sm:p-8 mb-6">
+          <div className="flex items-center space-x-5">
             <div className="relative">
               {user.image ? (
                 <Image
                   src={user.image}
                   alt="Profile"
-                  width={96}
-                  height={96}
-                  className="rounded-full object-cover ring-4 ring-orange-100"
+                  width={80}
+                  height={80}
+                  className="rounded-2xl object-cover ring-2 ring-stone-100"
                 />
               ) : (
-                <div className="w-24 h-24 rounded-full bg-gradient-to-r from-orange-500 to-red-500 flex items-center justify-center text-3xl font-bold text-white">
+                <div className="w-20 h-20 rounded-2xl bg-orange-500 flex items-center justify-center text-2xl font-bold text-white">
                   {user.name?.charAt(0) || "U"}
                 </div>
               )}
-              <div className="absolute -bottom-2 -right-2 w-6 h-6 bg-green-500 rounded-full border-4 border-white"></div>
+              <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-emerald-500 rounded-full border-3 border-white"></div>
             </div>
             <div className="flex-1">
-              <h1 className="text-2xl font-bold text-gray-900">{user.name}</h1>
-              <p className="text-gray-500">{user.email}</p>
-              <div className="mt-2 inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-orange-100 text-orange-800 capitalize">
+              <h1 className="text-xl font-bold text-stone-800">{user.name}</h1>
+              <p className="text-stone-500 text-sm">{user.email}</p>
+              <div className="mt-2 inline-flex items-center px-2.5 py-0.5 rounded-lg text-xs font-semibold bg-orange-50 text-orange-600 border border-orange-100 capitalize">
                 {user.role?.toLowerCase() || 'member'}
               </div>
             </div>
@@ -61,20 +62,20 @@ export default function ProfilePage() {
         </div>
 
         {/* Profile Information */}
-        <div className="bg-white rounded-2xl shadow-lg p-8">
-          <div className="border-b border-gray-200 pb-4 mb-6">
-            <h2 className="text-xl font-semibold text-gray-800">Profile Information</h2>
-            <p className="text-gray-500 text-sm mt-1">Update your account information</p>
+        <div className="bg-white rounded-2xl border border-stone-100 shadow-sm p-6 sm:p-8">
+          <div className="border-b border-stone-100 pb-4 mb-6">
+            <h2 className="text-lg font-bold text-stone-800">Informasi Profil</h2>
+            <p className="text-stone-500 text-xs mt-1">Kelola informasi akun Anda</p>
           </div>
 
           <div className="space-y-6">
             {/* Name Field */}
             <div className="flex items-center space-x-4">
-              <div className="w-10 h-10 rounded-full bg-orange-100 flex items-center justify-center">
-                <User className="w-5 h-5 text-orange-600" />
+              <div className="w-9 h-9 rounded-xl bg-orange-50 flex items-center justify-center">
+                <User className="w-4 h-4 text-orange-500" />
               </div>
               <div className="flex-1">
-                <label className="block text-sm font-medium text-gray-700">Name</label>
+                <label className="block text-xs font-semibold text-stone-600">Nama</label>
                 <Input
                   type="text"
                   value={user.name || ''}
@@ -86,11 +87,11 @@ export default function ProfilePage() {
 
             {/* Email Field */}
             <div className="flex items-center space-x-4">
-              <div className="w-10 h-10 rounded-full bg-orange-100 flex items-center justify-center">
-                <Mail className="w-5 h-5 text-orange-600" />
+              <div className="w-9 h-9 rounded-xl bg-blue-50 flex items-center justify-center">
+                <Mail className="w-4 h-4 text-blue-500" />
               </div>
               <div className="flex-1">
-                <label className="block text-sm font-medium text-gray-700">Email</label>
+                <label className="block text-xs font-semibold text-stone-600">Email</label>
                 <Input
                   type="email"
                   value={user.email || ''}
@@ -102,11 +103,11 @@ export default function ProfilePage() {
 
             {/* Role Field */}
             <div className="flex items-center space-x-4">
-              <div className="w-10 h-10 rounded-full bg-orange-100 flex items-center justify-center">
-                <Shield className="w-5 h-5 text-orange-600" />
+              <div className="w-9 h-9 rounded-xl bg-emerald-50 flex items-center justify-center">
+                <Shield className="w-4 h-4 text-emerald-500" />
               </div>
               <div className="flex-1">
-                <label className="block text-sm font-medium text-gray-700">Role</label>
+                <label className="block text-xs font-semibold text-stone-600">Role</label>
                 <Input
                   type="text"
                   value={user.role || 'member'}
@@ -118,11 +119,11 @@ export default function ProfilePage() {
 
             {/* Password Field */}
             <div className="flex items-center space-x-4">
-              <div className="w-10 h-10 rounded-full bg-orange-100 flex items-center justify-center">
-                <Key className="w-5 h-5 text-orange-600" />
+              <div className="w-9 h-9 rounded-xl bg-stone-100 flex items-center justify-center">
+                <Key className="w-4 h-4 text-stone-500" />
               </div>
               <div className="flex-1">
-                <label className="block text-sm font-medium text-gray-700">Password</label>
+                <label className="block text-xs font-semibold text-stone-600">Password</label>
                 <Input
                   type="password"
                   value="••••••••"
@@ -137,26 +138,26 @@ export default function ProfilePage() {
               <Button
                 variant="outline"
                 onClick={() => setIsEditing(!isEditing)}
-                className="border-orange-500 text-orange-500 hover:bg-orange-50"
+                className="border-stone-200 text-stone-700 hover:bg-stone-50 rounded-xl"
               >
-                {isEditing ? 'Cancel' : 'Edit Profile'}
+                {isEditing ? 'Batal' : 'Edit Profil'}
               </Button>
               {isEditing && (
                 <Button
-                  className="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white"
+                  className="bg-orange-500 hover:bg-orange-600 text-white rounded-xl"
                   onClick={() => {
                     setIsEditing(false)
                   }}
                 >
-                  Save Changes
+                  Simpan
                 </Button>
               )}
               <Button
                 onClick={() => signOut()}
-                className="bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600 text-white flex items-center justify-center gap-2"
+                className="bg-red-500 hover:bg-red-600 text-white flex items-center justify-center gap-2 rounded-xl"
               >
                 <LogOut className="w-4 h-4" />
-                Sign Out
+                Keluar
               </Button>
             </div>
           </div>

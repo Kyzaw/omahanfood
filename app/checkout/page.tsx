@@ -431,22 +431,23 @@ export default function CheckoutPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-red-50 pb-15 sm:pt-24 md:pt-28">
-      <div className="max-w-6xl mx-auto px-3 sm:px-4 py-4 sm:py-6 md:py-8">
+    <div className="min-h-screen bg-[#faf9f7] pb-20 md:pb-8">
+      <div className="hidden md:block h-16" />
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-6 md:py-8">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
           {/* Left Column - Forms */}
           <div className="lg:col-span-2 space-y-4 sm:space-y-6">
             {/* Header */}
-            <div className="text-center lg:text-left">
-              <h1 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent mb-2">Checkout</h1>
-              <p className="text-gray-600 text-sm sm:text-base">Lengkapi detail pesanan Anda untuk melanjutkan</p>
+            <div>
+              <h1 className="text-2xl sm:text-3xl font-bold text-stone-800 tracking-tight mb-1">Checkout</h1>
+              <p className="text-stone-500 text-sm">Lengkapi detail pesanan Anda</p>
             </div>
 
             {/* Delivery Address Card */}
-            <Card className="bg-white/95 backdrop-blur-xl border border-gray-100 shadow-lg">
+            <Card className="bg-white border border-stone-100 shadow-sm">
               <CardHeader className="pb-4 px-4 sm:px-6">
-                <CardTitle className="flex items-center gap-2 text-lg font-semibold bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent">
-                  <MapPin className="w-4 h-4 sm:w-5 sm:h-5 text-orange-500" />
+                <CardTitle className="flex items-center gap-2 text-base font-semibold text-stone-800">
+                  <div className="w-8 h-8 rounded-lg bg-orange-50 border border-orange-100 flex items-center justify-center"><MapPin className="w-4 h-4 text-orange-600" /></div>
                   Alamat Pengiriman
                 </CardTitle>
               </CardHeader>
@@ -462,7 +463,7 @@ export default function CheckoutPage() {
                       value={address.name}
                       onChange={handleAddressChange}
                       placeholder="Nama lengkap"
-                      className="h-10 sm:h-11 border-gray-200 focus:border-orange-500 focus:ring-orange-500 rounded-xl text-sm"
+                      className="h-11 border-stone-200 focus:border-orange-400 focus:ring-orange-400/20 rounded-xl text-sm bg-white"
                       required
                     />
                   </div>
@@ -477,7 +478,7 @@ export default function CheckoutPage() {
                       value={address.phone}
                       onChange={handleAddressChange}
                       placeholder="+628123456789"
-                      className={`h-10 sm:h-11 border-gray-200 focus:border-orange-500 focus:ring-orange-500 rounded-xl text-sm ${phoneError ? 'border-red-500 focus:border-red-500' : ''}`}
+                      className={`h-11 border-stone-200 focus:border-orange-400 focus:ring-orange-400/20 rounded-xl text-sm bg-white ${phoneError ? 'border-red-300' : ''}`}
                       required
                     />
                     {phoneError && (
@@ -496,7 +497,7 @@ export default function CheckoutPage() {
                     onChange={handleAddressChange}
                     placeholder="Jalan, No Rumah, Kelurahan, Kecamatan, Kota"
                     rows={3}
-                    className="resize-none border-gray-200 focus:border-orange-500 focus:ring-orange-500 rounded-xl text-sm"
+                    className="resize-none border-stone-200 focus:border-orange-400 focus:ring-orange-400/20 rounded-xl text-sm bg-white"
                     required
                   />
                 </div>
@@ -504,19 +505,19 @@ export default function CheckoutPage() {
                   <Button
                     variant="outline"
                     onClick={fetchCurrentAddress}
-                    className="flex items-center gap-2 border-orange-200 text-orange-600 hover:bg-gradient-to-r hover:from-orange-50 hover:to-red-50 rounded-xl transition-all duration-300 hover:scale-105 text-sm h-10 sm:h-11"
+                    className="flex items-center gap-2 border-stone-200 text-stone-600 hover:bg-stone-50 rounded-xl text-sm h-11"
                     type="button"
                   >
-                    <MapPin className="w-3 h-3 sm:w-4 sm:h-4" />
-                    <span className="text-xs sm:text-sm">Gunakan Lokasi Saat Ini</span>
+                    <MapPin className="w-4 h-4" />
+                    <span>Gunakan Lokasi</span>
                   </Button>
                   <Button
                     onClick={saveAddress}
-                    className="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 text-sm h-10 sm:h-11"
+                    className="bg-orange-500 hover:bg-orange-600 text-white rounded-xl shadow-sm shadow-orange-200 text-sm h-11"
                     type="button"
                   >
-                    <CheckCircle className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
-                    <span className="text-xs sm:text-sm">Simpan Alamat</span>
+                    <CheckCircle className="w-4 h-4 mr-2" />
+                    Simpan Alamat
                   </Button>
                 </div>
               </CardContent>
@@ -524,10 +525,10 @@ export default function CheckoutPage() {
 
             {/* Delivery Options */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
-              <Card className="bg-white/95 backdrop-blur-xl border border-gray-100 shadow-lg">
+              <Card className="bg-white border border-stone-100 shadow-sm">
                 <CardHeader className="pb-4 px-4 sm:px-6">
-                  <CardTitle className="flex items-center gap-2 text-lg font-semibold bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent">
-                    <Clock className="w-4 h-4 sm:w-5 sm:h-5 text-orange-500" />
+                  <CardTitle className="flex items-center gap-2 text-base font-semibold text-stone-800">
+                    <div className="w-8 h-8 rounded-lg bg-blue-50 border border-blue-100 flex items-center justify-center"><Clock className="w-4 h-4 text-blue-600" /></div>
                     Waktu Pengiriman
                   </CardTitle>
                   <p className="text-xs sm:text-sm text-gray-600">Order sekarang, dikirim besok</p>
@@ -543,7 +544,7 @@ export default function CheckoutPage() {
                       { value: "SIANG", label: "Siang", time: "10:00 WIB", desc: "Makan siang" },
                       { value: "SORE", label: "Sore", time: "15:00 WIB", desc: "Makan sore" }
                     ].map((time) => (
-                      <div key={time.value} className="flex items-center space-x-3 p-3 rounded-xl border border-gray-200 hover:bg-gradient-to-r hover:from-orange-50 hover:to-red-50 transition-all duration-300 hover:scale-105">
+                      <div key={time.value} className="flex items-center space-x-3 p-3 rounded-xl border border-stone-200 hover:border-orange-200 hover:bg-orange-50/50 transition-all duration-200">
                         <RadioGroupItem value={time.value} id={time.value} className="text-orange-500" />
                         <Label htmlFor={time.value} className="cursor-pointer flex-1">
                           <div className="flex items-center justify-between">
@@ -560,10 +561,10 @@ export default function CheckoutPage() {
                 </CardContent>
               </Card>
 
-              <Card className="bg-white/95 backdrop-blur-xl border border-gray-100 shadow-lg">
+              <Card className="bg-white border border-stone-100 shadow-sm">
                 <CardHeader className="pb-4 px-4 sm:px-6">
-                  <CardTitle className="flex items-center gap-2 text-lg font-semibold bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent">
-                    <Package className="w-4 h-4 sm:w-5 sm:h-5 text-orange-500" />
+                  <CardTitle className="flex items-center gap-2 text-base font-semibold text-stone-800">
+                    <div className="w-8 h-8 rounded-lg bg-emerald-50 border border-emerald-100 flex items-center justify-center"><Package className="w-4 h-4 text-emerald-600" /></div>
                     Jenis Paket
                   </CardTitle>
                   <p className="text-xs sm:text-sm text-gray-600">Hari minggu & tanggal merah libur</p>
@@ -579,7 +580,7 @@ export default function CheckoutPage() {
                       { value: "MINGGUAN", label: "Mingguan", desc: "6x pengiriman per minggu", multiplier: 6 },
                       { value: "BULANAN", label: "Bulanan", desc: "25x pengiriman per bulan", multiplier: 25 }
                     ].map((item) => (
-                      <div key={item.value} className="flex items-center space-x-3 p-3 rounded-xl border border-gray-200 hover:bg-gradient-to-r hover:from-orange-50 hover:to-red-50 transition-all duration-300 hover:scale-105">
+                      <div key={item.value} className="flex items-center space-x-3 p-3 rounded-xl border border-stone-200 hover:border-orange-200 hover:bg-orange-50/50 transition-all duration-200">
                         <RadioGroupItem value={item.value} id={item.value} className="text-orange-500" />
                         <Label htmlFor={item.value} className="cursor-pointer flex-1">
                           <div>
@@ -587,7 +588,7 @@ export default function CheckoutPage() {
                             <p className="text-xs sm:text-sm text-gray-600">{item.desc}</p>
                           </div>
                         </Label>
-                        <Badge variant="outline" className="text-orange-600 border-orange-200 bg-gradient-to-r from-orange-50 to-red-50 text-xs">
+                        <Badge variant="outline" className="text-orange-600 border-orange-200 bg-orange-50 text-xs">
                           ×{item.multiplier}
                         </Badge>
                       </div>
@@ -598,9 +599,9 @@ export default function CheckoutPage() {
             </div>
 
             {/* Additional Notes */}
-            <Card className="bg-white/95 backdrop-blur-xl border border-gray-100 shadow-lg">
+            <Card className="bg-white border border-stone-100 shadow-sm">
               <CardHeader className="pb-4 px-4 sm:px-6">
-                <CardTitle className="text-lg font-semibold bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent">Catatan Tambahan</CardTitle>
+                <CardTitle className="text-base font-semibold text-stone-800">Catatan Tambahan</CardTitle>
                 <p className="text-xs sm:text-sm text-gray-600">Alergi, preferensi, atau instruksi khusus</p>
               </CardHeader>
               <CardContent className="px-4 sm:px-6">
@@ -610,13 +611,13 @@ export default function CheckoutPage() {
                   placeholder="Contoh: Tidak pakai sambal, Alergi kacang, dll."
                   rows={3}
                   maxLength={500}
-                  className="resize-none border-gray-200 focus:border-orange-500 focus:ring-orange-500 rounded-xl text-sm"
+                  className="resize-none border-stone-200 focus:border-orange-400 focus:ring-orange-400/20 rounded-xl text-sm bg-white"
                 />
                 <div className="flex justify-between items-center mt-2">
                   <p className="text-xs text-gray-500">
                     {note.length}/500 karakter
                   </p>
-                  <Badge variant="secondary" className="text-xs bg-gradient-to-r from-orange-50 to-red-50 text-orange-600 border-orange-200">
+                  <Badge variant="secondary" className="text-xs bg-stone-100 text-stone-500">
                     Opsional
                   </Badge>
                 </div>
@@ -624,23 +625,23 @@ export default function CheckoutPage() {
             </Card>
 
             {/* Cart Items */}
-            <Card className="bg-white/95 backdrop-blur-xl border border-gray-100 shadow-lg">
+            <Card className="bg-white border border-stone-100 shadow-sm">
               <CardHeader className="pb-4 px-4 sm:px-6">
-                <CardTitle className="flex items-center gap-2 text-lg font-semibold bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent">
-                  <ShoppingCart className="w-4 h-4 sm:w-5 sm:h-5 text-orange-500" />
+                <CardTitle className="flex items-center gap-2 text-base font-semibold text-stone-800">
+                  <div className="w-8 h-8 rounded-lg bg-amber-50 border border-amber-100 flex items-center justify-center"><ShoppingCart className="w-4 h-4 text-amber-600" /></div>
                   Keranjang Belanja
                 </CardTitle>
               </CardHeader>
               <CardContent className="px-4 sm:px-6">
                 {items.length === 0 ? (
                   <div className="text-center py-8 sm:py-12">
-                    <div className="w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-r from-orange-100 to-red-100 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
-                      <ShoppingCart className="w-8 h-8 sm:w-10 sm:h-10 text-orange-500" />
+                    <div className="w-16 h-16 bg-stone-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                      <ShoppingCart className="w-8 h-8 text-stone-300" />
                     </div>
-                    <p className="text-gray-500 text-base sm:text-lg mb-4 sm:mb-6 font-medium">Keranjang Anda kosong</p>
+                    <p className="text-stone-500 mb-4 font-medium">Keranjang Anda kosong</p>
                     <Button
                       onClick={() => router.push("/")}
-                      className="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 text-sm h-10 sm:h-11 px-4 sm:px-6"
+                      className="bg-orange-500 hover:bg-orange-600 text-white rounded-xl shadow-sm shadow-orange-200 text-sm h-11 px-6"
                     >
                       Mulai Belanja
                     </Button>
@@ -649,7 +650,7 @@ export default function CheckoutPage() {
                   <div className="space-y-4">
                     {items.map((item, index) => (
                       <div key={item.id}>
-                        <div className="flex gap-3 sm:gap-4 p-3 sm:p-4 rounded-xl bg-gradient-to-r from-orange-50/50 to-red-50/50 hover:from-orange-50 hover:to-red-50 transition-all duration-300">
+                        <div className="flex gap-3 sm:gap-4 p-3 sm:p-4 rounded-xl bg-stone-50 hover:bg-stone-100/50 transition-all duration-200">
                           <div className="flex-shrink-0">
                             <div className="w-16 h-16 sm:w-20 sm:h-20 bg-gray-100 rounded-xl overflow-hidden shadow-sm">
                               {item.image ? (
@@ -676,7 +677,7 @@ export default function CheckoutPage() {
                                   size="sm"
                                   variant="outline"
                                   onClick={() => decreaseQty(item.id)}
-                                  className="h-7 w-7 sm:h-8 sm:w-8 p-0 border-gray-200 hover:bg-gray-50 rounded-xl transition-all duration-300 hover:scale-105"
+                                  className="h-8 w-8 p-0 border-stone-200 hover:bg-white rounded-lg transition-all duration-200"
                                   disabled={isLoading}
                                 >
                                   <Minus className="w-3 h-3" />
@@ -685,7 +686,7 @@ export default function CheckoutPage() {
                                 <Button
                                   size="sm"
                                   onClick={() => increaseQty(item.id)}
-                                  className="h-7 w-7 sm:h-8 sm:w-8 p-0 bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 rounded-xl transition-all duration-300 hover:scale-105"
+                                  className="h-8 w-8 p-0 bg-orange-500 hover:bg-orange-600 rounded-lg transition-all duration-200"
                                   disabled={isLoading}
                                 >
                                   <Plus className="w-3 h-3" />
@@ -699,7 +700,7 @@ export default function CheckoutPage() {
                                   size="sm"
                                   variant="outline"
                                   onClick={() => removeItem(item.id)}
-                                  className="h-7 w-7 sm:h-8 sm:w-8 p-0 text-red-500 border-red-200 hover:bg-red-50 rounded-xl transition-all duration-300 hover:scale-105"
+                                  className="h-8 w-8 p-0 text-red-500 border-red-200 hover:bg-red-50 rounded-lg transition-all duration-200"
                                   disabled={isLoading}
                                 >
                                   <Trash2 className="w-3 h-3" />
@@ -708,7 +709,7 @@ export default function CheckoutPage() {
                             </div>
                           </div>
                         </div>
-                        {index < items.length - 1 && <Separator className="my-4 bg-gradient-to-r from-orange-200 to-red-200" />}
+                        {index < items.length - 1 && <Separator className="my-3" />}
                       </div>
                     ))}
                   </div>
@@ -721,9 +722,9 @@ export default function CheckoutPage() {
           <div className="lg:col-span-1">
             <div className="sticky top-24 sm:top-28 md:top-32 space-y-4 sm:space-y-6">
               {/* Order Summary Card */}
-              <Card className="bg-white/95 backdrop-blur-xl border border-gray-100 shadow-lg">
+              <Card className="bg-white border border-stone-100 shadow-sm">
                 <CardHeader className="pb-4 px-4 sm:px-6">
-                  <CardTitle className="text-lg font-semibold bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent">Ringkasan Pesanan</CardTitle>
+                  <CardTitle className="text-base font-semibold text-stone-800">Ringkasan Pesanan</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4 px-4 sm:px-6">
                   {items.length > 0 && (
@@ -738,11 +739,11 @@ export default function CheckoutPage() {
                           <span className="font-semibold capitalize">{jenisPaket.toLowerCase()}</span>
                         </div>
                       </div>
-                      <Separator className="bg-gradient-to-r from-orange-200 to-red-200" />
+                      <Separator />
                       <div className="flex justify-between items-center">
-                        <span className="text-gray-900 font-bold">Total Pembayaran</span>
+                        <span className="text-stone-800 font-bold">Total</span>
                         <div className="text-right">
-                          <p className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent">
+                          <p className="text-xl sm:text-2xl font-bold text-orange-600">
                             Rp {total.toLocaleString("id-ID")}
                           </p>
                           <p className="text-xs text-gray-500 mt-1">
@@ -750,9 +751,9 @@ export default function CheckoutPage() {
                           </p>
                         </div>
                       </div>
-                      <Separator className="bg-gradient-to-r from-orange-200 to-red-200" />
+                      <Separator />
                       <div className="space-y-2">
-                        <div className="flex items-center gap-2 text-sm text-gray-600">
+                        <div className="flex items-center gap-2 text-sm text-stone-500">
                           <CheckCircle className="w-4 h-4 text-green-500" />
                           <span className="font-medium">Pembayaran aman & terpercaya</span>
                         </div>
@@ -767,7 +768,7 @@ export default function CheckoutPage() {
                 <Button
                   onClick={handleCheckout}
                   disabled={isLoading || !snapLoaded}
-                  className="w-full bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white py-3 sm:py-4 rounded-xl font-bold text-sm sm:text-base shadow-lg hover:shadow-xl disabled:opacity-50 transition-all duration-300 hover:scale-105"
+                  className="w-full bg-orange-500 hover:bg-orange-600 text-white py-3 sm:py-4 rounded-xl font-semibold text-sm shadow-sm shadow-orange-200 hover:shadow-md hover:shadow-orange-200 disabled:opacity-50 transition-all duration-200"
                 >
                   {isLoading ? (
                     <span className="flex items-center gap-2">
@@ -785,7 +786,7 @@ export default function CheckoutPage() {
 
               {/* Security Badge */}
               <div className="text-center">
-                <div className="inline-flex items-center gap-2 px-4 sm:px-6 py-2 sm:py-3 bg-gradient-to-r from-green-50 to-emerald-50 text-green-700 rounded-full text-xs sm:text-sm font-semibold shadow-md border border-green-100">
+                <div className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-50 text-emerald-700 rounded-full text-xs font-medium border border-emerald-100">
                   <CheckCircle className="w-3 h-3 sm:w-4 sm:h-4" />
                   <span>100% Aman & Terjamin</span>
                 </div>

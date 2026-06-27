@@ -246,37 +246,35 @@ export default async function MyOrdersPage() {
 
   if (orders.length === 0) {
     return (
-      <div className="container mx-auto p-4 max-w-4xl md:pt-35 min-h-[70vh] flex items-center justify-center">
-        <div className="text-center py-12">
-          <div className="relative mb-6">
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="w-32 h-32 bg-gradient-to-br from-orange-100 to-orange-50 rounded-full blur-2xl opacity-50"></div>
+      <div className="min-h-screen bg-[#faf9f7]">
+        <div className="hidden md:block h-16" />
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 py-6 md:py-10 min-h-[70vh] flex items-center justify-center">
+          <div className="text-center py-12">
+            <div className="w-16 h-16 bg-stone-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+              <ShoppingBag className="h-8 w-8 text-stone-300" />
             </div>
-            <ShoppingBag className="relative mx-auto h-20 w-20 text-orange-400 mb-4" strokeWidth={1.5} />
+            <h2 className="text-2xl font-bold text-stone-800 mb-2">Belum Ada Pesanan</h2>
+            <p className="text-stone-500 mb-6 max-w-sm mx-auto text-sm">Anda belum memiliki pesanan aktif. Mulai pesan makanan favorit Anda sekarang!</p>
+            <Link href="/" className="inline-flex items-center px-5 py-2.5 bg-orange-500 text-white rounded-xl hover:bg-orange-600 transition-colors text-sm font-semibold shadow-sm shadow-orange-200">
+              <ShoppingBag className="h-4 w-4 mr-2" />
+              Mulai Belanja
+            </Link>
           </div>
-          <h2 className="text-3xl font-bold text-gray-900 mb-3">Belum Ada Pesanan</h2>
-          <p className="text-gray-500 mb-6 max-w-md mx-auto">Anda belum memiliki pesanan yang sedang diproses. Mulai pesan makanan favorit Anda sekarang!</p>
-          <Link href="/" className="inline-flex items-center px-6 py-3 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors font-medium shadow-sm">
-            <ShoppingBag className="h-5 w-5 mr-2" />
-            Mulai Belanja
-          </Link>
         </div>
+        <div className="md:hidden h-20" />
       </div>
     );
   }
 
   return (
-    <div className="container mx-auto p-4 max-w-5xl mb-23 md:pt-35">
+    <div className="min-h-screen bg-[#faf9f7]">
+      <div className="hidden md:block h-16" />
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 py-6 md:py-10 pb-24 md:pb-10">
       <div className="mb-8">
-        <div className="flex items-center gap-3 mb-3">
-          <div className="p-2 bg-orange-100 rounded-lg">
-            <Package className="h-6 w-6 text-orange-600" />
-          </div>
-          <h1 className="text-4xl font-bold text-gray-900">Pesanan Saya</h1>
-        </div>
-        <p className="text-gray-600 text-lg">Pantau dan kelola pesanan Anda dengan mudah</p>
-        <div className="mt-4 flex items-center gap-2 text-sm">
-          <Badge variant="secondary" className="bg-blue-50 text-blue-700 border-blue-200">
+        <h1 className="text-2xl sm:text-3xl font-bold text-stone-800 tracking-tight">Pesanan Saya</h1>
+        <p className="text-stone-500 mt-1 text-sm">Pantau dan kelola pesanan Anda</p>
+        <div className="mt-3 flex items-center gap-2 text-sm">
+          <Badge variant="secondary" className="bg-orange-50 text-orange-600 border border-orange-100 font-medium">
             {orders.length} Pesanan Aktif
           </Badge>
         </div>
@@ -303,25 +301,25 @@ export default async function MyOrdersPage() {
           const progress = getOrderProgress(order.status as OrderStatus);
 
           return (
-            <Card key={order.id} className="shadow-md hover:shadow-xl transition-all duration-300 border-2 border-gray-100 overflow-hidden">
+            <Card key={order.id} className="bg-white border border-stone-100 shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden">
               {/* Progress bar */}
-              <div className="h-1.5 bg-gray-100">
+              <div className="h-1 bg-stone-100">
                 <div
-                  className="h-full bg-gradient-to-r from-orange-400 to-orange-500 transition-all duration-500"
+                  className="h-full bg-orange-500 transition-all duration-500"
                   style={{ width: `${progress}%` }}
                 />
               </div>
 
-              <CardHeader className="pb-4 bg-gradient-to-br from-gray-50 to-white">
+              <CardHeader className="pb-4">
                 <div className="flex items-start justify-between gap-4">
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-2">
-                      <CardTitle className="text-xl font-bold text-gray-900">
+                      <CardTitle className="text-lg font-bold text-stone-800">
                         Order #{order.id.slice(-8).toUpperCase()}
                       </CardTitle>
                     </div>
-                    <div className="flex items-center text-sm text-gray-500">
-                      <Clock className="h-4 w-4 mr-1.5" />
+                    <div className="flex items-center text-xs text-stone-400">
+                      <Clock className="h-3.5 w-3.5 mr-1.5" />
                       {new Date(order.createdAt).toLocaleString("id-ID", {
                         weekday: "long",
                         year: "numeric",
@@ -346,22 +344,22 @@ export default async function MyOrdersPage() {
                 {/* Order Summary */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-4">
-                    <div className="flex items-start space-x-3 p-3 rounded-lg bg-gray-50 border border-gray-100">
-                      <div className="p-2 bg-white rounded-lg shadow-sm">
-                        <Package className="h-5 w-5 text-orange-500" />
+                    <div className="flex items-start space-x-3 p-3 rounded-lg bg-stone-50 border border-stone-100">
+                      <div className="p-2 bg-white rounded-lg">
+                        <Package className="h-4 w-4 text-orange-500" />
                       </div>
                       <div className="flex-1">
-                        <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">Total Item</p>
-                        <p className="text-base font-semibold text-gray-900 mt-0.5">{itemCount} item</p>
+                        <p className="text-xs text-stone-400">Total Item</p>
+                        <p className="text-sm font-semibold text-stone-800 mt-0.5">{itemCount} item</p>
                       </div>
                     </div>
 
-                    <div className="flex items-start space-x-3 p-3 rounded-lg bg-gray-50 border border-gray-100">
-                      <div className="p-2 bg-white rounded-lg shadow-sm">
-                        <MapPin className="h-5 w-5 text-red-500" />
+                    <div className="flex items-start space-x-3 p-3 rounded-lg bg-stone-50 border border-stone-100">
+                      <div className="p-2 bg-white rounded-lg">
+                        <MapPin className="h-4 w-4 text-red-500" />
                       </div>
                       <div className="flex-1">
-                        <p className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-1.5">Alamat Pengiriman</p>
+                        <p className="text-xs text-stone-400 mb-1">Alamat Pengiriman</p>
                         {(() => {
                           try {
                             const addressData = JSON.parse(order.address);
@@ -391,13 +389,13 @@ export default async function MyOrdersPage() {
                       </div>
                     </div>
 
-                    <div className="flex items-start space-x-3 p-3 rounded-lg bg-gray-50 border border-gray-100">
-                      <div className="p-2 bg-white rounded-lg shadow-sm">
-                        <Clock className="h-5 w-5 text-blue-500" />
+                    <div className="flex items-start space-x-3 p-3 rounded-lg bg-stone-50 border border-stone-100">
+                      <div className="p-2 bg-white rounded-lg">
+                        <Clock className="h-4 w-4 text-blue-500" />
                       </div>
                       <div className="flex-1">
-                        <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">Waktu Pengiriman</p>
-                        <p className="text-base font-semibold text-gray-900 mt-0.5">
+                        <p className="text-xs text-stone-400">Waktu Pengiriman</p>
+                        <p className="text-sm font-semibold text-stone-800 mt-0.5">
                           {getDeliveryTimeLabel(order.deliveryTime as DeliveryTime)}
                         </p>
                       </div>
@@ -405,23 +403,23 @@ export default async function MyOrdersPage() {
                   </div>
 
                   <div className="space-y-4">
-                    <div className="flex items-start space-x-3 p-3 rounded-lg bg-gray-50 border border-gray-100">
-                      <div className="p-2 bg-white rounded-lg shadow-sm">
-                        <CreditCard className="h-5 w-5 text-green-500" />
+                    <div className="flex items-start space-x-3 p-3 rounded-lg bg-stone-50 border border-stone-100">
+                      <div className="p-2 bg-white rounded-lg">
+                        <CreditCard className="h-4 w-4 text-green-500" />
                       </div>
                       <div className="flex-1">
-                        <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">Metode Pembayaran</p>
-                        <p className="text-base font-semibold text-gray-900 mt-0.5">{order.paymentMethod}</p>
+                        <p className="text-xs text-stone-400">Metode Pembayaran</p>
+                        <p className="text-sm font-semibold text-stone-800 mt-0.5">{order.paymentMethod}</p>
                       </div>
                     </div>
 
                     <div className="flex items-start space-x-3 p-3 rounded-lg bg-orange-50 border border-orange-100">
-                      <div className="p-2 bg-white rounded-lg shadow-sm">
-                        <RefreshCw className="h-5 w-5 text-orange-600" />
+                      <div className="p-2 bg-white rounded-lg">
+                        <RefreshCw className="h-4 w-4 text-orange-600" />
                       </div>
                       <div className="flex-1">
-                        <p className="text-xs font-medium text-orange-600 uppercase tracking-wide">Paket & Progress</p>
-                        <p className="text-base font-semibold text-gray-900 mt-0.5 capitalize">
+                        <p className="text-xs text-orange-500">Paket & Progress</p>
+                        <p className="text-sm font-semibold text-stone-800 mt-0.5 capitalize">
                           Paket {order.jenisPaket.toLowerCase()} ({order.deliveredCount}/{order.totalDeliveries})
                         </p>
                         {order.nextDeliveryDate && order.deliveredCount < order.totalDeliveries && (
@@ -437,13 +435,13 @@ export default async function MyOrdersPage() {
                     </div>
 
                     {order.courier && (
-                      <div className="flex items-start space-x-3 p-3 rounded-lg bg-gray-50 border border-gray-100">
-                        <div className="p-2 bg-white rounded-lg shadow-sm">
-                          <User className="h-5 w-5 text-purple-500" />
+                      <div className="flex items-start space-x-3 p-3 rounded-lg bg-stone-50 border border-stone-100">
+                        <div className="p-2 bg-white rounded-lg">
+                          <User className="h-4 w-4 text-purple-500" />
                         </div>
                         <div className="flex-1">
-                          <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">Kurir</p>
-                          <p className="text-base font-semibold text-gray-900 mt-0.5">{order.courier.name}</p>
+                          <p className="text-xs text-stone-400">Kurir</p>
+                          <p className="text-sm font-semibold text-stone-800 mt-0.5">{order.courier.name}</p>
                         </div>
                       </div>
                     )}
@@ -455,19 +453,19 @@ export default async function MyOrdersPage() {
                 {items.length > 0 && (
                   <>
                     <Separator className="my-6" />
-                    <div className="bg-gradient-to-br from-orange-50 to-amber-50 p-5 rounded-xl border border-orange-100">
-                      <div className="flex items-center gap-2 mb-4">
-                        <ShoppingBag className="h-5 w-5 text-orange-600" />
-                        <h4 className="text-base font-bold text-gray-900">Detail Pesanan</h4>
+                    <div className="bg-stone-50 p-4 rounded-xl border border-stone-100">
+                      <div className="flex items-center gap-2 mb-3">
+                        <ShoppingBag className="h-4 w-4 text-stone-500" />
+                        <h4 className="text-sm font-semibold text-stone-700">Detail Pesanan</h4>
                       </div>
-                      <div className="space-y-3">
+                      <div className="space-y-2">
                         {items.map((item, index: number) => (
-                          <div key={index} className="flex justify-between items-center bg-white p-3 rounded-lg shadow-sm">
+                          <div key={index} className="flex justify-between items-center bg-white p-3 rounded-lg border border-stone-100">
                             <div className="flex-1">
-                              <span className="font-semibold text-gray-900">{item.name || 'Item'}</span>
-                              <span className="text-orange-600 font-medium ml-2">×{item.quantity}</span>
+                              <span className="text-sm font-medium text-stone-800">{item.name || 'Item'}</span>
+                              <span className="text-orange-500 font-medium ml-2 text-sm">×{item.quantity}</span>
                             </div>
-                            <span className="font-bold text-gray-900">
+                            <span className="text-sm font-semibold text-stone-800">
                               Rp {(item.price * item.quantity).toLocaleString()}
                             </span>
                           </div>
@@ -493,9 +491,9 @@ export default async function MyOrdersPage() {
 
                 {/* Total */}
                 <Separator className="my-6" />
-                <div className="flex justify-between items-center bg-gradient-to-r from-orange-500 to-orange-600 p-5 rounded-xl shadow-lg">
-                  <span className="text-lg font-bold text-white">Total Pembayaran</span>
-                  <span className="text-2xl font-bold text-white">
+                <div className="flex justify-between items-center bg-stone-800 p-4 rounded-xl">
+                  <span className="text-sm font-semibold text-stone-300">Total Pembayaran</span>
+                  <span className="text-lg font-bold text-white">
                     Rp {order.totalAmount.toLocaleString()}
                   </span>
                 </div>
@@ -504,6 +502,8 @@ export default async function MyOrdersPage() {
           );
         })}
       </div>
+      </div>
+      <div className="md:hidden h-20" />
     </div>
   );
 }

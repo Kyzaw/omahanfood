@@ -23,10 +23,10 @@ export default function CourierNavbar() {
                                 <Truck className="w-5 h-5 text-white" />
                             </div>
                             <div className="flex flex-col">
-                                <span className="text-lg font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+                                <span className="text-lg font-bold text-slate-800">
                                     Courier Panel
                                 </span>
-                                <span className="text-xs text-slate-500 font-medium tracking-wide">
+                                <span className="text-xs text-slate-400 font-medium tracking-wide">
                                     DASHBOARD
                                 </span>
                             </div>

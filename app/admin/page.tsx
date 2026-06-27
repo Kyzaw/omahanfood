@@ -32,13 +32,13 @@ export default async function AdminPage() {
       {/* Main content with responsive spacing */}
       <main className="md:ml-64 min-h-screen transition-all duration-300 ease-in-out">
         {/* Header Section */}
-        <div className="bg-white border-b border-slate-200 px-4 md:px-6 py-4 md:py-6 shadow-sm mt-16 md:mt-0">
+        <div className="bg-white border-b border-slate-200 px-4 md:px-6 py-4 md:py-6 mt-16 md:mt-0">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
-              <h1 className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent">
+              <h1 className="text-2xl md:text-3xl font-bold text-slate-800">
                 Dashboard Overview
               </h1>
-              <p className="text-sm text-slate-600 mt-1 md:mt-2">
+              <p className="text-sm text-slate-500 mt-1 md:mt-2">
                 Monitor your catering performance and manage operations
               </p>
             </div>
@@ -99,11 +99,11 @@ export default async function AdminPage() {
           <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 md:gap-8">
             {/* Recent Orders */}
             <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden hover:shadow-md transition-shadow duration-300">
-              <div className="px-4 md:px-6 py-4 md:py-5 border-b border-slate-100 bg-gradient-to-r from-slate-50 to-white">
+              <div className="px-4 md:px-6 py-4 md:py-5 border-b border-slate-100">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2 md:gap-3">
-                    <div className="w-8 md:w-10 h-8 md:h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center">
-                      <ClipboardList className="text-white w-4 md:w-5 h-4 md:h-5" />
+                    <div className="w-8 md:w-10 h-8 md:h-10 bg-blue-100 rounded-xl flex items-center justify-center">
+                      <ClipboardList className="text-blue-600 w-4 md:w-5 h-4 md:h-5" />
                     </div>
                     <h2 className="text-lg md:text-xl font-bold text-slate-800">
                       Recent Orders
@@ -128,11 +128,11 @@ export default async function AdminPage() {
 
             {/* Top Performing Menus */}
             <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden hover:shadow-md transition-shadow duration-300">
-              <div className="px-4 md:px-6 py-4 md:py-5 border-b border-slate-100 bg-gradient-to-r from-slate-50 to-white">
+              <div className="px-4 md:px-6 py-4 md:py-5 border-b border-slate-100">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2 md:gap-3">
-                    <div className="w-8 md:w-10 h-8 md:h-10 bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl flex items-center justify-center">
-                      <Star className="text-white w-4 md:w-5 h-4 md:h-5" />
+                    <div className="w-8 md:w-10 h-8 md:h-10 bg-emerald-100 rounded-xl flex items-center justify-center">
+                      <Star className="text-emerald-600 w-4 md:w-5 h-4 md:h-5" />
                     </div>
                     <h2 className="text-lg md:text-xl font-bold text-slate-800">
                       Top Performing Menus
@@ -151,10 +151,10 @@ export default async function AdminPage() {
 
           {/* Quick Actions */}
           <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden hover:shadow-md transition-shadow duration-300">
-            <div className="px-4 md:px-6 py-4 md:py-5 border-b border-slate-100 bg-gradient-to-r from-slate-50 to-white">
+            <div className="px-4 md:px-6 py-4 md:py-5 border-b border-slate-100">
               <div className="flex items-center gap-2 md:gap-3">
-                <div className="w-8 md:w-10 h-8 md:h-10 bg-gradient-to-br from-purple-500 to-pink-600 rounded-xl flex items-center justify-center">
-                  <Zap className="text-white w-4 md:w-5 h-4 md:h-5" />
+                <div className="w-8 md:w-10 h-8 md:h-10 bg-purple-100 rounded-xl flex items-center justify-center">
+                  <Zap className="text-purple-600 w-4 md:w-5 h-4 md:h-5" />
                 </div>
                 <h2 className="text-lg md:text-xl font-bold text-slate-800">
                   Quick Actions
@@ -163,7 +163,7 @@ export default async function AdminPage() {
             </div>
             <div className="p-4 md:p-6">
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4">
-                <Link href="/admin/menu/add" className="group flex items-center justify-center p-4 md:p-6 bg-gradient-to-br from-blue-50 to-blue-100 hover:from-blue-100 hover:to-blue-200 rounded-xl border border-blue-200 transition-all duration-300 hover:scale-105 hover:shadow-lg">
+                <Link href="/admin/menu/add" className="group flex items-center justify-center p-4 md:p-6 bg-blue-50 hover:bg-blue-100 rounded-xl border border-blue-100 transition-all duration-300 hover:shadow-md">
                   <div className="text-center">
                     <div className="flex justify-center mb-2 md:mb-3 group-hover:scale-110 transition-transform">
                       <UtensilsCrossed className="w-6 md:w-8 h-6 md:h-8 text-blue-600" />
@@ -172,16 +172,16 @@ export default async function AdminPage() {
                   </div>
                 </Link>
 
-                <Link href="/admin/reports" className="group flex items-center justify-center p-4 md:p-6 bg-gradient-to-br from-green-50 to-green-100 hover:from-green-100 hover:to-green-200 rounded-xl border border-green-200 transition-all duration-300 hover:scale-105 hover:shadow-lg">
+                <Link href="/admin/reports" className="group flex items-center justify-center p-4 md:p-6 bg-emerald-50 hover:bg-emerald-100 rounded-xl border border-emerald-100 transition-all duration-300 hover:shadow-md">
                   <div className="text-center">
                     <div className="flex justify-center mb-2 md:mb-3 group-hover:scale-110 transition-transform">
-                      <BarChart3 className="w-6 md:w-8 h-6 md:h-8 text-green-600" />
+                      <BarChart3 className="w-6 md:w-8 h-6 md:h-8 text-emerald-600" />
                     </div>
-                    <span className="text-xs md:text-sm font-semibold text-green-700">View Reports</span>
+                    <span className="text-xs md:text-sm font-semibold text-emerald-700">View Reports</span>
                   </div>
                 </Link>
 
-                <Link href="/admin/users" className="group flex items-center justify-center p-4 md:p-6 bg-gradient-to-br from-purple-50 to-purple-100 hover:from-purple-100 hover:to-purple-200 rounded-xl border border-purple-200 transition-all duration-300 hover:scale-105 hover:shadow-lg sm:col-span-2 lg:col-span-1">
+                <Link href="/admin/users" className="group flex items-center justify-center p-4 md:p-6 bg-purple-50 hover:bg-purple-100 rounded-xl border border-purple-100 transition-all duration-300 hover:shadow-md sm:col-span-2 lg:col-span-1">
                   <div className="text-center">
                     <div className="flex justify-center mb-2 md:mb-3 group-hover:scale-110 transition-transform">
                       <User className="w-6 md:w-8 h-6 md:h-8 text-purple-600" />

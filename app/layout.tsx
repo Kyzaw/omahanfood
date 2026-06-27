@@ -18,7 +18,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Omahan Food Katering App",
-  description: "Created by kyzaww",
+  description: "Pesan makanan katering favorit Anda dengan mudah dan cepat",
 };
 
 export default function RootLayout({
@@ -28,11 +28,18 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased font-[family-name:var(--font-geist-sans)]`}>
         <SessionProvider>
           <LayoutWrapper>
             {children}
-            <Toaster richColors />
+            <Toaster 
+              richColors 
+              position="top-center" 
+              gap={8}
+              toastOptions={{
+                duration: 3000,
+              }}
+            />
           </LayoutWrapper>
         </SessionProvider>
       </body>
