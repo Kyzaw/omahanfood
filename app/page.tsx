@@ -1,13 +1,21 @@
 import { prisma } from "@/lib/prisma";
 import MenuPage from "@/components/MenuPage";
-import { Star, Utensils, Timer, Award } from "lucide-react";
+import { Star, Utensils, Award } from "lucide-react";
+export const dynamic = 'force-dynamic';
 
 export default async function HomePage() {
-  const categories = await prisma.category.findMany({
-    include: {
-      menus: true,
-    },
-  });
+  const [categories, reviewStats] = await Promise.all([
+    prisma.category.findMany({
+      include: {
+        menus: true,
+      },
+    }),
+    prisma.review.aggregate({
+      _avg: {
+        rating: true,
+      },
+    }),
+  ]);
 
   const filteredCategories = categories.filter((cat) => cat.menus.length > 0);
 
@@ -15,6 +23,8 @@ export default async function HomePage() {
     ...menu,
     categoryName: cat.name
   })));
+
+  const averageRating = reviewStats._avg.rating ?? 0;
 
   return (
     <div className="min-h-screen bg-[#faf9f7]">
@@ -60,18 +70,16 @@ export default async function HomePage() {
         </section>
 
         {/* Stats Row */}
-        <section className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 mb-12 md:mb-16">
+        <section className="grid grid-cols-1 sm:grid-cols-3 gap-3 md:gap-4 mb-12 md:mb-16">
           {[
             { icon: Utensils, value: filteredCategories.length, label: 'Kategori', sublabel: 'Tersedia', color: 'orange' },
             { icon: Award, value: allMenus.length, label: 'Menu', sublabel: 'Siap Pesan', color: 'blue' },
-            { icon: Timer, value: '30', label: 'Menit', sublabel: 'Rata-rata Kirim', color: 'emerald' },
-            { icon: Star, value: '4.8+', label: 'Rating', sublabel: 'Kepuasan', color: 'amber' },
+            { icon: Star, value: averageRating > 0 ? averageRating.toFixed(2) : '0', label: 'Rating', sublabel: 'Kepuasan', color: 'amber' },
           ].map((stat, i) => {
             const Icon = stat.icon
             const colorMap: Record<string, string> = {
               orange: 'bg-orange-50 text-orange-600 border-orange-100',
               blue: 'bg-blue-50 text-blue-600 border-blue-100',
-              emerald: 'bg-emerald-50 text-emerald-600 border-emerald-100',
               amber: 'bg-amber-50 text-amber-600 border-amber-100',
             }
             return (
